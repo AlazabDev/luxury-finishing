@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ClipboardList, Cube, CheckSquare, HardHat, Key } from "lucide-react";
+import { ClipboardList, Box, CheckSquare, HardHat, Key } from "lucide-react";
 
 const steps = [
   { icon: ClipboardList, title: "استشارة وزيارة ميدانية", desc: "فريقنا يزور الشقة ويأخذ المقاسات بدقة ويناقش أفكارك." },
