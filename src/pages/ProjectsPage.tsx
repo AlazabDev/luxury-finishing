@@ -228,11 +228,10 @@ const ProjectsPage = () => {
                       >
                         {/* Cover image */}
                         <div className="relative aspect-[4/3] overflow-hidden">
-                          <img
+                          <LazyImage
                             src={project.coverImage}
                             alt={project.title}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent" />
                           
