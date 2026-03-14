@@ -5,6 +5,7 @@ import FloatingElements from "@/components/FloatingElements";
 import GalleryLightbox from "@/components/GalleryLightbox";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, Images, MapPin, Calendar, ArrowLeft, Grid3X3, LayoutGrid } from "lucide-react";
+import LazyImage from "@/components/LazyImage";
 import { galleryProjects, galleryCategories, totalImageCount, type GalleryProject } from "@/lib/images";
 import { Button } from "@/components/ui/button";
 
@@ -175,12 +176,10 @@ const ProjectsPage = () => {
                         className="break-inside-avoid group relative rounded-xl overflow-hidden cursor-pointer"
                         onClick={() => openLightbox(selectedProject.images, i, selectedProject.title)}
                       >
-                        <img
+                        <LazyImage
                           src={img}
                           alt={`${selectedProject.title} - صورة ${i + 1}`}
                           className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                          style={{ outline: "1px solid rgba(0,0,0,0.05)", outlineOffset: "-1px" }}
                         />
                         <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-all duration-300 flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity">
@@ -228,11 +227,10 @@ const ProjectsPage = () => {
                       >
                         {/* Cover image */}
                         <div className="relative aspect-[4/3] overflow-hidden">
-                          <img
+                          <LazyImage
                             src={project.coverImage}
                             alt={project.title}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent" />
                           
@@ -272,7 +270,7 @@ const ProjectsPage = () => {
                           <div className="flex gap-1.5">
                             {project.images.slice(1, 5).map((img, j) => (
                               <div key={j} className="w-14 h-14 rounded-md overflow-hidden flex-shrink-0">
-                                <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" />
+                                <LazyImage src={img} alt="" className="w-full h-full object-cover" />
                               </div>
                             ))}
                             {project.images.length > 5 && (
@@ -307,12 +305,10 @@ const ProjectsPage = () => {
                         className="break-inside-avoid group relative rounded-lg overflow-hidden cursor-pointer"
                         onClick={() => openLightbox(allFilteredImages, i)}
                       >
-                        <img
+                        <LazyImage
                           src={img}
                           alt={`صورة ${i + 1}`}
                           className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                          style={{ outline: "1px solid rgba(0,0,0,0.05)", outlineOffset: "-1px" }}
                         />
                         <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/30 transition-all duration-300 flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity">
