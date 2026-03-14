@@ -181,7 +181,6 @@ const ProjectsPage = () => {
                           alt={`${selectedProject.title} - صورة ${i + 1}`}
                           className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
-                        />
                         <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-all duration-300 flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                             <div className="w-12 h-12 rounded-full bg-primary-foreground/20 backdrop-blur-sm flex items-center justify-center">
