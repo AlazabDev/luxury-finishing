@@ -3,7 +3,7 @@ import { ClipboardList, Box, CheckSquare, HardHat, Key } from "lucide-react";
 
 const steps = [
   { icon: ClipboardList, title: "استشارة وزيارة ميدانية", desc: "فريقنا يزور الشقة ويأخذ المقاسات بدقة ويناقش أفكارك." },
-  { icon: Cube, title: "تصميم أولي (3D)", desc: "نقدم لك تصميماً ثلاثي الأبعاد للمساحات قبل بدء العمل." },
+  { icon: Box, title: "تصميم أولي (3D)", desc: "نقدم لك تصميماً ثلاثي الأبعاد للمساحات قبل بدء العمل." },
   { icon: CheckSquare, title: "اعتماد العروض والمواد", desc: "نحدد الخامات النهائية والتكاليف بشفافية كاملة." },
   { icon: HardHat, title: "التنفيذ والإشراف", desc: "نبدأ العمل تحت إشراف مهندسين متخصصين." },
   { icon: Key, title: "التسليم النهائي", desc: "نسلمك منزل أحلامك جاهزاً للسكن." },
