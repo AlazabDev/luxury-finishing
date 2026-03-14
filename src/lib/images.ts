@@ -230,6 +230,9 @@ const abuaufImages: string[] = [
   `${CDN}/v1773441261/abuauf_6_vpd4wc.jpg`,
 ];
 
+// About page image
+export const ABOUT_HERO = `${CDN}/v1773441261/about-18_ndwlyr.jpg`;
+
 // Organized gallery projects
 export const galleryProjects: GalleryProject[] = [
   {
