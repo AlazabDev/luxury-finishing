@@ -5,6 +5,7 @@ import FloatingElements from "@/components/FloatingElements";
 import GalleryLightbox from "@/components/GalleryLightbox";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, Images, MapPin, Calendar, ArrowLeft, Grid3X3, LayoutGrid } from "lucide-react";
+import LazyImage from "@/components/LazyImage";
 import { galleryProjects, galleryCategories, totalImageCount, type GalleryProject } from "@/lib/images";
 import { Button } from "@/components/ui/button";
 
