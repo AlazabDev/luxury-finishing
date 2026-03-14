@@ -4,7 +4,7 @@ import FloatingElements from "@/components/FloatingElements";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import { BLOG_IMAGES, GALLERY_IMAGES } from "@/lib/images";
+import { BLOG_IMAGES, SERVICE_IMAGES } from "@/lib/images";
 
 const posts = [
   { title: "أفكار ذكية لتصميم غرف المعيشة المفتوحة", category: "تصميم داخلي", image: BLOG_IMAGES[0], excerpt: "اكتشف أفضل الطرق لتصميم غرف معيشة مفتوحة تجمع بين الأناقة والوظيفية." },
