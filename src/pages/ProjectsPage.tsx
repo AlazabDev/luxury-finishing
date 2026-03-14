@@ -271,7 +271,7 @@ const ProjectsPage = () => {
                           <div className="flex gap-1.5">
                             {project.images.slice(1, 5).map((img, j) => (
                               <div key={j} className="w-14 h-14 rounded-md overflow-hidden flex-shrink-0">
-                                <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" />
+                                <LazyImage src={img} alt="" className="w-full h-full object-cover" />
                               </div>
                             ))}
                             {project.images.length > 5 && (
