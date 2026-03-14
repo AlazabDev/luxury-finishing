@@ -306,12 +306,10 @@ const ProjectsPage = () => {
                         className="break-inside-avoid group relative rounded-lg overflow-hidden cursor-pointer"
                         onClick={() => openLightbox(allFilteredImages, i)}
                       >
-                        <img
+                        <LazyImage
                           src={img}
                           alt={`صورة ${i + 1}`}
                           className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                          style={{ outline: "1px solid rgba(0,0,0,0.05)", outlineOffset: "-1px" }}
                         />
                         <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/30 transition-all duration-300 flex items-center justify-center">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity">
