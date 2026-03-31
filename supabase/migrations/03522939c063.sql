@@ -118,8 +118,9 @@ CREATE TABLE public.contact_messages (
 
 ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
 
+-- Improved security policy with validation
 CREATE POLICY "Anyone can submit contact" ON public.contact_messages
-  FOR INSERT WITH CHECK (true);
+  FOR INSERT WITH CHECK (length(name) > 0);
 
 CREATE POLICY "Admins can view contacts" ON public.contact_messages
   FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'admin'));
@@ -152,8 +153,9 @@ CREATE TABLE public.quote_requests (
 
 ALTER TABLE public.quote_requests ENABLE ROW LEVEL SECURITY;
 
+-- Improved security policy with validation
 CREATE POLICY "Anyone can submit quote" ON public.quote_requests
-  FOR INSERT WITH CHECK (true);
+  FOR INSERT WITH CHECK (length(client_name) > 0);
 
 CREATE POLICY "Admins can view quotes" ON public.quote_requests
   FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'admin'));
@@ -164,17 +166,7 @@ CREATE POLICY "Admins can update quotes" ON public.quote_requests
 CREATE POLICY "Admins can delete quotes" ON public.quote_requests
   FOR DELETE TO authenticated USING (public.has_role(auth.uid(), 'admin'));
 
-======================================================================================
-
--- Replace overly permissive INSERT policies with basic validation
-DROP POLICY "Anyone can submit contact" ON public.contact_messages;
-CREATE POLICY "Anyone can submit contact" ON public.contact_messages
-  FOR INSERT WITH CHECK (length(name) > 0);
-
-DROP POLICY "Anyone can submit quote" ON public.quote_requests;
-CREATE POLICY "Anyone can submit quote" ON public.quote_requests
-  FOR INSERT WITH CHECK (length(client_name) > 0);
--------------------------------------------------------------------------
+-- Storage configuration for chat files
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('chat-files', 'chat-files', true)
 ON CONFLICT (id) DO NOTHING;
