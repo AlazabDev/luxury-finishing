@@ -1,59 +1,126 @@
 import { motion } from "framer-motion";
-import { Heart, Lightbulb, Clock } from "lucide-react";
+import { Shield, Lightbulb, Clock, Award } from "lucide-react";
+import LazyImage from "./LazyImage";
 
 const cards = [
   {
-    icon: Heart,
-    title: "فهم احتياجات الأسرة",
-    desc: "نستمع لرغباتك ونصمم مساحات تناسب نمط حياتك، سواء كنت تبحث عن الفخامة الكلاسيكية أو البساطة العصرية.",
+    icon: Shield,
+    title: "ضمان جودة شامل",
+    desc: "نلتزم بأعلى معايير الجودة مع ضمان على جميع الأعمال المنفذة.",
   },
   {
     icon: Lightbulb,
-    title: "تصميمات عصرية وحلول ذكية",
-    desc: "تصاميم معمارية مبتكرة تزيد من مساحات التخزين وتوفر الراحة مع لمسات جمالية عصرية.",
+    title: "تصاميم عصرية ومبتكرة",
+    desc: "تصاميم 3D قبل التنفيذ تساعدك على تخيل منزلك قبل البدء.",
   },
   {
     icon: Clock,
-    title: "التزام بالمواعيد والجودة",
-    desc: "ندرك أهمية تسليم منزلك في الوقت المتفق عليه، مع الالتزام بأعلى معايير الجودة والشفافية.",
+    title: "التزام صارم بالمواعيد",
+    desc: "جداول زمنية واضحة مع تحديثات دورية حتى التسليم.",
+  },
+  {
+    icon: Award,
+    title: "خامات أوروبية فاخرة",
+    desc: "نتعامل مع أفضل موردي الخامات لضمان متانة وجمال التشطيبات.",
   },
 ];
 
 const ExpertiseSection = () => {
   return (
-    <section className="section-padding bg-secondary">
+    <section className="section-padding bg-primary overflow-hidden">
       <div className="container-custom">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl text-primary mb-4">
-            لماذا تختار Luxury Finishing لبيتك؟
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            نحن لا ننفذ تشطيباً عادياً.. بل نصنع مساحة تعكس شخصيتك وذوقك الرفيع.
-          </p>
-        </motion.div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            <span className="text-accent text-sm font-bold tracking-wider mb-3 block">
+              لماذا نحن
+            </span>
+            <h2 className="text-3xl md:text-4xl text-primary-foreground mb-6">
+              لماذا يثق بنا عملاؤنا في تشطيب منازلهم؟
+            </h2>
+            <p className="text-primary-foreground/70 text-lg mb-10 leading-relaxed">
+              نحن لا ننفذ تشطيباً عادياً — بل نصنع مساحة تعكس شخصيتك وذوقك
+              الرفيع بأعلى معايير الاحترافية.
+            </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {cards.map((card, i) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ delay: i * 0.15 }}
-              className="bg-card rounded-xl p-8 shadow-card hover:shadow-card-hover transition-all duration-300 text-center"
-            >
-              <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
-                <card.icon className="w-8 h-8 text-accent" strokeWidth={1.5} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {cards.map((card, i) => (
+                <motion.div
+                  key={card.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="flex gap-4"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-accent/15 flex-shrink-0 flex items-center justify-center">
+                    <card.icon
+                      className="w-6 h-6 text-accent"
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-primary-foreground mb-1">
+                      {card.title}
+                    </h3>
+                    <p className="text-sm text-primary-foreground/60 leading-relaxed">
+                      {card.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Image collage */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            className="relative"
+          >
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <div className="rounded-2xl overflow-hidden aspect-[3/4]">
+                  <LazyImage
+                    src="https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-010.jpg"
+                    alt="تشطيبات سكنية"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="rounded-2xl overflow-hidden aspect-square">
+                  <LazyImage
+                    src="https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-025.jpg"
+                    alt="ديكورات داخلية"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-primary mb-4">{card.title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{card.desc}</p>
-            </motion.div>
-          ))}
+              <div className="space-y-4 mt-8">
+                <div className="rounded-2xl overflow-hidden aspect-square">
+                  <LazyImage
+                    src="https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-040.jpg"
+                    alt="مطابخ حديثة"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="rounded-2xl overflow-hidden aspect-[3/4]">
+                  <LazyImage
+                    src="https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-055.jpg"
+                    alt="غرف نوم فاخرة"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Accent border */}
+            <div className="absolute -bottom-4 -left-4 w-32 h-32 border-2 border-accent/30 rounded-2xl -z-10" />
+            <div className="absolute -top-4 -right-4 w-24 h-24 border-2 border-accent/20 rounded-2xl -z-10" />
+          </motion.div>
         </div>
       </div>
     </section>
