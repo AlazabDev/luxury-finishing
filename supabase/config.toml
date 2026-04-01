@@ -1,1 +1,6 @@
+
 project_id = "lnoyiwrulvoaaerpiqxc"
+
+[functions.whatsapp]
+verify_jwt = false
+[functions.maintenance-proxy]
