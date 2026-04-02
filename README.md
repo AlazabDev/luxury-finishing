@@ -1,18 +1,13 @@
-# UberFix.shop
+
+# Luxury Finishing
 
 ![Alazab Construction](https://al-azab.co/logo-alazab.gif)
 
 ## Overview
 
-**UberFix.shop** is the unified maintenance operations platform developed by **Alazab Construction Company** to manage service requests, operational workflows, field execution, evidence tracking, and customer communication through one structured system.
+**Luxury Finishing** is the premium execution and finishing platform of **Alazab Construction Company**, developed to present high-end residential and commercial finishing services with clarity, confidence, and strong brand identity.
 
-The platform is built to serve real business operations with a clear focus on:
-
-- receiving maintenance requests from multiple channels
-- standardizing request intake into one operational flow
-- tracking execution status with clarity
-- improving customer communication and follow-up
-- supporting scalable maintenance governance for commercial and residential portfolios
+This project represents the refined execution arm of the Alazab ecosystem, with a focus on delivering elegant spaces, disciplined implementation, and a customer experience built on trust, quality, and visual excellence.
 
 ---
 
@@ -20,50 +15,45 @@ The platform is built to serve real business operations with a clear focus on:
 
 **Al-azab.co هي شركة متخصصة في التصميم المعماري والداخلي تقدم حلولاً سكنية وتجارية وضيافة منذ عام 2020. الشركة تلتزم بتقديم أفكار عالية الجودة ومريحة، وتوفر خدمات تشمل التصميم المعماري والداخلي وتنفيذ المشاريع وتطبيقها.**
 
-UberFix represents the maintenance and service operations layer within the broader Alazab ecosystem.
+Luxury Finishing reflects the premium finishing direction of the company and serves as one of the main brand pillars within the broader Alazab structure.
 
 ---
 
 ## Core Purpose
 
-This system is designed to unify maintenance work from request creation to execution and follow-up.
+This project is designed to present and support the luxury finishing identity of the business through a professional digital presence that communicates:
 
-Key objectives:
+- execution quality
+- visual elegance
+- technical confidence
+- service clarity
+- brand trust
 
-- create a reliable maintenance intake gateway
-- centralize operational data
-- improve service responsiveness
-- support internal teams and technicians
-- provide professional customer-facing request tracking
-- build a maintainable foundation for future integrations
+It is intended to be more than a marketing site. It should function as a refined brand interface that supports customer conversion, project presentation, and long-term positioning.
 
 ---
 
-## Main Capabilities
+## Main Focus Areas
 
-### Request Intake
-- create maintenance requests from structured forms and integrated channels
-- classify service type, priority, and request metadata
-- generate standardized request numbers
-- support centralized request tracking
+### Premium Brand Presentation
+- present the Luxury Finishing identity with a strong and elegant visual standard
+- communicate the company’s execution quality with clarity
+- reinforce trust through a polished digital presence
 
-### Operations Workflow
-- manage request lifecycle from submission to completion
-- assign internal teams and technical resources
-- organize maintenance flow with operational clarity
-- maintain auditability across critical actions
+### Service Communication
+- explain finishing services in a structured and professional way
+- support residential and commercial customer journeys
+- improve how service value is presented to potential clients
 
-### Customer Communication
-- notify requesters after successful request creation
-- support WhatsApp-based operational communication
-- provide tracking links for request follow-up
-- maintain structured logs for outbound communication
+### Project Showcase
+- display selected work with strong visual hierarchy
+- reflect quality, precision, and material awareness
+- support future case studies and portfolio expansion
 
-### Administration and Visibility
-- support dashboards and reporting workflows
-- centralize operational records
-- maintain data consistency across service channels
-- prepare the platform for enterprise-level scaling
+### Business Alignment
+- align the digital presence with the broader Alazab brand system
+- maintain consistency with company standards
+- support integration with future internal systems and service flows
 
 ---
 
@@ -76,20 +66,21 @@ This project is built with:
 - **React**
 - **Tailwind CSS**
 - **shadcn/ui**
-- **Supabase**
-- **Supabase Edge Functions**
 
 ---
 
-## Project Structure
+## Development
+
+### Requirements
+
+- Node.js 18+
+- pnpm or npm
+
+### Install
 
 ```bash
-.
-├── src
-├── public
-├── supabase
-│   ├── functions
-│   ├── migrations
-│   └── config
-├── docs
-└── android
+git clone <YOUR_REPOSITORY_URL>
+cd luxury-finishing
+pnpm install
+
+
