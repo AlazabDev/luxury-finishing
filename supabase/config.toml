@@ -1,10 +1,6 @@
+
 project_id = "lnoyiwrulvoaaerpiqxc"
 
-[functions.chat]
+[functions.whatsapp]
 verify_jwt = false
-
-[functions.tts]
-verify_jwt = false
-
-[functions.stt]
-verify_jwt = false
+[functions.maintenance-proxy]
