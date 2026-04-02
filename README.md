@@ -1,73 +1,95 @@
-# Welcome to your Lovable project
+# UberFix.shop
 
-## Project info
+![Alazab Construction](https://al-azab.co/logo-alazab.gif)
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Overview
 
-## How can I edit this code?
+**UberFix.shop** is the unified maintenance operations platform developed by **Alazab Construction Company** to manage service requests, operational workflows, field execution, evidence tracking, and customer communication through one structured system.
 
-There are several ways of editing your application.
+The platform is built to serve real business operations with a clear focus on:
 
-**Use Lovable**
+- receiving maintenance requests from multiple channels
+- standardizing request intake into one operational flow
+- tracking execution status with clarity
+- improving customer communication and follow-up
+- supporting scalable maintenance governance for commercial and residential portfolios
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## About Alazab
 
-**Use your preferred IDE**
+**Al-azab.co هي شركة متخصصة في التصميم المعماري والداخلي تقدم حلولاً سكنية وتجارية وضيافة منذ عام 2020. الشركة تلتزم بتقديم أفكار عالية الجودة ومريحة، وتوفر خدمات تشمل التصميم المعماري والداخلي وتنفيذ المشاريع وتطبيقها.**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+UberFix represents the maintenance and service operations layer within the broader Alazab ecosystem.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## Core Purpose
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+This system is designed to unify maintenance work from request creation to execution and follow-up.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Key objectives:
 
-# Step 3: Install the necessary dependencies.
-npm i
+- create a reliable maintenance intake gateway
+- centralize operational data
+- improve service responsiveness
+- support internal teams and technicians
+- provide professional customer-facing request tracking
+- build a maintainable foundation for future integrations
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
 
-**Edit a file directly in GitHub**
+## Main Capabilities
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Request Intake
+- create maintenance requests from structured forms and integrated channels
+- classify service type, priority, and request metadata
+- generate standardized request numbers
+- support centralized request tracking
 
-**Use GitHub Codespaces**
+### Operations Workflow
+- manage request lifecycle from submission to completion
+- assign internal teams and technical resources
+- organize maintenance flow with operational clarity
+- maintain auditability across critical actions
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Customer Communication
+- notify requesters after successful request creation
+- support WhatsApp-based operational communication
+- provide tracking links for request follow-up
+- maintain structured logs for outbound communication
 
-## What technologies are used for this project?
+### Administration and Visibility
+- support dashboards and reporting workflows
+- centralize operational records
+- maintain data consistency across service channels
+- prepare the platform for enterprise-level scaling
+
+---
+
+## Technology Stack
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Vite**
+- **TypeScript**
+- **React**
+- **Tailwind CSS**
+- **shadcn/ui**
+- **Supabase**
+- **Supabase Edge Functions**
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Project Structure
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```bash
+.
+├── src
+├── public
+├── supabase
+│   ├── functions
+│   ├── migrations
+│   └── config
+├── docs
+└── android
