@@ -31,10 +31,10 @@ const LazyImage = ({ src, alt, className, placeholderClassName, ...props }: Lazy
 
   return (
     <div ref={imgRef} className={cn("relative overflow-hidden", placeholderClassName)}>
-      {/* Blur placeholder */}
+      {/* Static placeholder — no pulse */}
       <div
         className={cn(
-          "absolute inset-0 bg-muted animate-pulse transition-opacity duration-500",
+          "absolute inset-0 bg-muted transition-opacity duration-500",
           loaded ? "opacity-0" : "opacity-100"
         )}
       />
