@@ -1,12 +1,15 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Phone } from "lucide-react";
+import { ArrowLeft, ArrowRight, Phone } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const CtaBand = () => {
+  const { t, dir } = useLanguage();
+  const ArrowIcon = dir === "rtl" ? ArrowLeft : ArrowRight;
+
   return (
     <section className="relative py-24 px-4 overflow-hidden">
-      {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-fixed"
         style={{
@@ -30,10 +33,10 @@ const CtaBand = () => {
       >
         <div className="w-12 h-0.5 bg-accent mx-auto mb-6" />
         <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6 max-w-3xl mx-auto leading-tight">
-          جاهز لتحويل شقتك إلى تحفة فنية؟
+          {t("cta.title")}
         </h2>
         <p className="text-primary-foreground/70 text-lg mb-10 max-w-xl mx-auto">
-          تواصل معنا اليوم واحصل على استشارة مجانية وعرض سعر تفصيلي لمشروعك
+          {t("cta.desc")}
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Button
@@ -43,8 +46,8 @@ const CtaBand = () => {
             asChild
           >
             <Link to="/quote">
-              اطلب عرض سعر
-              <ArrowLeft className="w-5 h-5" />
+              {t("cta.button")}
+              <ArrowIcon className="w-5 h-5" />
             </Link>
           </Button>
           <Button
@@ -55,7 +58,7 @@ const CtaBand = () => {
           >
             <a href="tel:+201004006620">
               <Phone className="w-5 h-5" />
-              اتصل الآن
+              {t("cta.call")}
             </a>
           </Button>
         </div>
