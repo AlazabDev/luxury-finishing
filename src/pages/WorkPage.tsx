@@ -636,7 +636,7 @@ export default function WorkProcessPage() {
         </section>
       </main>
 
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }
