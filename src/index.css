@@ -98,7 +98,14 @@
 
   body {
     @apply bg-background text-foreground font-body;
+  }
+
+  [dir="rtl"] body {
     direction: rtl;
+  }
+
+  [dir="ltr"] body {
+    direction: ltr;
   }
 
   h1, h2, h3, h4, h5, h6 {

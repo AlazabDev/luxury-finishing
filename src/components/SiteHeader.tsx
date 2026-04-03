@@ -1,22 +1,26 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Phone, Menu, X, Home } from "lucide-react";
+import { Phone, Menu, X, Home, Sun, Moon, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const navLinks = [
-  { label: "الرئيسية", href: "/" },
-  { label: "عن الشركة", href: "/about" },
-  { label: "خدماتنا", href: "/services" },
-  { label: "مشاريعنا", href: "/projects" },
-  { label: "المدونة", href: "/blog" },
-  { label: "اتصل بنا", href: "/contact" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const SiteHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { lang, setLang, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
+
+  const navLinks = [
+    { label: t("nav.home"), href: "/" },
+    { label: t("nav.about"), href: "/about" },
+    { label: t("nav.services"), href: "/services" },
+    { label: t("nav.projects"), href: "/projects" },
+    { label: t("nav.blog"), href: "/blog" },
+    { label: t("nav.contact"), href: "/contact" },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -25,6 +29,8 @@ const SiteHeader = () => {
   }, []);
 
   useEffect(() => setMobileOpen(false), [location]);
+
+  const toggleLang = () => setLang(lang === "en" ? "ar" : "en");
 
   return (
     <header
@@ -64,23 +70,61 @@ const SiteHeader = () => {
           ))}
         </nav>
 
-        {/* CTA */}
-        <div className="hidden lg:block">
+        {/* Actions */}
+        <div className="hidden lg:flex items-center gap-3">
+          {/* Language Toggle */}
+          <button
+            onClick={toggleLang}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all hover:bg-accent/10 ${
+              scrolled ? "text-foreground" : "text-primary-foreground"
+            }`}
+            title={lang === "en" ? "التبديل للعربية" : "Switch to English"}
+          >
+            <Globe className="w-4 h-4" />
+            {lang === "en" ? "AR" : "EN"}
+          </button>
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className={`p-2 rounded-lg transition-all hover:bg-accent/10 ${
+              scrolled ? "text-foreground" : "text-primary-foreground"
+            }`}
+            title={theme === "light" ? t("theme.dark") : t("theme.light")}
+          >
+            {theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+          </button>
+
+          {/* CTA */}
           <Button variant="gold" size="lg" asChild>
             <a href="tel:+201004006620">
               <Phone className="w-4 h-4" />
-              استشارة مجانية
+              {t("nav.cta")}
             </a>
           </Button>
         </div>
 
         {/* Mobile Toggle */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className={`lg:hidden p-2 ${scrolled ? "text-foreground" : "text-primary-foreground"}`}
-        >
-          {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="lg:hidden flex items-center gap-2">
+          <button
+            onClick={toggleLang}
+            className={`p-2 text-xs font-bold rounded-lg ${scrolled ? "text-foreground" : "text-primary-foreground"}`}
+          >
+            <Globe className="w-5 h-5" />
+          </button>
+          <button
+            onClick={toggleTheme}
+            className={`p-2 rounded-lg ${scrolled ? "text-foreground" : "text-primary-foreground"}`}
+          >
+            {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+          </button>
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className={`p-2 ${scrolled ? "text-foreground" : "text-primary-foreground"}`}
+          >
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -107,7 +151,7 @@ const SiteHeader = () => {
               <Button variant="gold" size="lg" className="mt-2" asChild>
                 <a href="tel:+201004006620">
                   <Phone className="w-4 h-4" />
-                  استشارة مجانية
+                  {t("nav.cta")}
                 </a>
               </Button>
             </nav>

@@ -25,8 +25,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 type StatItem = {
   value: string;
@@ -254,7 +254,7 @@ export default function WorkProcessPage() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-white text-slate-900" dir="rtl">
-      <Header />
+      <SiteHeader />
 
       <main>
         <section className="relative isolate overflow-hidden bg-slate-950">
@@ -636,7 +636,7 @@ export default function WorkProcessPage() {
         </section>
       </main>
 
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }
