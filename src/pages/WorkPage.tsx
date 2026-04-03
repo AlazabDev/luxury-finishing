@@ -254,7 +254,7 @@ export default function WorkProcessPage() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-white text-slate-900" dir="rtl">
-      <Header />
+      <SiteHeader />
 
       <main>
         <section className="relative isolate overflow-hidden bg-slate-950">
