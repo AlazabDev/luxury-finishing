@@ -3,7 +3,9 @@ import SiteFooter from "@/components/SiteFooter";
 import FloatingElements from "@/components/FloatingElements";
 import { motion } from "framer-motion";
 import { Target, Eye, Heart, Shield, Award, Users } from "lucide-react";
-import { ABOUT_IMAGES } from "@/lib/images";
+import LazyImage from "@/components/LazyImage";
+import { ABOUT_IMAGE_IDS } from "@/lib/images";
+import { getEditorialImage, getPortraitImage } from "@/lib/cloudinary";
 
 const values = [
   { icon: Award, label: "الجودة" },
@@ -68,7 +70,11 @@ const AboutPage = () => {
               viewport={{ once: true }}
               className="rounded-xl overflow-hidden shadow-card"
             >
-              <img src={ABOUT_IMAGES[0]} alt="عن الشركة" className="w-full h-80 object-cover" loading="lazy" />
+              <LazyImage
+                {...getEditorialImage(ABOUT_IMAGE_IDS[0])}
+                alt="عن الشركة"
+                className="w-full h-80 object-cover"
+              />
             </motion.div>
           </div>
         </section>
@@ -113,9 +119,9 @@ const AboutPage = () => {
             <h2 className="text-3xl font-bold text-primary mb-12">فريق القيادة</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { name: "م. أحمد العزب", role: "المدير التنفيذي", img: ABOUT_IMAGES[1] },
-                { name: "م. محمد حسن", role: "مدير المشاريع", img: ABOUT_IMAGES[2] },
-                { name: "م. سارة إبراهيم", role: "مديرة التصميم", img: ABOUT_IMAGES[0] },
+                { name: "م. أحمد العزب", role: "المدير التنفيذي", imageId: ABOUT_IMAGE_IDS[1] },
+                { name: "م. محمد حسن", role: "مدير المشاريع", imageId: ABOUT_IMAGE_IDS[2] },
+                { name: "م. سارة إبراهيم", role: "مديرة التصميم", imageId: ABOUT_IMAGE_IDS[0] },
               ].map((m, i) => (
                 <motion.div
                   key={m.name}
@@ -125,7 +131,11 @@ const AboutPage = () => {
                   transition={{ delay: i * 0.1 }}
                   className="bg-card rounded-xl overflow-hidden shadow-card"
                 >
-                  <img src={m.img} alt={m.name} className="w-full h-48 object-cover" loading="lazy" />
+                  <LazyImage
+                    {...getPortraitImage(m.imageId)}
+                    alt={m.name}
+                    className="w-full h-48 object-cover"
+                  />
                   <div className="p-6">
                     <div className="font-bold text-primary">{m.name}</div>
                     <div className="text-sm text-muted-foreground">{m.role}</div>

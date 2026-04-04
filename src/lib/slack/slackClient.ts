@@ -12,6 +12,45 @@ interface SlackMessageOptions {
     }>;
 }
 
+type SlackBlock =
+    | {
+        type: 'section';
+        text: {
+            type: 'mrkdwn';
+            text: string;
+        };
+    }
+    | {
+        type: 'actions';
+        block_id: string;
+        elements: Array<
+            | {
+                type: 'button';
+                text: {
+                    type: 'plain_text';
+                    text: string;
+                };
+                value: string;
+                action_id: string;
+            }
+            | {
+                type: 'static_select';
+                placeholder: {
+                    type: 'plain_text';
+                    text: string;
+                };
+                options?: Array<{
+                    text: {
+                        type: 'plain_text';
+                        text: string;
+                    };
+                    value: string;
+                }>;
+                action_id: string;
+            }
+        >;
+    };
+
 export class SlackClient {
     private webhookUrl: string;
 
@@ -20,7 +59,7 @@ export class SlackClient {
     }
 
     async sendInteractiveMessage(options: SlackMessageOptions) {
-        const blocks: any[] = [
+        const blocks: SlackBlock[] = [
             {
                 type: 'section',
                 text: {
@@ -61,7 +100,7 @@ export class SlackClient {
                     };
                 }
                 return null;
-            }).filter(Boolean);
+            }).filter((value): value is NonNullable<typeof value> => value !== null);
 
             blocks.push({
                 type: 'actions',

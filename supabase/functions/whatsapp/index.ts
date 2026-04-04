@@ -10,6 +10,15 @@ const GRAPH_API = "https://graph.facebook.com/v21.0";
 const SEAFILE_URL = "https://seafile.alazab.com";
 const PHONE_NUMBER_ID_REGEX = /^\d{10,20}$/;
 
+interface WhatsAppMediaMessagePayload {
+  messaging_product: "whatsapp";
+  to: string;
+  type: "image" | "audio" | "document";
+  image?: { id: string };
+  audio?: { id: string };
+  document?: { id: string; filename?: string };
+}
+
 const normalizePhone = (value: string) => value.replace(/[^\d]/g, "");
 
 const assertPhoneNumberId = (value: string) => {
@@ -77,8 +86,18 @@ async function uploadToSeafile(fileBlob: Blob, fileName: string, folder = "/what
 
 async function uploadToSupabaseStorage(fileBlob: Blob, fileName: string): Promise<string | null> {
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabaseUrl =
+      Deno.env.get("SUPABASE_URL")?.trim() ||
+      Deno.env.get("VITE_SUPABASE_URL")?.trim();
+    const serviceKey =
+      Deno.env.get("LF_SUPABASE_SERVICE_ROLE_KEY")?.trim() ||
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")?.trim();
+
+    if (!supabaseUrl || !serviceKey) {
+      console.error("Supabase storage fallback is not configured");
+      return null;
+    }
+
     const supabase = createClient(supabaseUrl, serviceKey);
 
     const filePath = `whatsapp/${Date.now()}_${fileName}`;
@@ -148,12 +167,12 @@ serve(async (req) => {
         if (uploadRes.ok) {
           const uploadData = await uploadRes.json();
           const msgType = mediaType === "image" ? "image" : mediaType === "audio" ? "audio" : "document";
-          const msgPayload: any = {
+          const msgPayload: WhatsAppMediaMessagePayload = {
             messaging_product: "whatsapp",
             to,
             type: msgType,
             [msgType]: { id: uploadData.id },
-          };
+          } as WhatsAppMediaMessagePayload;
           if (msgType === "document" && fileName) {
             msgPayload.document.filename = fileName;
           }

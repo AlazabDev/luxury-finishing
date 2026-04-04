@@ -3,13 +3,16 @@ import { Home, Phone, Mail, MapPin } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const SiteFooter = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const quickLinks = [
     { label: t("nav.about"), href: "/about" },
     { label: t("nav.services"), href: "/services" },
     { label: t("nav.projects"), href: "/projects" },
     { label: t("nav.blog"), href: "/blog" },
+    { label: t("footer.legal"), href: "/legal" },
+    { label: t("footer.channels"), href: "/channels" },
+    { label: t("footer.sitemap"), href: "/sitemap" },
     { label: t("footer.privacy"), href: "/privacy" },
   ];
 
@@ -22,7 +25,7 @@ const SiteFooter = () => {
               <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
                 <Home className="w-5 h-5 text-accent-foreground" />
               </div>
-              <span className="font-heading font-bold text-xl">Luxury Finishing</span>
+              <span className="font-heading font-bold text-xl">{t("brand.name")}</span>
             </div>
             <p className="text-primary-foreground/70 text-sm leading-relaxed mb-4">
               {t("footer.about")}
@@ -64,7 +67,7 @@ const SiteFooter = () => {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-accent mt-1 flex-shrink-0" />
-                <span className="text-sm text-primary-foreground/70">Cairo, Egypt</span>
+                <span className="text-sm text-primary-foreground/70">{t("footer.location")}</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-accent flex-shrink-0" />
@@ -88,14 +91,14 @@ const SiteFooter = () => {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Location"
+                title={lang === "ar" ? "موقع المشروع" : "Project location"}
               />
             </div>
           </div>
         </div>
 
         <div className="border-t border-primary-foreground/10 mt-12 pt-8 text-center text-sm text-primary-foreground/50">
-          © {new Date().getFullYear()} Luxury Finishing. {t("footer.rights")}.
+          © {new Date().getFullYear()} {t("brand.name")}. {t("footer.rights")}.
         </div>
       </div>
     </footer>

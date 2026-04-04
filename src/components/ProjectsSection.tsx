@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { galleryProjects, totalImageCount } from "@/lib/images";
 import { Button } from "@/components/ui/button";
 import LazyImage from "./LazyImage";
+import { getProjectCoverImage } from "@/lib/cloudinary";
 
 const featured = galleryProjects.slice(0, 4);
 
@@ -54,7 +55,7 @@ const ProjectsSection = () => {
             >
               <Link to="/projects" className="block w-full h-full">
                 <LazyImage
-                  src={project.coverImage}
+                  {...getProjectCoverImage(project.coverImageId)}
                   alt={project.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -63,7 +64,7 @@ const ProjectsSection = () => {
                 {/* Image count badge */}
                 <div className="absolute top-4 left-4 bg-primary/60 backdrop-blur-sm text-primary-foreground text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
                   <Images className="w-3.5 h-3.5" />
-                  {project.images.length}
+                  {project.imageIds.length}
                 </div>
 
                 {/* Hover overlay */}

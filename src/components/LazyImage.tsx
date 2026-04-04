@@ -14,6 +14,10 @@ const LazyImage = ({ src, alt, className, placeholderClassName, ...props }: Lazy
   const imgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setLoaded(false);
+  }, [src]);
+
+  useEffect(() => {
     const el = imgRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
@@ -44,6 +48,8 @@ const LazyImage = ({ src, alt, className, placeholderClassName, ...props }: Lazy
           alt={alt}
           className={cn("transition-opacity duration-500", loaded ? "opacity-100" : "opacity-0", className)}
           onLoad={() => setLoaded(true)}
+          loading={props.loading ?? "lazy"}
+          decoding={props.decoding ?? "async"}
           {...props}
         />
       )}

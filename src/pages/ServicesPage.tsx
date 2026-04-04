@@ -3,38 +3,40 @@ import SiteFooter from "@/components/SiteFooter";
 import FloatingElements from "@/components/FloatingElements";
 import { motion } from "framer-motion";
 import { Hammer, PaintBucket, Layers, DoorOpen, KeyRound, Headphones, ClipboardCheck, Wrench } from "lucide-react";
-import { SERVICE_IMAGES } from "@/lib/images";
+import LazyImage from "@/components/LazyImage";
+import { SERVICE_IMAGE_IDS } from "@/lib/images";
+import { getServiceImage } from "@/lib/cloudinary";
 
 const mainServices = [
   {
     icon: Hammer,
     title: "التعديلات الإنشائية والتأسيسات",
     desc: "هدم وإعادة بناء الجدران، تمديدات كهربائية مخفية، شبكات سباكة متطورة، تأسيس أنظمة تكييف مركزي وتبريد موزع.",
-    image: SERVICE_IMAGES[0],
+    imageId: SERVICE_IMAGE_IDS[0],
   },
   {
     icon: PaintBucket,
     title: "التشطيبات المعمارية الفاخرة",
     desc: "تنفيذ جميع أعمال التشطيبات بأعلى جودة من لياسة ودهانات ديكورية وورق جدران. تركيب أرضيات راقية من باركيه ورخام وسيراميك بورسلين.",
-    image: SERVICE_IMAGES[1],
+    imageId: SERVICE_IMAGE_IDS[1],
   },
   {
     icon: Layers,
     title: "أعمال الجبس بورد والديكور",
     desc: "تصميم وتنفيذ أسقف جبس بورد معلقة متعددة المستويات، إفريزات، جدران ديكورية، إضاءة مخفية LED وكوفيات لإضفاء أجواء فاخرة.",
-    image: SERVICE_IMAGES[2],
+    imageId: SERVICE_IMAGE_IDS[2],
   },
   {
     icon: DoorOpen,
     title: "النجارة والمطابخ",
     desc: "تصميم وتصنيع وتركيب غرف نوم ومطابخ ووحدات تخزين وحلول ذكية باستخدام أفضل خامات الأخشاب والإكسسوارات.",
-    image: SERVICE_IMAGES[3],
+    imageId: SERVICE_IMAGE_IDS[3],
   },
   {
     icon: KeyRound,
     title: "التشطيب والتسليم النهائي",
     desc: "تركيب جميع الأدوات الصحية والكهربائية الفاخرة، تجهيز المطابخ بالكامل، أعمال الزجاج والمرايا، والتسليم على المفتاح.",
-    image: SERVICE_IMAGES[4],
+    imageId: SERVICE_IMAGE_IDS[4],
   },
 ];
 
@@ -83,7 +85,11 @@ const ServicesPage = () => {
                   <p className="text-muted-foreground leading-relaxed">{s.desc}</p>
                 </div>
                 <div className={`rounded-xl overflow-hidden shadow-card ${i % 2 === 1 ? "lg:order-1" : ""}`}>
-                  <img src={s.image} alt={s.title} className="w-full h-72 object-cover" loading="lazy" />
+                  <LazyImage
+                    {...getServiceImage(s.imageId)}
+                    alt={s.title}
+                    className="w-full h-72 object-cover"
+                  />
                 </div>
               </motion.div>
             ))}

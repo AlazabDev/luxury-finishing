@@ -14,6 +14,12 @@ import ContactPage from "./pages/ContactPage.tsx";
 import QuotePage from "./pages/QuotePage.tsx";
 import FaqPage from "./pages/FaqPage.tsx";
 import PrivacyPage from "./pages/PrivacyPage.tsx";
+import TermsPage from "./pages/TermsPage.tsx";
+import CookiesPage from "./pages/CookiesPage.tsx";
+import DataDeletionPage from "./pages/DataDeletionPage.tsx";
+import LegalCenterPage from "./pages/LegalCenterPage.tsx";
+import ChannelsPage from "./pages/ChannelsPage.tsx";
+import SitemapPage from "./pages/SitemapPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import ChatBot from "./components/ChatBot.tsx";
 
@@ -37,6 +43,12 @@ const App = () => (
               <Route path="/quote" element={<QuotePage />} />
               <Route path="/faq" element={<FaqPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="/cookies" element={<CookiesPage />} />
+              <Route path="/data-deletion" element={<DataDeletionPage />} />
+              <Route path="/legal" element={<LegalCenterPage />} />
+              <Route path="/channels" element={<ChannelsPage />} />
+              <Route path="/sitemap" element={<SitemapPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <ChatBot />

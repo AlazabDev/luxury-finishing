@@ -2,29 +2,26 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import LazyImage from "./LazyImage";
+import { getProjectCoverImage } from "@/lib/cloudinary";
 
 const showcaseItems = [
   {
-    image:
-      "https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-005.jpg",
+    imageId: "retail-interiors/retail-interiors-005",
     title: "صالات معيشة فاخرة",
     desc: "تصاميم عصرية بأسقف مزخرفة وإضاءة مخفية",
   },
   {
-    image:
-      "https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-015.jpg",
+    imageId: "retail-interiors/retail-interiors-015",
     title: "غرف نوم راقية",
     desc: "خامات فاخرة ولمسات ديكورية مميزة",
   },
   {
-    image:
-      "https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-030.jpg",
+    imageId: "retail-interiors/retail-interiors-030",
     title: "مطابخ عصرية",
     desc: "تصنيع وتركيب مطابخ بأفضل الخامات",
   },
   {
-    image:
-      "https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-045.jpg",
+    imageId: "retail-interiors/retail-interiors-045",
     title: "حمامات فندقية",
     desc: "رخام طبيعي وأدوات صحية أوروبية",
   },
@@ -64,7 +61,7 @@ const ShowcaseSection = () => {
             >
               <Link to="/projects">
                 <LazyImage
-                  src={item.image}
+                  {...getProjectCoverImage(item.imageId)}
                   alt={item.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />

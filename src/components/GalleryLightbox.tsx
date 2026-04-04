@@ -1,9 +1,14 @@
 import { useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, ZoomIn, Download } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Download } from "lucide-react";
+import {
+  getDownloadImage,
+  getLightboxImage,
+  getLightboxThumbnail,
+} from "@/lib/cloudinary";
 
 interface GalleryLightboxProps {
-  images: string[];
+  imageIds: string[];
   currentIndex: number;
   isOpen: boolean;
   onClose: () => void;
@@ -11,14 +16,17 @@ interface GalleryLightboxProps {
   projectTitle?: string;
 }
 
-const GalleryLightbox = ({ images, currentIndex, isOpen, onClose, onNavigate, projectTitle }: GalleryLightboxProps) => {
+const GalleryLightbox = ({ imageIds, currentIndex, isOpen, onClose, onNavigate, projectTitle }: GalleryLightboxProps) => {
   const goNext = useCallback(() => {
-    if (currentIndex < images.length - 1) onNavigate(currentIndex + 1);
-  }, [currentIndex, images.length, onNavigate]);
+    if (currentIndex < imageIds.length - 1) onNavigate(currentIndex + 1);
+  }, [currentIndex, imageIds.length, onNavigate]);
 
   const goPrev = useCallback(() => {
     if (currentIndex > 0) onNavigate(currentIndex - 1);
   }, [currentIndex, onNavigate]);
+
+  const currentImageId = imageIds[currentIndex];
+  const currentImage = currentImageId ? getLightboxImage(currentImageId) : null;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -58,12 +66,12 @@ const GalleryLightbox = ({ images, currentIndex, isOpen, onClose, onNavigate, pr
                 <span className="text-primary-foreground/80 text-sm font-medium hidden md:block">{projectTitle}</span>
               )}
               <span className="text-primary-foreground/50 text-sm font-mono tabular-nums">
-                {currentIndex + 1} / {images.length}
+                {currentIndex + 1} / {imageIds.length}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <a
-                href={images[currentIndex]}
+                href={currentImageId ? getDownloadImage(currentImageId) : "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full flex items-center justify-center text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
@@ -101,17 +109,21 @@ const GalleryLightbox = ({ images, currentIndex, isOpen, onClose, onNavigate, pr
                 transition={{ duration: 0.2 }}
                 className="max-w-full max-h-full flex items-center justify-center"
               >
-                <img
-                  src={images[currentIndex]}
-                  alt={`صورة ${currentIndex + 1}`}
-                  className="max-w-full max-h-[calc(100vh-120px)] object-contain rounded-lg"
-                  style={{ outline: "1px solid rgba(255,255,255,0.08)", outlineOffset: "-1px" }}
-                />
+                {currentImage && (
+                  <img
+                    src={currentImage.src}
+                    srcSet={currentImage.srcSet}
+                    sizes={currentImage.sizes}
+                    alt={`صورة ${currentIndex + 1}`}
+                    className="max-w-full max-h-[calc(100vh-120px)] object-contain rounded-lg"
+                    style={{ outline: "1px solid rgba(255,255,255,0.08)", outlineOffset: "-1px" }}
+                  />
+                )}
               </motion.div>
             </AnimatePresence>
 
             {/* Next */}
-            {currentIndex < images.length - 1 && (
+            {currentIndex < imageIds.length - 1 && (
               <button
                 onClick={goNext}
                 className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-primary-foreground/10 backdrop-blur-sm flex items-center justify-center text-primary-foreground/80 hover:bg-primary-foreground/20 transition-all z-20"
@@ -124,11 +136,12 @@ const GalleryLightbox = ({ images, currentIndex, isOpen, onClose, onNavigate, pr
           {/* Thumbnail strip */}
           <div className="px-4 pb-4">
             <div className="flex gap-2 overflow-x-auto justify-center py-2 scrollbar-hide">
-              {images.slice(
+              {imageIds.slice(
                 Math.max(0, currentIndex - 5),
-                Math.min(images.length, currentIndex + 6)
-              ).map((img, i) => {
+                Math.min(imageIds.length, currentIndex + 6)
+              ).map((imageId, i) => {
                 const realIndex = Math.max(0, currentIndex - 5) + i;
+                const thumb = getLightboxThumbnail(imageId);
                 return (
                   <button
                     key={realIndex}
@@ -139,7 +152,15 @@ const GalleryLightbox = ({ images, currentIndex, isOpen, onClose, onNavigate, pr
                         : "opacity-50 hover:opacity-80"
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" />
+                    <img
+                      src={thumb.src}
+                      srcSet={thumb.srcSet}
+                      sizes={thumb.sizes}
+                      alt=""
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </button>
                 );
               })}

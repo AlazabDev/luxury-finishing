@@ -19,6 +19,11 @@ export const useLanguage = () => {
 
 const translations: Record<Language, Record<string, string>> = {
   en: {
+    // Brand
+    "brand.name": "Luxury Finishing",
+    "brand.nameAr": "Luxury Finishing",
+    "brand.location": "Cairo, Egypt",
+
     // Nav
     "nav.home": "Home",
     "nav.about": "About Us",
@@ -28,6 +33,9 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.contact": "Contact",
     "nav.cta": "Free Consultation",
     "nav.quote": "Get a Quote",
+    "nav.legal": "Legal Center",
+    "nav.channels": "Official Channels",
+    "nav.sitemap": "Sitemap",
 
     // Hero
     "hero.badge": "Specialists in luxury residential finishing since 2010",
@@ -104,6 +112,10 @@ const translations: Record<Language, Record<string, string>> = {
     "footer.rights": "All rights reserved",
     "footer.privacy": "Privacy Policy",
     "footer.faq": "FAQ",
+    "footer.location": "Cairo, Egypt",
+    "footer.legal": "Legal Center",
+    "footer.channels": "Official Channels",
+    "footer.sitemap": "Sitemap",
 
     // Quote Page
     "quote.badge": "Free Quote",
@@ -143,9 +155,36 @@ const translations: Record<Language, Record<string, string>> = {
     "blog.desc": "Tips, trends, and insights about luxury finishing",
 
     // ChatBot
-    "chat.title": "Luxury Finishing AI",
+    "chat.title": "Luxury Finishing Assistant",
+    "chat.subtitle": "Maintenance, inquiries, attachments, and voice support",
     "chat.placeholder": "Type your message...",
-    "chat.welcome": "Hello! I'm Luxury Finishing assistant. How can I help you?",
+    "chat.welcome": "Welcome to Luxury Finishing. I can help with general inquiries, create architectural maintenance requests, or check an existing request.",
+    "chat.newConversation": "New conversation",
+    "chat.history": "Previous conversations",
+    "chat.download": "Download transcript",
+    "chat.close": "Close chat",
+    "chat.open": "Open chat",
+    "chat.historyTitle": "Conversation history",
+    "chat.historyLead": "You can restore, remove, or clear saved conversations.",
+    "chat.historyEmpty": "No saved conversations yet",
+    "chat.historyEmptyLead": "History is saved automatically after the first user message.",
+    "chat.historyCount": "saved conversations",
+    "chat.current": "Current",
+    "chat.clearAll": "Clear all",
+    "chat.saved": "saved",
+    "chat.removeAttachment": "Remove attachment",
+    "chat.attach": "Attach files",
+    "chat.record": "Voice recording",
+    "chat.stopRecord": "Stop recording",
+    "chat.listen": "Listen",
+    "chat.send": "Send",
+    "chat.attachPlaceholder": "Type your message or attach files...",
+    "chat.downloadSuccess": "The current conversation transcript was downloaded.",
+    "chat.clearSuccess": "Saved conversation history was cleared.",
+    "chat.downloadEmpty": "There is no conversation to download right now.",
+    "chat.supportLead": "Text and voice chat, maintenance requests, attachments, and previous conversations.",
+    "chat.attachmentsAssist": "Integrated assistant for maintenance, inquiries, and attachments",
+    "chat.latestUpdate": "Last updated",
 
     // Theme
     "theme.light": "Light",
@@ -160,6 +199,11 @@ const translations: Record<Language, Record<string, string>> = {
     "property.studio": "Studio",
   },
   ar: {
+    // Brand
+    "brand.name": "لاكشري فينيشينج",
+    "brand.nameAr": "لاكشري فينيشينج",
+    "brand.location": "القاهرة، مصر",
+
     // Nav
     "nav.home": "الرئيسية",
     "nav.about": "عن الشركة",
@@ -169,6 +213,9 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.contact": "اتصل بنا",
     "nav.cta": "استشارة مجانية",
     "nav.quote": "طلب عرض سعر",
+    "nav.legal": "المركز القانوني",
+    "nav.channels": "القنوات الرسمية",
+    "nav.sitemap": "خريطة الموقع",
 
     // Hero
     "hero.badge": "متخصصون في التشطيبات السكنية الفاخرة منذ 2010",
@@ -245,6 +292,10 @@ const translations: Record<Language, Record<string, string>> = {
     "footer.rights": "جميع الحقوق محفوظة",
     "footer.privacy": "سياسة الخصوصية",
     "footer.faq": "الأسئلة الشائعة",
+    "footer.location": "القاهرة، مصر",
+    "footer.legal": "المركز القانوني",
+    "footer.channels": "القنوات الرسمية",
+    "footer.sitemap": "خريطة الموقع",
 
     // Quote Page
     "quote.badge": "عرض سعر مجاني",
@@ -276,7 +327,7 @@ const translations: Record<Language, Record<string, string>> = {
     "contact.desc": "نحن هنا لمساعدتك في مشروع التشطيب",
 
     // About
-    "about.title": "عن Luxury Finishing",
+    "about.title": "عن لاكشري فينيشينج",
     "about.desc": "تعرف على رحلتنا والتزامنا بالتميز",
 
     // Blog
@@ -284,9 +335,36 @@ const translations: Record<Language, Record<string, string>> = {
     "blog.desc": "نصائح واتجاهات ومعلومات عن التشطيبات الفاخرة",
 
     // ChatBot
-    "chat.title": "مساعد Luxury Finishing الذكي",
+    "chat.title": "مساعد لاكشري فينيشينج",
+    "chat.subtitle": "الصيانة والاستفسارات والمرفقات والدعم الصوتي",
     "chat.placeholder": "اكتب رسالتك...",
-    "chat.welcome": "مرحباً! أنا مساعد Luxury Finishing الذكي. كيف يمكنني مساعدتك؟",
+    "chat.welcome": "مرحباً بك في لاكشري فينيشينج. يمكنني مساعدتك في الاستفسارات العامة، أو إنشاء طلب صيانة معمارية، أو الاستعلام عن طلب قائم.",
+    "chat.newConversation": "محادثة جديدة",
+    "chat.history": "المحادثات السابقة",
+    "chat.download": "تنزيل نسخة من المحادثة",
+    "chat.close": "إغلاق المحادثة",
+    "chat.open": "فتح المحادثة",
+    "chat.historyTitle": "سجل المحادثات",
+    "chat.historyLead": "يمكنك الرجوع إلى أي محادثة سابقة أو حذفها أو بدء محادثة جديدة.",
+    "chat.historyEmpty": "لا توجد محادثات محفوظة بعد",
+    "chat.historyEmptyLead": "يبدأ السجل بالحفظ تلقائياً بعد أول رسالة من المستخدم.",
+    "chat.historyCount": "محادثة محفوظة",
+    "chat.current": "الحالية",
+    "chat.clearAll": "مسح الكل",
+    "chat.saved": "محفوظة",
+    "chat.removeAttachment": "إزالة المرفق",
+    "chat.attach": "إرفاق ملفات",
+    "chat.record": "تسجيل صوتي",
+    "chat.stopRecord": "إيقاف التسجيل",
+    "chat.listen": "استمع",
+    "chat.send": "إرسال",
+    "chat.attachPlaceholder": "اكتب رسالتك أو أرفق ملفات...",
+    "chat.downloadSuccess": "تم تنزيل نسخة من المحادثة الحالية.",
+    "chat.clearSuccess": "تم مسح سجل المحادثات المحفوظة.",
+    "chat.downloadEmpty": "لا توجد محادثة قابلة للتنزيل حالياً.",
+    "chat.supportLead": "دعم المحادثة النصية والصوتية، إنشاء طلبات الصيانة، المرفقات، وسجل المحادثات السابقة.",
+    "chat.attachmentsAssist": "مساعد متكامل للصيانة والاستفسارات والمرفقات",
+    "chat.latestUpdate": "آخر تحديث",
 
     // Theme
     "theme.light": "نهاري",
@@ -305,7 +383,7 @@ const translations: Record<Language, Record<string, string>> = {
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>(() => {
     const saved = localStorage.getItem("lf-lang");
-    return (saved === "ar" || saved === "en") ? saved : "en";
+    return (saved === "ar" || saved === "en") ? saved : "ar";
   });
 
   const setLang = (newLang: Language) => {

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Shield, Lightbulb, Clock, Award } from "lucide-react";
 import LazyImage from "./LazyImage";
+import { getEditorialImage, getPortraitImage } from "@/lib/cloudinary";
 
 const cards = [
   {
@@ -87,14 +88,14 @@ const ExpertiseSection = () => {
               <div className="space-y-4">
                 <div className="rounded-2xl overflow-hidden aspect-[3/4]">
                   <LazyImage
-                    src="https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-010.jpg"
+                    {...getPortraitImage("retail-interiors/retail-interiors-010")}
                     alt="تشطيبات سكنية"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="rounded-2xl overflow-hidden aspect-square">
                   <LazyImage
-                    src="https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-025.jpg"
+                    {...getEditorialImage("retail-interiors/retail-interiors-025")}
                     alt="ديكورات داخلية"
                     className="w-full h-full object-cover"
                   />
@@ -103,14 +104,14 @@ const ExpertiseSection = () => {
               <div className="space-y-4 mt-8">
                 <div className="rounded-2xl overflow-hidden aspect-square">
                   <LazyImage
-                    src="https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-040.jpg"
+                    {...getEditorialImage("retail-interiors/retail-interiors-040")}
                     alt="مطابخ حديثة"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="rounded-2xl overflow-hidden aspect-[3/4]">
                   <LazyImage
-                    src="https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-055.jpg"
+                    {...getPortraitImage("retail-interiors/retail-interiors-055")}
                     alt="غرف نوم فاخرة"
                     className="w-full h-full object-cover"
                   />

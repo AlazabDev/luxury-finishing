@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { PROJECT_IMAGES, HERO_IMAGE } from "@/lib/images";
+import { PROJECT_IMAGE_IDS, HERO_IMAGE_ID } from "@/lib/images";
+import { getHeroBackgroundImage } from "@/lib/cloudinary";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const stats = [
@@ -50,10 +51,10 @@ const HeroSection = () => {
   const { t, lang, dir } = useLanguage();
 
   const heroSlides = [
-    { image: HERO_IMAGE, title: t("hero.slide1.title"), subtitle: t("hero.slide1.subtitle") },
-    { image: PROJECT_IMAGES[0], title: t("hero.slide2.title"), subtitle: t("hero.slide2.subtitle") },
-    { image: PROJECT_IMAGES[1], title: t("hero.slide3.title"), subtitle: t("hero.slide3.subtitle") },
-    { image: PROJECT_IMAGES[2], title: t("hero.slide4.title"), subtitle: t("hero.slide4.subtitle") },
+    { imageId: HERO_IMAGE_ID, title: t("hero.slide1.title"), subtitle: t("hero.slide1.subtitle") },
+    { imageId: PROJECT_IMAGE_IDS[0], title: t("hero.slide2.title"), subtitle: t("hero.slide2.subtitle") },
+    { imageId: PROJECT_IMAGE_IDS[1], title: t("hero.slide3.title"), subtitle: t("hero.slide3.subtitle") },
+    { imageId: PROJECT_IMAGE_IDS[2], title: t("hero.slide4.title"), subtitle: t("hero.slide4.subtitle") },
   ];
 
   const next = useCallback(
@@ -84,7 +85,7 @@ const HeroSection = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${slide.image})` }}
+            style={{ backgroundImage: `url(${getHeroBackgroundImage(slide.imageId)})` }}
           />
         </AnimatePresence>
 

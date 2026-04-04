@@ -3,4 +3,23 @@ project_id = "lnoyiwrulvoaaerpiqxc"
 
 [functions.whatsapp]
 verify_jwt = false
+[functions.auth-hooks]
+verify_jwt = false
+[functions.whatsapp-hooks]
+verify_jwt = false
+[functions.maintenance-gateway]
+verify_jwt = false
+[functions.maintenance-gateway-api]
+verify_jwt = false
 [functions.maintenance-proxy]
+[functions.chat-attachments]
+[functions.chatbot-endpoint]
+verify_jwt = false
+[functions.meta-webhook]
+verify_jwt = false
+[functions.meta-data-deletion]
+verify_jwt = false
+[functions.notifications-gateway]
+verify_jwt = false
+[functions.system-notifications]
+verify_jwt = false

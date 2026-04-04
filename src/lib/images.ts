@@ -1,11 +1,27 @@
-const OCI_BASE = "https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-";
-const CDN = "http://res.cloudinary.com/dn4ne1ep1/image/upload";
+const buildImageSequence = (
+  prefix: string,
+  count: number,
+  options: {
+    pad?: number;
+    separator?: string;
+    exclude?: number[];
+  } = {},
+) => {
+  const {
+    pad = 0,
+    separator = "-",
+    exclude = [],
+  } = options;
 
-// Helper to generate OCI image URLs (skip broken extensions)
-const ociImg = (n: number) => `${OCI_BASE}${String(n).padStart(3, "0")}.jpg`;
+  const excluded = new Set(exclude);
 
-// Broken links to skip: 57 (.تنزيل), 78 (.تنزيل), 79 (.css), 224 (.gif)
-const brokenOci = new Set([57, 78, 79, 224]);
+  return Array.from({ length: count }, (_, index) => index + 1)
+    .filter((value) => !excluded.has(value))
+    .map((value) => {
+      const suffix = pad ? String(value).padStart(pad, "0") : String(value);
+      return `${prefix}${separator}${suffix}`;
+    });
+};
 
 export interface GalleryProject {
   id: string;
@@ -13,227 +29,28 @@ export interface GalleryProject {
   category: string;
   location: string;
   year: string;
-  coverImage: string;
-  images: string[];
+  coverImageId: string;
+  imageIds: string[];
   description: string;
 }
 
-// Generate valid retail-interiors URLs
-const retailImages = Array.from({ length: 389 }, (_, i) => i + 1)
-  .filter((n) => !brokenOci.has(n))
-  .map(ociImg);
+const retailImageIds = buildImageSequence("retail-interiors/retail-interiors", 389, {
+  pad: 3,
+  exclude: [57, 78, 79, 224],
+});
 
-// Shops images (Cloudinary)
-const shopsImages: string[] = [
-  `${CDN}/v1773446524/shops-147_lkkrrc.jpg`,
-  `${CDN}/v1773446460/shops-146_qryzub.jpg`,
-  `${CDN}/v1773446427/shops-150_pxm94c.jpg`,
-  `${CDN}/v1773446426/shops-148_qbpjjy.jpg`,
-  `${CDN}/v1773446418/shops-151_srcrev.jpg`,
-  `${CDN}/v1773446371/shops-144_gbct7g.jpg`,
-  `${CDN}/v1773446352/shops-149_jtucxi.jpg`,
-  `${CDN}/v1773446286/shops-142_esiedl.jpg`,
-  `${CDN}/v1773446263/shops-143_z1bkry.jpg`,
-  `${CDN}/v1773446261/shops-145_hjtxxo.jpg`,
-  `${CDN}/v1773446226/shops-140_xlxcrh.jpg`,
-  `${CDN}/v1773446207/shops-130_xvdkhk.jpg`,
-  `${CDN}/v1773446175/shops-141_hezsdy.jpg`,
-  `${CDN}/v1773446175/shops-138_j6aysa.jpg`,
-  `${CDN}/v1773446144/shops-132_nljvqq.jpg`,
-  `${CDN}/v1773446137/shops-139_ydnecq.jpg`,
-  `${CDN}/v1773446129/shops-137_vbiznf.jpg`,
-  `${CDN}/v1773446113/shops-125_uq34tr.jpg`,
-  `${CDN}/v1773446060/shops-127_cuhzqz.jpg`,
-  `${CDN}/v1773446059/shops-136_juvnbn.jpg`,
-  `${CDN}/v1773446047/shops-135_mh81tz.jpg`,
-  `${CDN}/v1773445989/shops-133_fwbfui.jpg`,
-  `${CDN}/v1773445954/shops-134_pw1ddy.jpg`,
-  `${CDN}/v1773445914/shops-126_v2eylq.jpg`,
-  `${CDN}/v1773445898/shops-129_jkpuuu.jpg`,
-  `${CDN}/v1773445865/shops-131_r9odwp.jpg`,
-  `${CDN}/v1773445862/shops-123_xu3gge.jpg`,
-  `${CDN}/v1773445845/shops-119_cdhaix.jpg`,
-  `${CDN}/v1773445822/shops-128_kutmu5.jpg`,
-  `${CDN}/v1773445818/shops-120_hy7atd.jpg`,
-  `${CDN}/v1773445801/shops-124_asowkd.jpg`,
-  `${CDN}/v1773445729/shops-121_yhgrl2.jpg`,
-  `${CDN}/v1773445727/shops-104_zqsfdx.jpg`,
-  `${CDN}/v1773445717/shops-122_qiwkys.jpg`,
-  `${CDN}/v1773445691/shops-118_k6t4ln.jpg`,
-  `${CDN}/v1773445635/shops-117_tmvtcl.jpg`,
-  `${CDN}/v1773445627/shops-116_cv486f.jpg`,
-  `${CDN}/v1773445581/shops-108_ndfmfz.jpg`,
-  `${CDN}/v1773445566/shops-114_etvjyl.jpg`,
-  `${CDN}/v1773445510/shops-115_nvoutq.jpg`,
-  `${CDN}/v1773445507/shops-112_fvh1xu.jpg`,
-  `${CDN}/v1773445451/shops-110_gmxlu7.jpg`,
-  `${CDN}/v1773445438/shops-111_f3jjme.jpg`,
-  `${CDN}/v1773445429/shops-113_ajp34m.jpg`,
-  `${CDN}/v1773445342/shops-109_oxuqyj.jpg`,
-  `${CDN}/v1773445278/shops-107_pewatq.jpg`,
-  `${CDN}/v1773445258/shops-099_iqbyik.jpg`,
-  `${CDN}/v1773445219/shops-105_ebm0zw.jpg`,
-  `${CDN}/v1773445207/shops-101_ks4m0k.jpg`,
-  `${CDN}/v1773445203/shops-098_y0nwml.jpg`,
-  `${CDN}/v1773445159/shops-106_qhggbi.jpg`,
-  `${CDN}/v1773445083/shops-103_hhqjbi.jpg`,
-  `${CDN}/v1773445083/shops-100_g8ijjd.jpg`,
-  `${CDN}/v1773445077/shops-102_exxzcp.jpg`,
-  `${CDN}/v1773445012/shops-097_um0rki.jpg`,
-  `${CDN}/v1773444959/shops-092_siqmc2.jpg`,
-  `${CDN}/v1773444956/shops-095_p7gpye.jpg`,
-  `${CDN}/v1773444946/shops-096_yhbpvy.jpg`,
-  `${CDN}/v1773444935/shops-093_rwwyaz.jpg`,
-  `${CDN}/v1773444935/shops-094_k9uqkh.jpg`,
-  `${CDN}/v1773444902/shops-088_h0lss1.jpg`,
-  `${CDN}/v1773444874/shops-091_nhzq0i.jpg`,
-  `${CDN}/v1773444853/shops-090_yzxsfv.jpg`,
-  `${CDN}/v1773444837/shops-089_updkzi.jpg`,
-  `${CDN}/v1773444832/shops-087_oph2jl.jpg`,
-  `${CDN}/v1773444825/shops-082_kkktge.jpg`,
-  `${CDN}/v1773444793/shops-079_eo0jnt.jpg`,
-  `${CDN}/v1773444774/shops-084_tyxip7.jpg`,
-  `${CDN}/v1773444767/shops-083_dpfxdg.jpg`,
-  `${CDN}/v1773444765/shops-086_y8hfev.jpg`,
-  `${CDN}/v1773444759/shops-085_xgbv23.jpg`,
-  `${CDN}/v1773444706/shops-081_tnhd08.jpg`,
-  `${CDN}/v1773444699/shops-077_kgh6u4.jpg`,
-  `${CDN}/v1773444693/shops-078_big7d2.jpg`,
-  `${CDN}/v1773444688/shops-080_moq4fl.jpg`,
-  `${CDN}/v1773444630/shops-075_y7lyrj.jpg`,
-  `${CDN}/v1773444605/shops-072_anznpl.jpg`,
-  `${CDN}/v1773444584/shops-074_udxbft.jpg`,
-  `${CDN}/v1773444567/shops-076_hpnpmc.jpg`,
-  `${CDN}/v1773444482/shops-073_kpxii2.jpg`,
-  `${CDN}/v1773444451/shops-068_bro7hf.jpg`,
-  `${CDN}/v1773444436/shops-057_yh6kbi.jpg`,
-  `${CDN}/v1773444396/shops-069_qdltqx.jpg`,
-  `${CDN}/v1773444389/shops-071_li61qk.jpg`,
-  `${CDN}/v1773444378/shops-066_b92msu.jpg`,
-  `${CDN}/v1773444327/shops-067_csdc0l.jpg`,
-  `${CDN}/v1773444218/shops-070_qhzhio.jpg`,
-  `${CDN}/v1773444206/shops-049_gdfeno.jpg`,
-  `${CDN}/v1773444205/shops-058_stb661.jpg`,
-  `${CDN}/v1773444194/shops-063_zciyjz.jpg`,
-  `${CDN}/v1773444176/shops-064_znpfop.jpg`,
-  `${CDN}/v1773444173/shops-065_ewsjp7.jpg`,
-  `${CDN}/v1773444149/shops-060_nxsuwj.jpg`,
-  `${CDN}/v1773444107/shops-062_o3krjh.jpg`,
-  `${CDN}/v1773444073/shops-059_ypqggk.jpg`,
-  `${CDN}/v1773444046/shops-061_du1mya.jpg`,
-  `${CDN}/v1773443998/shops-056_hiowkx.jpg`,
-  `${CDN}/v1773443938/shops-054_l0vdxf.jpg`,
-  `${CDN}/v1773443936/shops-048_gbxgib.jpg`,
-  `${CDN}/v1773443934/shops-055_uf8xjt.jpg`,
-  `${CDN}/v1773443929/shops-053_xurpxz.jpg`,
-  `${CDN}/v1773443889/shops-052_bounzj.jpg`,
-  `${CDN}/v1773443884/shops-050_tbyh46.jpg`,
-  `${CDN}/v1773443864/shops-051_t1xrfd.jpg`,
-  `${CDN}/v1773443838/shops-043_qwokdo.jpg`,
-  `${CDN}/v1773443815/shops-047_m4rff3.jpg`,
-  `${CDN}/v1773443813/shops-044_kwxkjm.jpg`,
-  `${CDN}/v1773443812/shops-041_fdclkx.jpg`,
-  `${CDN}/v1773443809/shops-045_gdz1os.jpg`,
-  `${CDN}/v1773443793/shops-042_lo3mkf.jpg`,
-  `${CDN}/v1773443777/shops-046_prkwcd.jpg`,
-  `${CDN}/v1773443751/shops-040_zaz9xn.jpg`,
-  `${CDN}/v1773443717/shops-039_ylmwgb.jpg`,
-  `${CDN}/v1773443716/shops-038_egy3nj.jpg`,
-  `${CDN}/v1773443714/shops-037_ihzhxr.jpg`,
-  `${CDN}/v1773443713/shops-035_kgmd1j.jpg`,
-  `${CDN}/v1773443713/shops-036_ajje4j.jpg`,
-  `${CDN}/v1773443712/shops-034_syflnk.jpg`,
-  `${CDN}/v1773443712/shops-033_a0fkls.jpg`,
-  `${CDN}/v1773443707/shops-032_j4zgle.jpg`,
-  `${CDN}/v1773443707/shops-031_cqz7g5.jpg`,
-  `${CDN}/v1773443707/shops-028_vmf6eu.jpg`,
-  `${CDN}/v1773443707/shops-030_lbue72.jpg`,
-  `${CDN}/v1773443707/shops-029_bjh5qe.jpg`,
-  `${CDN}/v1773443704/shops-027_bhkvzb.jpg`,
-  `${CDN}/v1773443702/shops-026_iimq3b.jpg`,
-  `${CDN}/v1773443701/shops-024_aea5ck.jpg`,
-  `${CDN}/v1773443701/shops-025_fracqj.jpg`,
-  `${CDN}/v1773443700/shops-023_orarja.jpg`,
-  `${CDN}/v1773443699/shops-022_ao2bry.jpg`,
-  `${CDN}/v1773443698/shops-021_oxy2ip.jpg`,
-  `${CDN}/v1773443697/shops-020_mpn2ar.jpg`,
-  `${CDN}/v1773443696/shops-019_jusb7e.jpg`,
-  `${CDN}/v1773443695/shops-018_bcez1c.jpg`,
-  `${CDN}/v1773443694/shops-016_yifgps.jpg`,
-  `${CDN}/v1773443694/shops-017_aw3rwn.jpg`,
-  `${CDN}/v1773443692/shops-011_yqiv9u.jpg`,
-  `${CDN}/v1773443689/shops-015_lxvhaj.jpg`,
-  `${CDN}/v1773443689/shops-014_alfgsq.jpg`,
-  `${CDN}/v1773443689/shops-013_gtfyto.jpg`,
-  `${CDN}/v1773443688/shops-012_yep0we.jpg`,
-  `${CDN}/v1773443688/shops-010_achcpv.jpg`,
-  `${CDN}/v1773443682/shops-009_l7istf.jpg`,
-  `${CDN}/v1773443682/shops-005_lam36c.jpg`,
-  `${CDN}/v1773443681/shops-008_tsbfrc.jpg`,
-  `${CDN}/v1773443681/shops-006_ddhvbo.jpg`,
-  `${CDN}/v1773443681/shops-007_cu1s0a.jpg`,
-  `${CDN}/v1773443681/shops-004_o7zykx.jpg`,
-  `${CDN}/v1773443681/shops-003_gkag89.jpg`,
-  `${CDN}/v1773443681/shops-002_goufly.jpg`,
-  `${CDN}/v1773443680/shops-001_iffytj.jpg`,
-];
+const shopsImageIds = buildImageSequence("shops/shops", 151, {
+  pad: 3,
+});
 
-// Abu Auf images (Cloudinary)
-const abuaufImages: string[] = [
-  `${CDN}/v1773442140/abuauf_38_jqkm5l.jpg`,
-  `${CDN}/v1773442122/abuauf_40_t7imfc.jpg`,
-  `${CDN}/v1773441891/abuauf_49_hyrlgn.jpg`,
-  `${CDN}/v1773441870/abuauf_47_mshliw.jpg`,
-  `${CDN}/v1773441847/abuauf_48_wuhp4q.jpg`,
-  `${CDN}/v1773441845/abuauf_45_epvrsl.jpg`,
-  `${CDN}/v1773441840/abuauf_46_hjvpgo.jpg`,
-  `${CDN}/v1773441826/abuauf_42_jcts54.jpg`,
-  `${CDN}/v1773441824/abuauf_44_xl6isl.jpg`,
-  `${CDN}/v1773441799/abuauf_43_bgnhj5.jpg`,
-  `${CDN}/v1773441798/abuauf_20_btkfba.jpg`,
-  `${CDN}/v1773441794/abuauf_18_aghzz6.jpg`,
-  `${CDN}/v1773441775/abuauf_41_e8ekgw.jpg`,
-  `${CDN}/v1773441768/abuauf_39_pimunt.jpg`,
-  `${CDN}/v1773441737/abuauf_35_nqciuv.jpg`,
-  `${CDN}/v1773441736/abuauf_37_wnyaic.jpg`,
-  `${CDN}/v1773441725/abuauf_32_pogtpg.jpg`,
-  `${CDN}/v1773441723/abuauf_34_kv5ach.jpg`,
-  `${CDN}/v1773441707/abuauf_36_eq5gsa.jpg`,
-  `${CDN}/v1773441691/abuauf_33_u4fy8d.jpg`,
-  `${CDN}/v1773441690/abuauf_3_j2fuou.jpg`,
-  `${CDN}/v1773441689/abuauf_31_blsjcs.jpg`,
-  `${CDN}/v1773441681/abuauf_28_quribv.jpg`,
-  `${CDN}/v1773441672/abuauf_30_n2odwx.jpg`,
-  `${CDN}/v1773441667/abuauf_29_ctxmfd.jpg`,
-  `${CDN}/v1773441645/abuauf_25_yk77fw.jpg`,
-  `${CDN}/v1773441633/abuauf_26_sf6rnd.jpg`,
-  `${CDN}/v1773441629/abuauf_27_efrsd1.jpg`,
-  `${CDN}/v1773441606/abuauf_24_q2inpi.jpg`,
-  `${CDN}/v1773441601/abuauf_23_j2ecrk.jpg`,
-  `${CDN}/v1773441590/abuauf_17_ni5u97.jpg`,
-  `${CDN}/v1773441577/abuauf_16_zbx3hg.jpg`,
-  `${CDN}/v1773441538/abuauf_22_fzhzjy.jpg`,
-  `${CDN}/v1773441493/abuauf_21_py8fb4.jpg`,
-  `${CDN}/v1773441451/abuauf_19_kneen6.jpg`,
-  `${CDN}/v1773441386/abuauf_13_btxudd.jpg`,
-  `${CDN}/v1773441383/abuauf_15_rutk63.jpg`,
-  `${CDN}/v1773441350/abuauf_12_kiokbd.jpg`,
-  `${CDN}/v1773441341/abuauf_14_knpl36.jpg`,
-  `${CDN}/v1773441333/abuauf_11_dqtxjy.jpg`,
-  `${CDN}/v1773441313/abuauf_9_tr6fo9.jpg`,
-  `${CDN}/v1773441312/abuauf_10_ajiebo.jpg`,
-  `${CDN}/v1773441311/abuauf_4_cgusgq.jpg`,
-  `${CDN}/v1773441310/abuauf_8_dgoexw.jpg`,
-  `${CDN}/v1773441287/abuauf_7_j7xxes.jpg`,
-  `${CDN}/v1773441278/abuauf_2_omuzfw.jpg`,
-  `${CDN}/v1773441266/abuauf_1_tnqr3b.jpg`,
-  `${CDN}/v1773441261/abuauf_6_vpd4wc.jpg`,
-];
+const abuaufImageIds = buildImageSequence("abuauf/abuauf_", 49, {
+  separator: "",
+  exclude: [5],
+});
 
-// About page image
-export const ABOUT_HERO = `${CDN}/v1773441261/about-18_ndwlyr.jpg`;
+export const ABOUT_HERO_ID = "about/about-18";
+export const CTA_IMAGE_ID = "retail-interiors/retail-interiors-020";
 
-// Organized gallery projects
 export const galleryProjects: GalleryProject[] = [
   {
     id: "retail-1",
@@ -241,8 +58,8 @@ export const galleryProjects: GalleryProject[] = [
     category: "تشطيبات سكنية",
     location: "القاهرة الكبرى",
     year: "2024",
-    coverImage: retailImages[0],
-    images: retailImages.slice(0, 50),
+    coverImageId: retailImageIds[0],
+    imageIds: retailImageIds.slice(0, 50),
     description: "مجموعة متنوعة من مشاريع التشطيبات السكنية الفاخرة تشمل صالات معيشة وغرف نوم ومطابخ عصرية.",
   },
   {
@@ -251,8 +68,8 @@ export const galleryProjects: GalleryProject[] = [
     category: "تشطيبات سكنية",
     location: "التجمع الخامس",
     year: "2024",
-    coverImage: retailImages[50],
-    images: retailImages.slice(50, 120),
+    coverImageId: retailImageIds[50],
+    imageIds: retailImageIds.slice(50, 120),
     description: "مشاريع تشطيب راقية تتضمن أرضيات رخام وأسقف جبس بورد وإضاءة مخفية.",
   },
   {
@@ -261,8 +78,8 @@ export const galleryProjects: GalleryProject[] = [
     category: "تشطيبات سكنية",
     location: "الشيخ زايد",
     year: "2023",
-    coverImage: retailImages[120],
-    images: retailImages.slice(120, 200),
+    coverImageId: retailImageIds[120],
+    imageIds: retailImageIds.slice(120, 200),
     description: "مشاريع فلل ودوبلكس بتصميمات عصرية وخامات أوروبية.",
   },
   {
@@ -271,8 +88,8 @@ export const galleryProjects: GalleryProject[] = [
     category: "تشطيبات سكنية",
     location: "المعادي والرحاب",
     year: "2023",
-    coverImage: retailImages[200],
-    images: retailImages.slice(200, 290),
+    coverImageId: retailImageIds[200],
+    imageIds: retailImageIds.slice(200, 290),
     description: "تشطيبات داخلية عالية الجودة لشقق فاخرة وبنتهاوس.",
   },
   {
@@ -281,8 +98,8 @@ export const galleryProjects: GalleryProject[] = [
     category: "تشطيبات سكنية",
     location: "مدينة نصر والمهندسين",
     year: "2022",
-    coverImage: retailImages[290],
-    images: retailImages.slice(290),
+    coverImageId: retailImageIds[290],
+    imageIds: retailImageIds.slice(290),
     description: "أحدث مشاريعنا في التصميم الداخلي والتشطيبات المعمارية.",
   },
   {
@@ -291,8 +108,8 @@ export const galleryProjects: GalleryProject[] = [
     category: "محلات تجارية",
     location: "مواقع متعددة",
     year: "2024",
-    coverImage: shopsImages[0],
-    images: shopsImages.slice(0, 50),
+    coverImageId: shopsImageIds[0],
+    imageIds: shopsImageIds.slice(0, 50),
     description: "تجهيز وتشطيب محلات تجارية بتصميمات جذابة وعصرية.",
   },
   {
@@ -301,8 +118,8 @@ export const galleryProjects: GalleryProject[] = [
     category: "محلات تجارية",
     location: "مولات ومراكز تجارية",
     year: "2023",
-    coverImage: shopsImages[50],
-    images: shopsImages.slice(50, 100),
+    coverImageId: shopsImageIds[50],
+    imageIds: shopsImageIds.slice(50, 100),
     description: "تشطيبات محلات تجارية مع واجهات زجاجية وتصميمات داخلية مميزة.",
   },
   {
@@ -311,8 +128,8 @@ export const galleryProjects: GalleryProject[] = [
     category: "محلات تجارية",
     location: "مناطق تجارية",
     year: "2023",
-    coverImage: shopsImages[100],
-    images: shopsImages.slice(100),
+    coverImageId: shopsImageIds[100],
+    imageIds: shopsImageIds.slice(100),
     description: "تجهيزات تجارية متكاملة من التصميم إلى التسليم.",
   },
   {
@@ -321,20 +138,38 @@ export const galleryProjects: GalleryProject[] = [
     category: "مشاريع خاصة",
     location: "فروع متعددة",
     year: "2024",
-    coverImage: abuaufImages[0],
-    images: abuaufImages,
+    coverImageId: abuaufImageIds[0],
+    imageIds: abuaufImageIds,
     description: "تجهيز وتشطيب فروع أبو عوف بتصميمات مميزة تعكس هوية العلامة التجارية.",
   },
 ];
 
 export const galleryCategories = ["الكل", "تشطيبات سكنية", "محلات تجارية", "مشاريع خاصة"];
 
-// Total image count for stats
-export const totalImageCount = retailImages.length + shopsImages.length + abuaufImages.length;
+export const totalImageCount =
+  retailImageIds.length + shopsImageIds.length + abuaufImageIds.length;
 
-// For other components that use simple image arrays
-export const HERO_IMAGE = retailImages[0];
-export const PROJECT_IMAGES = [retailImages[10], retailImages[60], retailImages[120], retailImages[200]];
-export const SERVICE_IMAGES = [retailImages[30], retailImages[80], retailImages[140], retailImages[180], retailImages[250]];
-export const BLOG_IMAGES = [retailImages[50], retailImages[100], retailImages[150]];
-export const ABOUT_IMAGES = [retailImages[5], retailImages[15], retailImages[25]];
+export const HERO_IMAGE_ID = retailImageIds[0];
+export const PROJECT_IMAGE_IDS = [
+  retailImageIds[10],
+  retailImageIds[60],
+  retailImageIds[120],
+  retailImageIds[200],
+];
+export const SERVICE_IMAGE_IDS = [
+  retailImageIds[30],
+  retailImageIds[80],
+  retailImageIds[140],
+  retailImageIds[180],
+  retailImageIds[250],
+];
+export const BLOG_IMAGE_IDS = [
+  retailImageIds[50],
+  retailImageIds[100],
+  retailImageIds[150],
+];
+export const ABOUT_IMAGE_IDS = [
+  retailImageIds[5],
+  retailImageIds[15],
+  retailImageIds[25],
+];

@@ -8,6 +8,11 @@ import { Eye, Images, MapPin, Calendar, ArrowLeft, Grid3X3, LayoutGrid } from "l
 import LazyImage from "@/components/LazyImage";
 import { galleryProjects, galleryCategories, totalImageCount, type GalleryProject } from "@/lib/images";
 import { Button } from "@/components/ui/button";
+import {
+  getGalleryImage,
+  getProjectCoverImage,
+  getProjectPreviewThumb,
+} from "@/lib/cloudinary";
 
 type ViewMode = "projects" | "gallery";
 
@@ -17,7 +22,7 @@ const ProjectsPage = () => {
   const [selectedProject, setSelectedProject] = useState<GalleryProject | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
+  const [lightboxImageIds, setLightboxImageIds] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState(12);
 
   const filteredProjects = useMemo(() => {
@@ -26,12 +31,12 @@ const ProjectsPage = () => {
   }, [activeCategory]);
 
   // All images from filtered projects for gallery view
-  const allFilteredImages = useMemo(() => {
-    return filteredProjects.flatMap((p) => p.images);
+  const allFilteredImageIds = useMemo(() => {
+    return filteredProjects.flatMap((project) => project.imageIds);
   }, [filteredProjects]);
 
-  const openLightbox = useCallback((images: string[], index: number, title?: string) => {
-    setLightboxImages(images);
+  const openLightbox = useCallback((imageIds: string[], index: number) => {
+    setLightboxImageIds(imageIds);
     setLightboxIndex(index);
     setLightboxOpen(true);
   }, []);
@@ -160,24 +165,24 @@ const ProjectsPage = () => {
                     <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
                       <span className="flex items-center gap-1"><MapPin className="w-4 h-4 text-accent" />{selectedProject.location}</span>
                       <span className="flex items-center gap-1"><Calendar className="w-4 h-4 text-accent" />{selectedProject.year}</span>
-                      <span className="flex items-center gap-1"><Images className="w-4 h-4 text-accent" />{selectedProject.images.length} صورة</span>
+                      <span className="flex items-center gap-1"><Images className="w-4 h-4 text-accent" />{selectedProject.imageIds.length} صورة</span>
                     </div>
                     <p className="text-muted-foreground max-w-2xl">{selectedProject.description}</p>
                   </div>
 
                   {/* Masonry Grid */}
                   <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
-                    {selectedProject.images.slice(0, visibleCount).map((img, i) => (
+                    {selectedProject.imageIds.slice(0, visibleCount).map((imageId, i) => (
                       <motion.div
                         key={i}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: Math.min(i * 0.03, 0.3) }}
                         className="break-inside-avoid group relative rounded-xl overflow-hidden cursor-pointer"
-                        onClick={() => openLightbox(selectedProject.images, i, selectedProject.title)}
+                        onClick={() => openLightbox(selectedProject.imageIds, i)}
                       >
                         <LazyImage
-                          src={img}
+                          {...getGalleryImage(imageId)}
                           alt={`${selectedProject.title} - صورة ${i + 1}`}
                           className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
@@ -193,7 +198,7 @@ const ProjectsPage = () => {
                   </div>
 
                   {/* Load more */}
-                  {visibleCount < selectedProject.images.length && (
+                  {visibleCount < selectedProject.imageIds.length && (
                     <div className="text-center mt-12">
                       <Button
                         variant="gold-outline"
@@ -202,7 +207,7 @@ const ProjectsPage = () => {
                         className="px-10"
                       >
                         <Images className="w-5 h-5" />
-                        عرض المزيد ({selectedProject.images.length - visibleCount} صورة متبقية)
+                        عرض المزيد ({selectedProject.imageIds.length - visibleCount} صورة متبقية)
                       </Button>
                     </div>
                   )}
@@ -228,7 +233,7 @@ const ProjectsPage = () => {
                         {/* Cover image */}
                         <div className="relative aspect-[4/3] overflow-hidden">
                           <LazyImage
-                            src={project.coverImage}
+                            {...getProjectCoverImage(project.coverImageId)}
                             alt={project.title}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
@@ -237,7 +242,7 @@ const ProjectsPage = () => {
                           {/* Image count badge */}
                           <div className="absolute top-4 left-4 bg-primary/70 backdrop-blur-sm text-primary-foreground text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
                             <Images className="w-3.5 h-3.5" />
-                            {project.images.length}
+                            {project.imageIds.length}
                           </div>
 
                           {/* Bottom info overlay */}
@@ -268,14 +273,18 @@ const ProjectsPage = () => {
                         {/* Preview thumbnails */}
                         <div className="px-5 pb-5">
                           <div className="flex gap-1.5">
-                            {project.images.slice(1, 5).map((img, j) => (
+                            {project.imageIds.slice(1, 5).map((imageId, j) => (
                               <div key={j} className="w-14 h-14 rounded-md overflow-hidden flex-shrink-0">
-                                <LazyImage src={img} alt="" className="w-full h-full object-cover" />
+                                <LazyImage
+                                  {...getProjectPreviewThumb(imageId)}
+                                  alt=""
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                             ))}
-                            {project.images.length > 5 && (
+                            {project.imageIds.length > 5 && (
                               <div className="w-14 h-14 rounded-md bg-secondary flex items-center justify-center flex-shrink-0">
-                                <span className="text-xs font-bold text-muted-foreground">+{project.images.length - 5}</span>
+                                <span className="text-xs font-bold text-muted-foreground">+{project.imageIds.length - 5}</span>
                               </div>
                             )}
                           </div>
@@ -293,20 +302,20 @@ const ProjectsPage = () => {
                   exit={{ opacity: 0 }}
                 >
                   <div className="mb-6 text-sm text-muted-foreground">
-                    عرض {Math.min(visibleCount, allFilteredImages.length)} من {allFilteredImages.length} صورة
+                    عرض {Math.min(visibleCount, allFilteredImageIds.length)} من {allFilteredImageIds.length} صورة
                   </div>
                   <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-3 space-y-3">
-                    {allFilteredImages.slice(0, visibleCount).map((img, i) => (
+                    {allFilteredImageIds.slice(0, visibleCount).map((imageId, i) => (
                       <motion.div
                         key={i}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: Math.min(i * 0.02, 0.4) }}
                         className="break-inside-avoid group relative rounded-lg overflow-hidden cursor-pointer"
-                        onClick={() => openLightbox(allFilteredImages, i)}
+                        onClick={() => openLightbox(allFilteredImageIds, i)}
                       >
                         <LazyImage
-                          src={img}
+                          {...getGalleryImage(imageId)}
                           alt={`صورة ${i + 1}`}
                           className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
@@ -319,7 +328,7 @@ const ProjectsPage = () => {
                     ))}
                   </div>
 
-                  {visibleCount < allFilteredImages.length && (
+                  {visibleCount < allFilteredImageIds.length && (
                     <div className="text-center mt-12">
                       <Button
                         variant="gold-outline"
@@ -328,7 +337,7 @@ const ProjectsPage = () => {
                         className="px-10"
                       >
                         <Images className="w-5 h-5" />
-                        عرض المزيد ({allFilteredImages.length - visibleCount} صورة متبقية)
+                        عرض المزيد ({allFilteredImageIds.length - visibleCount} صورة متبقية)
                       </Button>
                     </div>
                   )}
@@ -344,11 +353,12 @@ const ProjectsPage = () => {
 
       {/* Lightbox */}
       <GalleryLightbox
-        images={lightboxImages}
+        imageIds={lightboxImageIds}
         currentIndex={lightboxIndex}
         isOpen={lightboxOpen}
         onClose={() => setLightboxOpen(false)}
         onNavigate={setLightboxIndex}
+        projectTitle={selectedProject?.title}
       />
     </div>
   );

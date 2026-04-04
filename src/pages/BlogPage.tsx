@@ -4,15 +4,17 @@ import FloatingElements from "@/components/FloatingElements";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import { BLOG_IMAGES, SERVICE_IMAGES } from "@/lib/images";
+import LazyImage from "@/components/LazyImage";
+import { BLOG_IMAGE_IDS, SERVICE_IMAGE_IDS } from "@/lib/images";
+import { getArticleCardImage } from "@/lib/cloudinary";
 
 const posts = [
-  { title: "أفكار ذكية لتصميم غرف المعيشة المفتوحة", category: "تصميم داخلي", image: BLOG_IMAGES[0], excerpt: "اكتشف أفضل الطرق لتصميم غرف معيشة مفتوحة تجمع بين الأناقة والوظيفية." },
-  { title: "دليلك لاختيار الأرضيات: باركيه أم رخام أم بورسلين؟", category: "مواد بناء", image: BLOG_IMAGES[1], excerpt: "مقارنة شاملة بين أنواع الأرضيات لمساعدتك في اتخاذ القرار الأمثل لمنزلك." },
-  { title: "أحدث صيحات ألوان الدهانات الديكورية لعام 2024", category: "ديكور", image: BLOG_IMAGES[2], excerpt: "تعرف على أحدث اتجاهات الألوان التي تضفي طابعاً عصرياً على مساحاتك." },
-  { title: "كيف تختار تصميم المطبخ المثالي لمنزلك", category: "تصميم داخلي", image: SERVICE_IMAGES[2], excerpt: "نصائح عملية لتصميم مطبخ يجمع بين الجمال والعملية." },
-  { title: "أسرار الإضاءة الداخلية الاحترافية", category: "ديكور", image: SERVICE_IMAGES[3], excerpt: "كيف تستخدم الإضاءة لتحويل أي مساحة إلى تحفة فنية." },
-  { title: "دليل اختيار الخامات المناسبة للحمامات", category: "مواد بناء", image: SERVICE_IMAGES[4], excerpt: "كل ما تحتاج معرفته عن خامات الحمامات الفاخرة." },
+  { title: "أفكار ذكية لتصميم غرف المعيشة المفتوحة", category: "تصميم داخلي", imageId: BLOG_IMAGE_IDS[0], excerpt: "اكتشف أفضل الطرق لتصميم غرف معيشة مفتوحة تجمع بين الأناقة والوظيفية." },
+  { title: "دليلك لاختيار الأرضيات: باركيه أم رخام أم بورسلين؟", category: "مواد بناء", imageId: BLOG_IMAGE_IDS[1], excerpt: "مقارنة شاملة بين أنواع الأرضيات لمساعدتك في اتخاذ القرار الأمثل لمنزلك." },
+  { title: "أحدث صيحات ألوان الدهانات الديكورية لعام 2024", category: "ديكور", imageId: BLOG_IMAGE_IDS[2], excerpt: "تعرف على أحدث اتجاهات الألوان التي تضفي طابعاً عصرياً على مساحاتك." },
+  { title: "كيف تختار تصميم المطبخ المثالي لمنزلك", category: "تصميم داخلي", imageId: SERVICE_IMAGE_IDS[2], excerpt: "نصائح عملية لتصميم مطبخ يجمع بين الجمال والعملية." },
+  { title: "أسرار الإضاءة الداخلية الاحترافية", category: "ديكور", imageId: SERVICE_IMAGE_IDS[3], excerpt: "كيف تستخدم الإضاءة لتحويل أي مساحة إلى تحفة فنية." },
+  { title: "دليل اختيار الخامات المناسبة للحمامات", category: "مواد بناء", imageId: SERVICE_IMAGE_IDS[4], excerpt: "كل ما تحتاج معرفته عن خامات الحمامات الفاخرة." },
 ];
 
 const BlogPage = () => {
@@ -46,7 +48,11 @@ const BlogPage = () => {
                   className="bg-card rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 group"
                 >
                   <div className="aspect-video overflow-hidden">
-                    <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    <LazyImage
+                      {...getArticleCardImage(post.imageId)}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
                   </div>
                   <div className="p-6">
                     <span className="text-xs font-bold text-accent">{post.category}</span>

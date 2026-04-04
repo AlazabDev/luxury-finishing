@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Phone } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CTA_IMAGE_ID } from "@/lib/images";
+import { getCtaBackgroundImage } from "@/lib/cloudinary";
 
 const CtaBand = () => {
   const { t, dir } = useLanguage();
@@ -13,8 +15,7 @@ const CtaBand = () => {
       <div
         className="absolute inset-0 bg-cover bg-center bg-fixed"
         style={{
-          backgroundImage:
-            "url(https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-020.jpg)",
+          backgroundImage: `url(${getCtaBackgroundImage(CTA_IMAGE_ID)})`,
         }}
       />
       <div
