@@ -71,7 +71,7 @@ export class SlackClient {
 
         // إضافة أزرار تفاعلية
         if (options.actions && options.actions.length > 0) {
-            const actionElements: SlackBlock extends { type: 'actions' } ? SlackBlock['elements'] : never = [];
+            const actionElements: Array<{ type: 'button'; text: { type: 'plain_text'; text: string }; value: string; action_id: string } | { type: 'static_select'; placeholder: { type: 'plain_text'; text: string }; options?: Array<{ text: { type: 'plain_text'; text: string }; value: string }>; action_id: string }> = [];
             for (const action of options.actions) {
                 if (action.type === 'button') {
                     actionElements.push({
