@@ -111,7 +111,7 @@ const ContactPage = () => {
                         <option value="duplex">{t("contact.duplex")}</option>
                         <option value="other">{t("contact.other")}</option>
                       </select>
-                      {errors.propertyType && <span className="text-xs text-destructive mt-1">{errors.propertyType]}</span>}
+                      {errors.propertyType && <span className="text-xs text-destructive mt-1">{errors.propertyType}</span>}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-1">{t("contact.area")}</label>
