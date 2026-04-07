@@ -71,36 +71,27 @@ export class SlackClient {
 
         // إضافة أزرار تفاعلية
         if (options.actions && options.actions.length > 0) {
-            const actionElements = options.actions.map(action => {
+            const actionElements: Array<{ type: 'button'; text: { type: 'plain_text'; text: string }; value: string; action_id: string } | { type: 'static_select'; placeholder: { type: 'plain_text'; text: string }; options?: Array<{ text: { type: 'plain_text'; text: string }; value: string }>; action_id: string }> = [];
+            for (const action of options.actions) {
                 if (action.type === 'button') {
-                    return {
-                        type: 'button',
-                        text: {
-                            type: 'plain_text',
-                            text: action.text
-                        },
+                    actionElements.push({
+                        type: 'button' as const,
+                        text: { type: 'plain_text' as const, text: action.text },
                         value: action.value || action.name,
-                        action_id: action.name
-                    };
+                        action_id: action.name,
+                    });
                 } else if (action.type === 'select') {
-                    return {
-                        type: 'static_select',
-                        placeholder: {
-                            type: 'plain_text',
-                            text: action.text
-                        },
+                    actionElements.push({
+                        type: 'static_select' as const,
+                        placeholder: { type: 'plain_text' as const, text: action.text },
                         options: action.options?.map(opt => ({
-                            text: {
-                                type: 'plain_text',
-                                text: opt.text
-                            },
-                            value: opt.value
+                            text: { type: 'plain_text' as const, text: opt.text },
+                            value: opt.value,
                         })),
-                        action_id: action.name
-                    };
+                        action_id: action.name,
+                    });
                 }
-                return null;
-            }).filter((value): value is NonNullable<typeof value> => value !== null);
+            }
 
             blocks.push({
                 type: 'actions',
