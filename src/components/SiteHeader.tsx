@@ -87,8 +87,8 @@ const SiteHeader = () => {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-lg transition-all hover:bg-accent/10 ${
-              scrolled ? "text-foreground" : "text-primary-foreground"
+            className={`p-2 rounded-lg transition-all hover:bg-white/10 ${
+              scrolled ? "text-foreground" : "text-white"
             }`}
             title={theme === "light" ? t("theme.dark") : t("theme.light")}
           >
