@@ -40,7 +40,7 @@ const SiteHeader = () => {
           : "bg-transparent py-5"
       }`}
     >
-      <div className="container-custom flex items-center justify-between">
+      <div className="container-custom px-4 md:px-8 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
