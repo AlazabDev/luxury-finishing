@@ -40,13 +40,13 @@ const SiteHeader = () => {
           : "bg-transparent py-5"
       }`}
     >
-      <div className="container-custom flex items-center justify-between">
+      <div className="container-custom px-4 md:px-8 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
             <Home className="w-5 h-5 text-accent-foreground" />
           </div>
-          <span className={`font-heading font-bold text-xl ${scrolled ? "text-primary" : "text-primary-foreground"}`}>
+          <span className={`font-heading font-bold text-xl ${scrolled ? "text-foreground" : "text-white"}`}>
             {t("brand.name")}
           </span>
         </Link>
@@ -62,7 +62,7 @@ const SiteHeader = () => {
                   ? "text-accent"
                   : scrolled
                   ? "text-foreground"
-                  : "text-primary-foreground/90"
+                  : "text-white/90"
               }`}
             >
               {link.label}
@@ -75,8 +75,8 @@ const SiteHeader = () => {
           {/* Language Toggle */}
           <button
             onClick={toggleLang}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all hover:bg-accent/10 ${
-              scrolled ? "text-foreground" : "text-primary-foreground"
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all hover:bg-white/10 ${
+              scrolled ? "text-foreground" : "text-white"
             }`}
             title={lang === "en" ? "التبديل للعربية" : "Switch to English"}
           >
@@ -87,8 +87,8 @@ const SiteHeader = () => {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-lg transition-all hover:bg-accent/10 ${
-              scrolled ? "text-foreground" : "text-primary-foreground"
+            className={`p-2 rounded-lg transition-all hover:bg-white/10 ${
+              scrolled ? "text-foreground" : "text-white"
             }`}
             title={theme === "light" ? t("theme.dark") : t("theme.light")}
           >
@@ -108,19 +108,19 @@ const SiteHeader = () => {
         <div className="lg:hidden flex items-center gap-2">
           <button
             onClick={toggleLang}
-            className={`p-2 text-xs font-bold rounded-lg ${scrolled ? "text-foreground" : "text-primary-foreground"}`}
+            className={`p-2 text-xs font-bold rounded-lg ${scrolled ? "text-foreground" : "text-white"}`}
           >
             <Globe className="w-5 h-5" />
           </button>
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-lg ${scrolled ? "text-foreground" : "text-primary-foreground"}`}
+            className={`p-2 rounded-lg ${scrolled ? "text-foreground" : "text-white"}`}
           >
             {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
           </button>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`p-2 ${scrolled ? "text-foreground" : "text-primary-foreground"}`}
+            className={`p-2 ${scrolled ? "text-foreground" : "text-white"}`}
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>

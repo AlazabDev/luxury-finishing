@@ -104,8 +104,8 @@ const HeroSection = () => {
           <div className="absolute top-1/3 start-1/4 w-px h-40 bg-gradient-to-b from-transparent via-accent/20 to-transparent" />
         </div>
 
-        <div className="relative z-10 container-custom w-full py-32">
-          <div className="max-w-3xl">
+        <div className="relative z-10 container-custom w-full py-32 px-4 md:px-8 overflow-hidden">
+          <div className="max-w-2xl lg:max-w-3xl">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -124,10 +124,10 @@ const HeroSection = () => {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.7 }}
               >
-                <h1 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-primary-foreground leading-tight text-balance mb-4">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-heading font-bold text-primary-foreground leading-tight mb-4">
                   {slide.title}
                 </h1>
-                <p className="text-xl md:text-3xl font-heading text-accent font-bold mb-6">
+                <p className="text-lg md:text-2xl lg:text-3xl font-heading text-accent font-bold mb-6">
                   {slide.subtitle}
                 </p>
               </motion.div>
