@@ -62,7 +62,7 @@ const SiteHeader = () => {
                   ? "text-accent"
                   : scrolled
                   ? "text-foreground"
-                  : "text-primary-foreground/90"
+                  : "text-white/90"
               }`}
             >
               {link.label}
