@@ -75,8 +75,8 @@ const SiteHeader = () => {
           {/* Language Toggle */}
           <button
             onClick={toggleLang}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all hover:bg-accent/10 ${
-              scrolled ? "text-foreground" : "text-primary-foreground"
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all hover:bg-white/10 ${
+              scrolled ? "text-foreground" : "text-white"
             }`}
             title={lang === "en" ? "التبديل للعربية" : "Switch to English"}
           >
