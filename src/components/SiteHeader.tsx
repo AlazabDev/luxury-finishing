@@ -46,7 +46,7 @@ const SiteHeader = () => {
           <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
             <Home className="w-5 h-5 text-accent-foreground" />
           </div>
-          <span className={`font-heading font-bold text-xl ${scrolled ? "text-primary" : "text-primary-foreground"}`}>
+          <span className={`font-heading font-bold text-xl ${scrolled ? "text-foreground" : "text-white"}`}>
             {t("brand.name")}
           </span>
         </Link>
