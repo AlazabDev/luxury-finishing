@@ -76,7 +76,7 @@ const HeroSection = () => {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center overflow-hidden" dir="ltr">
+      <section className="relative min-h-screen flex items-center overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
