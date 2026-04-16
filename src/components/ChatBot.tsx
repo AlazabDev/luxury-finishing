@@ -779,6 +779,9 @@ export default function ChatBot() {
                 <button type="button" onClick={handleDownloadTranscript} className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-foreground/10 text-accent-foreground hover:bg-accent-foreground/20 transition-colors" title={t("chat.download")}>
                   <Download className="h-4 w-4" />
                 </button>
+                <button type="button" onClick={() => setOpen(false)} className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-foreground/10 text-accent-foreground hover:bg-accent-foreground/20 transition-colors sm:hidden">
+                  <X className="h-4 w-4" />
+                </button>
               </div>
             </div>
           </div>

@@ -36,17 +36,17 @@ const SiteHeader = () => {
     <header
       className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-card/90 backdrop-blur-md shadow-header py-3"
-          : "bg-transparent py-5"
+          ? "bg-card/90 backdrop-blur-md shadow-header py-2 md:py-3"
+          : "bg-transparent py-3 md:py-5"
       }`}
     >
       <div className="container-custom px-4 md:px-8 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
-            <Home className="w-5 h-5 text-accent-foreground" />
+          <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg bg-accent flex items-center justify-center">
+            <Home className="w-4 h-4 md:w-5 md:h-5 text-accent-foreground" />
           </div>
-          <span className={`font-heading font-bold text-xl ${scrolled ? "text-foreground" : "text-white"}`}>
+          <span className={`font-heading font-bold text-base md:text-xl whitespace-nowrap ${scrolled ? "text-foreground" : "text-white"}`}>
             {t("brand.name")}
           </span>
         </Link>
