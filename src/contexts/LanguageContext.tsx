@@ -377,7 +377,7 @@ const translations: Record<Language, Record<string, string>> = {
     "property.studio": "Studio",
   },
   ar: {
-    "brand.name": "لاكشري فينيشينج",
+    "brand.name": "تشطيب راقي",
     "brand.location": "القاهرة، مصر",
 
     "nav.home": "الرئيسية",
@@ -507,7 +507,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     "about.heroTitle": "من نحن",
     "about.title": "عن لاكشري فينيشينج",
-    "about.desc": "بدأنا رحلتنا في عالم التشطيبات الفاخرة منذ عام 2010، حاملين شعار الجودة والذوق الرفيع.",
+    "about.desc": "بدأنا رحلتنا في عالم التشطيبات الفاخرة منذ عام 2015، حاملين شعار الجودة والذوق الرفيع.",
     "about.story": "قصتنا",
     "about.storyText": "تحولنا من مجرد مقاولين إلى شركاء لأصحاب المنازل في تحقيق حلمهم. نؤمن بأن كل منزل يستحق لمسة فنية تعكس شخصية أصحابه.",
     "about.vision": "الرؤية",
