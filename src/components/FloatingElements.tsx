@@ -127,7 +127,7 @@ const FloatingElements = () => {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-24 end-6 z-40 w-11 h-11 rounded-full bg-muted/80 backdrop-blur-sm shadow-lg border border-border flex items-center justify-center hover:bg-muted transition-colors"
+            className="fixed bottom-24 end-6 z-40 w-10 h-10 rounded-full bg-muted/80 backdrop-blur-sm shadow-lg border border-border flex items-center justify-center hover:bg-muted transition-colors"
             aria-label="Scroll to top"
           >
             <ArrowUp className="w-4 h-4 text-foreground" />

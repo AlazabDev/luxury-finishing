@@ -36,17 +36,17 @@ const SiteHeader = () => {
     <header
       className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-card/90 backdrop-blur-md shadow-header py-3"
-          : "bg-transparent py-5"
+          ? "bg-card/90 backdrop-blur-md shadow-header py-2 md:py-3"
+          : "bg-transparent py-3 md:py-5"
       }`}
     >
       <div className="container-custom px-4 md:px-8 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
-            <Home className="w-5 h-5 text-accent-foreground" />
+          <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg bg-accent flex items-center justify-center">
+            <Home className="w-4 h-4 md:w-5 md:h-5 text-accent-foreground" />
           </div>
-          <span className={`font-heading font-bold text-xl ${scrolled ? "text-foreground" : "text-white"}`}>
+          <span className={`font-heading font-bold text-base md:text-xl whitespace-nowrap ${scrolled ? "text-foreground" : "text-white"}`}>
             {t("brand.name")}
           </span>
         </Link>
@@ -105,22 +105,22 @@ const SiteHeader = () => {
         </div>
 
         {/* Mobile Toggle */}
-        <div className="lg:hidden flex items-center gap-2">
+        <div className="lg:hidden flex items-center gap-1">
           <button
             onClick={toggleLang}
-            className={`p-2 text-xs font-bold rounded-lg ${scrolled ? "text-foreground" : "text-white"}`}
+            className={`p-1.5 text-xs font-bold rounded-lg ${scrolled ? "text-foreground" : "text-white"}`}
           >
             <Globe className="w-5 h-5" />
           </button>
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-lg ${scrolled ? "text-foreground" : "text-white"}`}
+            className={`p-1.5 rounded-lg ${scrolled ? "text-foreground" : "text-white"}`}
           >
             {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
           </button>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`p-2 ${scrolled ? "text-foreground" : "text-white"}`}
+            className={`p-1.5 ${scrolled ? "text-foreground" : "text-white"}`}
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -136,13 +136,13 @@ const SiteHeader = () => {
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden bg-card/95 backdrop-blur-lg border-t border-border"
           >
-            <nav className="container-custom py-6 flex flex-col gap-4">
+            <nav className="container-custom py-4 px-4 flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`text-base font-medium py-2 ${
-                    location.pathname === link.href ? "text-accent" : "text-foreground"
+                  className={`text-base font-medium py-2.5 px-3 rounded-lg transition-colors ${
+                    location.pathname === link.href ? "text-accent bg-accent/10" : "text-foreground hover:bg-muted"
                   }`}
                 >
                   {link.label}

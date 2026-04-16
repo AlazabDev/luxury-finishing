@@ -755,7 +755,7 @@ export default function ChatBot() {
 
       {/* Chat Window */}
       {open ? (
-        <div className="fixed bottom-24 end-6 z-50 flex h-[580px] w-[370px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-3xl border border-border bg-background shadow-2xl animate-in slide-in-from-bottom-4 fade-in duration-300">
+        <div className="fixed inset-0 z-50 flex flex-col bg-background sm:inset-auto sm:bottom-24 sm:end-6 sm:h-[580px] sm:w-[370px] sm:rounded-3xl sm:border sm:border-border sm:shadow-2xl animate-in slide-in-from-bottom-4 fade-in duration-300 overflow-hidden">
           {/* Header */}
           <div className="bg-accent px-4 py-3">
             <div className="flex items-center justify-between">
@@ -778,6 +778,9 @@ export default function ChatBot() {
                 </button>
                 <button type="button" onClick={handleDownloadTranscript} className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-foreground/10 text-accent-foreground hover:bg-accent-foreground/20 transition-colors" title={t("chat.download")}>
                   <Download className="h-4 w-4" />
+                </button>
+                <button type="button" onClick={() => setOpen(false)} className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-foreground/10 text-accent-foreground hover:bg-accent-foreground/20 transition-colors sm:hidden">
+                  <X className="h-4 w-4" />
                 </button>
               </div>
             </div>
