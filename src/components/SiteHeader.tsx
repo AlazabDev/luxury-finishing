@@ -105,22 +105,22 @@ const SiteHeader = () => {
         </div>
 
         {/* Mobile Toggle */}
-        <div className="lg:hidden flex items-center gap-2">
+        <div className="lg:hidden flex items-center gap-1">
           <button
             onClick={toggleLang}
-            className={`p-2 text-xs font-bold rounded-lg ${scrolled ? "text-foreground" : "text-white"}`}
+            className={`p-1.5 text-xs font-bold rounded-lg ${scrolled ? "text-foreground" : "text-white"}`}
           >
             <Globe className="w-5 h-5" />
           </button>
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-lg ${scrolled ? "text-foreground" : "text-white"}`}
+            className={`p-1.5 rounded-lg ${scrolled ? "text-foreground" : "text-white"}`}
           >
             {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
           </button>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`p-2 ${scrolled ? "text-foreground" : "text-white"}`}
+            className={`p-1.5 ${scrolled ? "text-foreground" : "text-white"}`}
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -136,13 +136,13 @@ const SiteHeader = () => {
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden bg-card/95 backdrop-blur-lg border-t border-border"
           >
-            <nav className="container-custom py-6 flex flex-col gap-4">
+            <nav className="container-custom py-4 px-4 flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`text-base font-medium py-2 ${
-                    location.pathname === link.href ? "text-accent" : "text-foreground"
+                  className={`text-base font-medium py-2.5 px-3 rounded-lg transition-colors ${
+                    location.pathname === link.href ? "text-accent bg-accent/10" : "text-foreground hover:bg-muted"
                   }`}
                 >
                   {link.label}

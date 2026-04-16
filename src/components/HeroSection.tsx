@@ -39,7 +39,7 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
     <motion.div
       onViewportEnter={() => setStarted(true)}
       viewport={{ once: true }}
-      className="text-3xl md:text-5xl font-bold text-accent font-mono tabular-nums"
+      className="text-2xl md:text-5xl font-bold text-accent font-mono tabular-nums"
     >
       {count}{suffix}
     </motion.div>
@@ -76,7 +76,7 @@ const HeroSection = () => {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center overflow-hidden">
+      <section className="relative min-h-[100svh] flex items-center overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -104,13 +104,13 @@ const HeroSection = () => {
           <div className="absolute top-1/3 start-1/4 w-px h-40 bg-gradient-to-b from-transparent via-accent/20 to-transparent" />
         </div>
 
-        <div className="relative z-10 container-custom w-full py-32 px-4 md:px-8 overflow-hidden">
-          <div className="max-w-2xl lg:max-w-3xl">
+        <div className="relative z-10 container-custom w-full pt-24 pb-20 md:py-32 px-4 md:px-8 overflow-hidden">
+          <div className="max-w-full md:max-w-2xl lg:max-w-3xl">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 bg-accent/15 backdrop-blur-sm border border-accent/20 text-accent text-sm font-bold px-4 py-2 rounded-full mb-8"
+              className="inline-flex items-center gap-2 bg-accent/15 backdrop-blur-sm border border-accent/20 text-accent text-xs md:text-sm font-bold px-3 md:px-4 py-1.5 md:py-2 rounded-full mb-6 md:mb-8"
             >
               <span className="w-2 h-2 rounded-full bg-accent" />
               {t("hero.badge")}
@@ -124,10 +124,10 @@ const HeroSection = () => {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.7 }}
               >
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-heading font-bold text-primary-foreground leading-tight mb-4">
+                <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-heading font-bold text-primary-foreground leading-tight mb-3 md:mb-4">
                   {slide.title}
                 </h1>
-                <p className="text-lg md:text-2xl lg:text-3xl font-heading text-accent font-bold mb-6">
+                <p className="text-base md:text-2xl lg:text-3xl font-heading text-accent font-bold mb-4 md:mb-6">
                   {slide.subtitle}
                 </p>
               </motion.div>
@@ -137,7 +137,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-lg md:text-xl text-primary-foreground/75 mb-10 max-w-2xl leading-relaxed"
+              className="text-sm md:text-xl text-primary-foreground/75 mb-8 md:mb-10 max-w-2xl leading-relaxed"
             >
               {t("hero.desc")}
             </motion.p>
@@ -203,9 +203,9 @@ const HeroSection = () => {
         </div>
       </section>
 
-      <section className="relative z-10 -mt-16">
+      <section className="relative z-10 -mt-12 md:-mt-16 px-4 md:px-0">
         <div className="container-custom">
-          <div className="bg-card rounded-2xl shadow-card-hover p-8 md:p-10 grid grid-cols-2 md:grid-cols-4 gap-8 border border-border">
+          <div className="bg-card rounded-2xl shadow-card-hover p-5 md:p-10 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 border border-border">
             {stats.map((stat) => (
               <div key={stat.key} className="text-center">
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} />
