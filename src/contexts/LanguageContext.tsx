@@ -375,6 +375,8 @@ const translations: Record<Language, Record<string, string>> = {
     "property.duplex": "Duplex",
     "property.penthouse": "Penthouse",
     "property.townhouse": "Townhouse",
+    "property.studio": "Studio",
+
     "calc.badge": "Free Cost Calculator",
     "calc.heroTitle": "Estimate Your Finishing Cost Instantly",
     "calc.heroDesc": "Get a transparent, indicative cost estimate for your residential finishing project — based on real prices from our suppliers and 15+ years of execution data.",
@@ -421,16 +423,6 @@ const translations: Record<Language, Record<string, string>> = {
     "calc.errNameRequired": "Please enter your name and phone number.",
     "calc.errPickScope": "Please select at least one work scope.",
     "calc.errSubmit": "Could not save your estimate. Please try again.",
-
-    "theme.light": "Light",
-    "theme.dark": "Dark",
-
-    "property.apartment": "Apartment",
-    "property.villa": "Villa",
-    "property.duplex": "Duplex",
-    "property.penthouse": "Penthouse",
-    "property.townhouse": "Townhouse",
-    "property.studio": "Studio",
   },
   ar: {
     "brand.name": "Luxury Finishing",
