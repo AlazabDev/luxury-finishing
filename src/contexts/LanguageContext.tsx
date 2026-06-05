@@ -377,7 +377,7 @@ const translations: Record<Language, Record<string, string>> = {
     "property.studio": "Studio",
   },
   ar: {
-    "brand.name": "تشطيب راقي",
+    "brand.name": "Luxury Finishing",
     "brand.location": "القاهرة، مصر",
 
     "nav.home": "الرئيسية",
