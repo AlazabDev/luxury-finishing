@@ -14,6 +14,99 @@ export type Database = {
   }
   public: {
     Tables: {
+      cost_estimates: {
+        Row: {
+          area: number
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string
+          estimated_max: number
+          estimated_min: number
+          floors: number
+          id: string
+          notes: string | null
+          property_type: string
+          quality_tier: string
+          selected_scopes: string[]
+        }
+        Insert: {
+          area: number
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          estimated_max: number
+          estimated_min: number
+          floors?: number
+          id?: string
+          notes?: string | null
+          property_type: string
+          quality_tier?: string
+          selected_scopes?: string[]
+        }
+        Update: {
+          area?: number
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          estimated_max?: number
+          estimated_min?: number
+          floors?: number
+          id?: string
+          notes?: string | null
+          property_type?: string
+          quality_tier?: string
+          selected_scopes?: string[]
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          brand: string | null
+          buy_price: number | null
+          category: string | null
+          created_at: string
+          description: string | null
+          external_id: number | null
+          id: string
+          is_active: boolean
+          name: string
+          product_code: string | null
+          unit_price: number | null
+          unit_template: string | null
+        }
+        Insert: {
+          brand?: string | null
+          buy_price?: number | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          external_id?: number | null
+          id?: string
+          is_active?: boolean
+          name: string
+          product_code?: string | null
+          unit_price?: number | null
+          unit_template?: string | null
+        }
+        Update: {
+          brand?: string | null
+          buy_price?: number | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          external_id?: number | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          product_code?: string | null
+          unit_price?: number | null
+          unit_template?: string | null
+        }
+        Relationships: []
+      }
       quote_requests: {
         Row: {
           area: string | null
