@@ -203,13 +203,18 @@ const HeroSection = () => {
         </div>
       </section>
 
-      <section className="relative z-10 -mt-12 md:-mt-16 px-4 md:px-0">
+      <section className="relative z-10 -mt-12 md:-mt-20 px-4 md:px-0">
         <div className="container-custom">
-          <div className="bg-card rounded-2xl shadow-card-hover p-5 md:p-10 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 border border-border">
-            {stats.map((stat) => (
-              <div key={stat.key} className="text-center">
+          <div className="bg-card/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-primary/10 p-5 md:p-10 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 border border-accent/20 ring-1 ring-accent/5">
+            {stats.map((stat, idx) => (
+              <div
+                key={stat.key}
+                className={`text-center relative ${
+                  idx > 0 ? "md:before:content-[''] md:before:absolute md:before:start-0 md:before:top-1/2 md:before:-translate-y-1/2 md:before:h-12 md:before:w-px md:before:bg-gradient-to-b md:before:from-transparent md:before:via-accent/30 md:before:to-transparent" : ""
+                }`}
+              >
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-                <div className="text-sm text-muted-foreground mt-2 font-medium">
+                <div className="text-xs md:text-sm text-muted-foreground mt-2 font-semibold tracking-wide uppercase">
                   {t(stat.key)}
                 </div>
               </div>
