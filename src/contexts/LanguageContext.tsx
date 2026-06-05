@@ -432,6 +432,7 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.about": "عن الشركة",
     "nav.services": "خدماتنا",
     "nav.projects": "مشاريعنا",
+    "nav.calculator": "حاسبة التكلفة",
     "nav.blog": "المدونة",
     "nav.contact": "اتصل بنا",
     "nav.cta": "استشارة مجانية",
