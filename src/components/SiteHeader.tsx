@@ -19,6 +19,7 @@ const SiteHeader = () => {
     { label: t("nav.services"), href: "/services" },
     { label: t("nav.projects"), href: "/projects" },
     { label: t("nav.calculator"), href: "/calculator" },
+    { label: t("nav.estimateRequest"), href: "/estimate-request" },
     { label: t("nav.blog"), href: "/blog" },
     { label: t("nav.contact"), href: "/contact" },
   ];
