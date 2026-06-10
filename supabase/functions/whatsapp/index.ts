@@ -1,9 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { requireNotificationAuth } from "../_shared/meta.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-api-key, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 const GRAPH_API = "https://graph.facebook.com/v21.0";
@@ -119,6 +120,17 @@ async function uploadToSupabaseStorage(fileBlob: Blob, fileName: string): Promis
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  // Require a bearer token shared only with trusted backend callers.
+  // Reuses SYSTEM_NOTIFICATIONS_TOKEN — without it, refuse all requests.
+  const sharedToken = Deno.env.get("SYSTEM_NOTIFICATIONS_TOKEN")?.trim() || "";
+  if (!sharedToken || !requireNotificationAuth(req, sharedToken)) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
 
   try {
     const WHATSAPP_ACCESS_TOKEN = Deno.env.get("WHATSAPP_ACCESS_TOKEN");

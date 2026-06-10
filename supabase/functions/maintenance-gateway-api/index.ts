@@ -6,17 +6,12 @@ import {
 } from "../_shared/maintenance.ts";
 import { verifyRequestWithTokenOrSecret } from "../_shared/request-auth.ts";
 
-const requiresGatewayAuth = () =>
-  Boolean(
-    Deno.env.get("MAINTENANCE_GATEWAY_TOKEN")?.trim() ||
-    Deno.env.get("MAINTENANCE_GATEWAY_SECRET")?.trim(),
-  );
-
 const authorizeGatewayRequest = async (req: Request, rawBody: string) => {
   const token = Deno.env.get("MAINTENANCE_GATEWAY_TOKEN")?.trim();
   const secret = Deno.env.get("MAINTENANCE_GATEWAY_SECRET")?.trim();
 
-  if (!token && !secret) return true;
+  // Auth is mandatory. If neither secret is configured, refuse all requests.
+  if (!token && !secret) return false;
 
   return verifyRequestWithTokenOrSecret({
     req,
@@ -25,6 +20,12 @@ const authorizeGatewayRequest = async (req: Request, rawBody: string) => {
     secret,
   });
 };
+
+const denyUnauthorized = () =>
+  new Response(JSON.stringify({ ok: false, error: "Unauthorized" }), {
+    status: 401,
+    headers: jsonHeaders,
+  });
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -44,6 +45,9 @@ serve(async (req) => {
           { headers: jsonHeaders },
         );
       }
+
+      const isAuthorized = await authorizeGatewayRequest(req, "");
+      if (!isAuthorized) return denyUnauthorized();
 
       const result = await queryMaintenanceRequests({
         request_number: url.searchParams.get("request_number") ?? undefined,
@@ -75,15 +79,9 @@ serve(async (req) => {
     }
 
     const rawBody = await req.text();
-    if (requiresGatewayAuth()) {
-      const isAuthorized = await authorizeGatewayRequest(req, rawBody);
-      if (!isAuthorized) {
-        return new Response(JSON.stringify({ ok: false, error: "Unauthorized" }), {
-          status: 401,
-          headers: jsonHeaders,
-        });
-      }
-    }
+    const isAuthorized = await authorizeGatewayRequest(req, rawBody);
+    if (!isAuthorized) return denyUnauthorized();
+
 
     const { action, ...params } = rawBody ? JSON.parse(rawBody) as Record<string, unknown> : {};
 
