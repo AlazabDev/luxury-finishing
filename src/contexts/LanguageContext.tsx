@@ -27,6 +27,7 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.services": "Services",
     "nav.projects": "Projects",
     "nav.calculator": "Cost Calculator",
+    "nav.estimateRequest": "Estimate Request",
     "nav.blog": "Blog",
     "nav.contact": "Contact",
     "nav.cta": "Free Consultation",
