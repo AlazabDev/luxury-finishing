@@ -110,6 +110,7 @@ const CalculatorPage = () => {
                 {t("nav.estimateRequest")}
               </a>
             </div>
+          </motion.div>
         </div>
       </section>
 
