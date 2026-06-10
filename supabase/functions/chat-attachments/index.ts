@@ -104,6 +104,37 @@ serve(async (req) => {
       });
     }
 
+    // Enforce safe MIME allowlist and a hard size cap to prevent abuse
+    const MAX_ATTACHMENT_BYTES = 15 * 1024 * 1024;
+    if (file.size > MAX_ATTACHMENT_BYTES) {
+      return new Response(
+        JSON.stringify({ error: "file exceeds 15MB limit" }),
+        { status: 413, headers: jsonHeaders },
+      );
+    }
+    const ALLOWED_MIME = new Set([
+      "image/jpeg", "image/png", "image/webp", "image/gif", "image/heic",
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "text/plain", "text/csv",
+      "application/zip", "application/x-zip-compressed",
+      "application/vnd.rar", "application/x-rar-compressed",
+      "application/acad", "image/vnd.dwg", "application/dxf",
+      "application/octet-stream",
+    ]);
+    const ALLOWED_EXT = /\.(jpe?g|png|webp|gif|heic|pdf|docx?|xlsx?|txt|csv|zip|rar|dwg|dxf)$/i;
+    const declaredType = (file.type || "").toLowerCase();
+    const nameOk = ALLOWED_EXT.test(file.name);
+    if (!nameOk || (declaredType && !ALLOWED_MIME.has(declaredType))) {
+      return new Response(
+        JSON.stringify({ error: "file type not allowed" }),
+        { status: 400, headers: jsonHeaders },
+      );
+    }
+
     const category = sanitizePathSegment(String(formData.get("category") || "general")) || "general";
     const conversationId =
       sanitizePathSegment(String(formData.get("conversationId") || "session")) || "session";
