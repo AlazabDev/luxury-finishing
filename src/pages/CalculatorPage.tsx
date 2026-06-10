@@ -101,6 +101,15 @@ const CalculatorPage = () => {
             </Badge>
             <h1 className="font-heading text-4xl md:text-6xl font-bold mb-4">{t("calc.heroTitle")}</h1>
             <p className="text-lg md:text-xl opacity-90 leading-relaxed">{t("calc.heroDesc")}</p>
+            <div className="mt-6">
+              <a
+                href="/estimate-request"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-accent-foreground font-semibold text-sm hover:opacity-90 transition"
+              >
+                <Send className="w-4 h-4" />
+                {t("nav.estimateRequest")}
+              </a>
+            </div>
           </motion.div>
         </div>
       </section>

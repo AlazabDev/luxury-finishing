@@ -62,6 +62,60 @@ export type Database = {
         }
         Relationships: []
       }
+      estimate_requests: {
+        Row: {
+          area: number | null
+          attachments: Json
+          contact_email: string | null
+          contact_name: string
+          contact_phone: string
+          created_at: string
+          estimated_max: number | null
+          estimated_min: number | null
+          floors: number
+          id: string
+          message: string | null
+          property_type: string
+          quality_tier: string
+          selected_scopes: string[]
+          status: string
+        }
+        Insert: {
+          area?: number | null
+          attachments?: Json
+          contact_email?: string | null
+          contact_name: string
+          contact_phone: string
+          created_at?: string
+          estimated_max?: number | null
+          estimated_min?: number | null
+          floors?: number
+          id?: string
+          message?: string | null
+          property_type: string
+          quality_tier?: string
+          selected_scopes?: string[]
+          status?: string
+        }
+        Update: {
+          area?: number | null
+          attachments?: Json
+          contact_email?: string | null
+          contact_name?: string
+          contact_phone?: string
+          created_at?: string
+          estimated_max?: number | null
+          estimated_min?: number | null
+          floors?: number
+          id?: string
+          message?: string | null
+          property_type?: string
+          quality_tier?: string
+          selected_scopes?: string[]
+          status?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           brand: string | null
