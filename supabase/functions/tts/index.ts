@@ -19,6 +19,14 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    // Cap input length to prevent ElevenLabs cost amplification abuse
+    const MAX_TTS_CHARS = 2000;
+    if (text.length > MAX_TTS_CHARS) {
+      return new Response(
+        JSON.stringify({ error: `text exceeds ${MAX_TTS_CHARS} character limit` }),
+        { status: 413, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
 
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
     if (!ELEVENLABS_API_KEY) throw new Error("ELEVENLABS_API_KEY not configured");

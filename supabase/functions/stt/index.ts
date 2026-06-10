@@ -20,6 +20,24 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    // Cap upload size to prevent ElevenLabs cost amplification abuse
+    const MAX_STT_BYTES = 5 * 1024 * 1024;
+    if (audioFile.size > MAX_STT_BYTES) {
+      return new Response(
+        JSON.stringify({ error: "audio file exceeds 5MB limit" }),
+        { status: 413, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+    const ALLOWED_AUDIO = new Set([
+      "audio/webm", "audio/ogg", "audio/mpeg", "audio/mp4", "audio/wav",
+      "audio/x-wav", "audio/aac", "audio/x-m4a", "audio/m4a",
+    ]);
+    if (audioFile.type && !ALLOWED_AUDIO.has(audioFile.type)) {
+      return new Response(
+        JSON.stringify({ error: `unsupported audio type: ${audioFile.type}` }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
 
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
     if (!ELEVENLABS_API_KEY) throw new Error("ELEVENLABS_API_KEY not configured");
