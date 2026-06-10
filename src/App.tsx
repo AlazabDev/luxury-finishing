@@ -9,6 +9,7 @@ import Index from "./pages/Index.tsx";
 import AboutPage from "./pages/AboutPage.tsx";
 import ServicesPage from "./pages/ServicesPage.tsx";
 import CalculatorPage from "./pages/CalculatorPage.tsx";
+import EstimateRequestPage from "./pages/EstimateRequestPage.tsx";
 import ProjectsPage from "./pages/ProjectsPage.tsx";
 import BlogPage from "./pages/BlogPage.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
