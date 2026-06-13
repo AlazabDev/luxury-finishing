@@ -15,7 +15,8 @@
     "pm2:reload": "pm2 startOrReload ecosystem.config.cjs --only luxury-finishing --update-env",
     "deploy:pm2": "powershell -ExecutionPolicy Bypass -File ./scripts/deploy-pm2.ps1",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit"
   },
   "dependencies": {
     "@elevenlabs/elevenlabs-js": "^2.41.1",

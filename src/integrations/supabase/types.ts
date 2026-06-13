@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      contact_messages: {
+        Row: {
+          area: string | null
+          created_at: string
+          email: string
+          id: string
+          ip_hash: string | null
+          locale: string | null
+          message: string
+          name: string
+          phone: string
+          property_type: string
+          source: string
+          status: string
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          area?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          ip_hash?: string | null
+          locale?: string | null
+          message: string
+          name: string
+          phone: string
+          property_type: string
+          source?: string
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          area?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          ip_hash?: string | null
+          locale?: string | null
+          message?: string
+          name?: string
+          phone?: string
+          property_type?: string
+          source?: string
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       cost_estimates: {
         Row: {
           area: number

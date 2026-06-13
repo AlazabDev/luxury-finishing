@@ -3,28 +3,32 @@ import SiteFooter from "@/components/SiteFooter";
 import FloatingElements from "@/components/FloatingElements";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const ContactPage = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [form, setForm] = useState({ name: "", email: "", phone: "", propertyType: "", area: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const contactSchema = z.object({
     name: z.string().trim().min(1).max(100),
     email: z.string().trim().email().max(255),
-    phone: z.string().trim().min(1).max(20),
+    phone: z.string().trim().min(5).max(20),
     propertyType: z.string().min(1),
     area: z.string().max(50).optional(),
-    message: z.string().trim().min(1).max(1000),
+    message: z.string().trim().min(1).max(2000),
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
     const result = contactSchema.safeParse(form);
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
@@ -35,13 +39,29 @@ const ContactPage = () => {
       return;
     }
     setErrors({});
-    setSubmitted(true);
+    setSubmitting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("submit-contact-message", {
+        body: { ...result.data, locale: lang },
+      });
+      if (error || !(data as { success?: boolean } | null)?.success) {
+        const msg = (data as { error?: string } | null)?.error || error?.message || "Failed to send";
+        toast.error(msg);
+        return;
+      }
+      setSubmitted(true);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to send");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const update = (field: string, value: string) => {
     setForm((p) => ({ ...p, [field]: value }));
     if (errors[field]) setErrors((p) => ({ ...p, [field]: "" }));
   };
+
 
   const contactCards = [
     { icon: Phone, label: t("contact.phone"), value: "+201004006620", href: "tel:+201004006620" },
@@ -122,7 +142,9 @@ const ContactPage = () => {
                       <textarea rows={4} value={form.message} onChange={(e) => update("message", e.target.value)} className="w-full rounded-lg border border-input bg-background px-4 py-3 text-sm focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all resize-none" />
                       {errors.message && <span className="text-xs text-destructive mt-1">{errors.message}</span>}
                     </div>
-                    <Button type="submit" variant="gold" size="lg" className="w-full py-6">{t("contact.submit")}</Button>
+                    <Button type="submit" variant="gold" size="lg" disabled={submitting} className="w-full py-6">
+                      {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : t("contact.submit")}
+                    </Button>
                   </form>
                 )}
               </div>
