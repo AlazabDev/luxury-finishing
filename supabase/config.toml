@@ -13,6 +13,8 @@ verify_jwt = false
 verify_jwt = false
 [functions.maintenance-proxy]
 [functions.chat-attachments]
+[functions.submit-contact-message]
+verify_jwt = false
 [functions.chatbot-endpoint]
 verify_jwt = false
 [functions.meta-webhook]
