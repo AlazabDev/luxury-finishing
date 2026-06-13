@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const ContactPage = () => {
-  const { t, language } = useLanguage();
+  const { t, lang } = useLanguage();
   const [form, setForm] = useState({ name: "", email: "", phone: "", propertyType: "", area: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -42,7 +42,7 @@ const ContactPage = () => {
     setSubmitting(true);
     try {
       const { data, error } = await supabase.functions.invoke("submit-contact-message", {
-        body: { ...result.data, locale: language },
+        body: { ...result.data, locale: lang },
       });
       if (error || !(data as { success?: boolean } | null)?.success) {
         const msg = (data as { error?: string } | null)?.error || error?.message || "Failed to send";
