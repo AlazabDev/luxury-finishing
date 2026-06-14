@@ -8,7 +8,30 @@ serve(async (req) => {
   }
 
   try {
-    const { messages } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const { messages } = body ?? {};
+
+    const MAX_MESSAGES = 50;
+    const MAX_CONTENT_CHARS = 4000;
+
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return new Response(
+        JSON.stringify({ error: "messages must be a non-empty array" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    if (messages.length > MAX_MESSAGES) {
+      return new Response(
+        JSON.stringify({ error: `Too many messages (max ${MAX_MESSAGES})` }),
+        { status: 413, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    const ALLOWED_ROLES = new Set(["user", "assistant", "system"]);
+    const safeMessages = messages.map((m: any) => ({
+      role: ALLOWED_ROLES.has(m?.role) ? m.role : "user",
+      content: String(m?.content ?? "").slice(0, MAX_CONTENT_CHARS),
+    }));
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 

@@ -298,7 +298,48 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      products_public: {
+        Row: {
+          brand: string | null
+          category: string | null
+          created_at: string | null
+          description: string | null
+          external_id: number | null
+          id: string | null
+          is_active: boolean | null
+          name: string | null
+          product_code: string | null
+          unit_price: number | null
+          unit_template: string | null
+        }
+        Insert: {
+          brand?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          external_id?: number | null
+          id?: string | null
+          is_active?: boolean | null
+          name?: string | null
+          product_code?: string | null
+          unit_price?: number | null
+          unit_template?: string | null
+        }
+        Update: {
+          brand?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          external_id?: number | null
+          id?: string | null
+          is_active?: boolean | null
+          name?: string | null
+          product_code?: string | null
+          unit_price?: number | null
+          unit_template?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
