@@ -117,6 +117,12 @@ const EstimateRequestPage = () => {
         toast.error(`${f.name}: ${t("er.errFileTooBig")}`);
         continue;
       }
+      const mimeOk = ALLOWED_MIME.has(f.type) && f.type !== "image/svg+xml";
+      const extOk = ALLOWED_EXT.test(f.name);
+      if (!mimeOk || !extOk) {
+        toast.error(`${f.name}: unsupported file type`);
+        continue;
+      }
       next.push({ file: f, id: crypto.randomUUID() });
     }
     setFiles(next);
