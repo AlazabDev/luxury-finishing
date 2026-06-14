@@ -47,6 +47,22 @@ import {
 const MAX_FILES = 8;
 const MAX_FILE_MB = 15;
 const ACCEPTED = ".pdf,.jpg,.jpeg,.png,.webp,.dwg,.dxf,.doc,.docx,.zip";
+const ALLOWED_MIME = new Set([
+  "application/pdf",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/zip",
+  "application/x-zip-compressed",
+  "application/acad",
+  "image/vnd.dwg",
+  "image/vnd.dxf",
+  "application/octet-stream", // dwg/dxf often reported as this
+  "",
+]);
+const ALLOWED_EXT = /\.(pdf|jpe?g|png|webp|dwg|dxf|docx?|zip)$/i;
 
 interface PendingFile {
   file: File;
@@ -99,6 +115,12 @@ const EstimateRequestPage = () => {
       }
       if (f.size > MAX_FILE_MB * 1024 * 1024) {
         toast.error(`${f.name}: ${t("er.errFileTooBig")}`);
+        continue;
+      }
+      const mimeOk = ALLOWED_MIME.has(f.type) && f.type !== "image/svg+xml";
+      const extOk = ALLOWED_EXT.test(f.name);
+      if (!mimeOk || !extOk) {
+        toast.error(`${f.name}: unsupported file type`);
         continue;
       }
       next.push({ file: f, id: crypto.randomUUID() });
