@@ -3,7 +3,7 @@ import SiteFooter from "@/components/SiteFooter";
 import FloatingElements from "@/components/FloatingElements";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Phone, Mail, MapPin, Clock, Loader2 } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Loader2, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 import { useLanguage } from "@/contexts/LanguageContext";
