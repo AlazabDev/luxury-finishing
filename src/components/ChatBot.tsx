@@ -686,12 +686,13 @@ export default function ChatBot() {
       <button
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "fixed bottom-6 end-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-300 hover:scale-110",
+          "fixed bottom-6 end-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-xl shadow-accent/30 ring-4 ring-accent/15 transition-all duration-300 hover:scale-110 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/50",
           open
             ? "bg-accent text-accent-foreground rotate-0"
             : "bg-accent text-accent-foreground",
         )}
         aria-label={t("chat.open")}
+        aria-expanded={open}
       >
         {open ? <X className="h-6 w-6" /> : <MessageSquareText className="h-6 w-6" />}
       </button>
