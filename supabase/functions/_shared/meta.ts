@@ -107,7 +107,7 @@ export const verifyMetaWebhookSignature = async (
   signatureHeader: string | null,
   appSecret: string,
 ) => {
-  if (!appSecret) return true;
+  if (!appSecret) return false;
   if (!signatureHeader) return false;
 
   const normalizedSignature = signatureHeader.replace(/^sha256=/i, "");
