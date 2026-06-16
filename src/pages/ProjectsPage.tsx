@@ -225,6 +225,18 @@ const ProjectsPage = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
+                  {filteredProjects.length === 0 ? (
+                    <div className="text-center py-20 px-4">
+                      <div className="w-16 h-16 mx-auto rounded-full bg-secondary flex items-center justify-center mb-4">
+                        <Images className="w-7 h-7 text-muted-foreground" />
+                      </div>
+                      <h3 className="text-lg font-bold text-primary mb-2">لا توجد مشاريع في هذا التصنيف</h3>
+                      <p className="text-sm text-muted-foreground mb-6">جرّب اختيار تصنيف آخر لاستعراض أعمالنا.</p>
+                      <Button variant="gold-outline" onClick={() => handleCategoryChange("الكل")}>
+                        عرض جميع المشاريع
+                      </Button>
+                    </div>
+                  ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredProjects.map((project, i) => (
                       <motion.div
