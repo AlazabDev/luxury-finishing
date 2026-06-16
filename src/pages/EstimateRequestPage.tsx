@@ -420,7 +420,7 @@ const EstimateRequestPage = () => {
 
               <label
                 htmlFor="er-file-input"
-                className="relative flex flex-col items-center justify-center gap-2 border-2 border-dashed border-border rounded-xl p-8 cursor-pointer hover:border-accent/60 hover:bg-accent/5 transition-colors text-center"
+                className="relative flex flex-col items-center justify-center gap-2 border-2 border-dashed border-border rounded-xl p-6 md:p-8 cursor-pointer hover:border-accent/60 hover:bg-accent/5 transition-colors text-center focus-within:ring-2 focus-within:ring-accent/40"
               >
                 <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
                   <Upload className="w-5 h-5 text-accent" />
@@ -430,6 +430,9 @@ const EstimateRequestPage = () => {
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {t("er.uploadHint")}
+                </div>
+                <div className="text-[11px] text-muted-foreground font-mono">
+                  {files.length} / {MAX_FILES} · حد أقصى {MAX_FILE_MB}MB لكل ملف
                 </div>
                 <input
                   id="er-file-input"
@@ -448,6 +451,8 @@ const EstimateRequestPage = () => {
                 <ul className="space-y-2">
                   {files.map((f) => {
                     const isImg = f.file.type.startsWith("image/");
+                    const sizeKB = f.file.size / 1024;
+                    const sizeLabel = sizeKB >= 1024 ? `${(sizeKB / 1024).toFixed(1)} MB` : `${sizeKB.toFixed(0)} KB`;
                     return (
                       <li
                         key={f.id}
@@ -465,14 +470,14 @@ const EstimateRequestPage = () => {
                             {f.file.name}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            {(f.file.size / 1024).toFixed(0)} KB
+                            {sizeLabel}
                           </div>
                         </div>
                         <button
                           type="button"
                           onClick={() => removeFile(f.id)}
-                          aria-label="remove"
-                          className="text-muted-foreground hover:text-destructive p-1"
+                          aria-label={`إزالة ${f.file.name}`}
+                          className="text-muted-foreground hover:text-destructive p-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive/40"
                         >
                           <X className="w-4 h-4" />
                         </button>

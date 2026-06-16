@@ -3,7 +3,7 @@ import SiteFooter from "@/components/SiteFooter";
 import FloatingElements from "@/components/FloatingElements";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Phone, Mail, MapPin, Clock, Loader2 } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Loader2, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -64,9 +64,10 @@ const ContactPage = () => {
 
 
   const contactCards = [
-    { icon: Phone, label: t("contact.phone"), value: "+201004006620", href: "tel:+201004006620" },
-    { icon: Mail, label: t("contact.email"), value: "brand.identity@alazab.com", href: "mailto:brand.identity@alazab.com" },
-    { icon: MapPin, label: t("contact.address"), value: t("contact.addressValue"), href: "#" },
+    { icon: Phone, label: t("contact.phone"), value: "+201004006620", href: "tel:+201004006620", external: false },
+    { icon: MessageCircle, label: "واتساب", value: "تواصل مباشر", href: "https://wa.me/201004006620", external: true },
+    { icon: Mail, label: t("contact.email"), value: "brand.identity@alazab.com", href: "mailto:brand.identity@alazab.com", external: false },
+    { icon: MapPin, label: t("contact.address"), value: t("contact.addressValue"), href: "#", external: false },
   ];
 
   return (
@@ -84,15 +85,21 @@ const ContactPage = () => {
 
         <section className="section-padding bg-background">
           <div className="container-custom">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
               {contactCards.map((c) => (
-                <a key={c.label} href={c.href} className="bg-card rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all flex items-center gap-4">
+                <a
+                  key={c.label}
+                  href={c.href}
+                  {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="bg-card rounded-xl p-5 shadow-card hover:shadow-card-hover transition-all flex items-center gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+                  aria-label={`${c.label}: ${c.value}`}
+                >
                   <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                    <c.icon className="w-6 h-6 text-accent" />
+                    <c.icon className="w-6 h-6 text-accent" aria-hidden="true" />
                   </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">{c.label}</div>
-                    <div className="font-bold text-primary text-sm">{c.value}</div>
+                  <div className="min-w-0">
+                    <div className="text-xs text-muted-foreground">{c.label}</div>
+                    <div className="font-bold text-primary text-sm truncate">{c.value}</div>
                   </div>
                 </a>
               ))}
@@ -153,7 +160,7 @@ const ContactPage = () => {
                 <div className="bg-card rounded-xl overflow-hidden shadow-card">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2708.771324907652!2d31.278762925568998!3d29.987812974952135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1458396627ebf27d%3A0x15bc48a54f2e9a92!2z2KfZhNi52LLYqCDZhNmE2YXZgtin2YjZhNin2Kog2YjYp9mE2KrZiNix2YrYr9in2Ko!5e1!3m2!1sar!2seg!4v1773443057660!5m2!1sar!2seg"
-                    width="100%" height="350" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={t("contact.ourLocation")}
+                    width="100%" className="block w-full h-[220px] sm:h-[300px] lg:h-[350px]" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={t("contact.ourLocation")}
                   />
                 </div>
                 <div className="bg-card rounded-xl p-6 shadow-card">

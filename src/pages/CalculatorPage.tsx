@@ -228,6 +228,10 @@ const CalculatorPage = () => {
 
           {/* Result */}
           <div className="lg:col-span-2 lg:sticky lg:top-24 space-y-4">
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-accent/10 border border-accent/30 text-xs text-foreground/80">
+              <Info className="w-4 h-4 text-accent shrink-0 mt-0.5" aria-hidden="true" />
+              <span>السعر تقديري لأغراض الاسترشاد فقط، وليس عرض سعر نهائي. سيتم تأكيد التكلفة النهائية بعد المعاينة.</span>
+            </div>
             <Card className="p-6 md:p-8 bg-gradient-to-br from-primary to-primary/90 text-primary-foreground shadow-2xl">
               <div className="flex items-center gap-2 text-accent text-xs uppercase tracking-widest mb-3">
                 <TrendingUp className="w-4 h-4" />
