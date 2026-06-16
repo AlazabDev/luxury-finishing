@@ -309,6 +309,7 @@ const ProjectsPage = () => {
                       </motion.div>
                     ))}
                   </div>
+                  )}
                 </motion.div>
               ) : (
                 /* Gallery Grid View (all images) */
