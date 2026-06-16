@@ -160,7 +160,7 @@ const ContactPage = () => {
                 <div className="bg-card rounded-xl overflow-hidden shadow-card">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2708.771324907652!2d31.278762925568998!3d29.987812974952135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1458396627ebf27d%3A0x15bc48a54f2e9a92!2z2KfZhNi52LLYqCDZhNmE2YXZgtin2YjZhNin2Kog2YjYp9mE2KrZiNix2YrYr9in2Ko!5e1!3m2!1sar!2seg!4v1773443057660!5m2!1sar!2seg"
-                    width="100%" height="350" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={t("contact.ourLocation")}
+                    width="100%" className="block w-full h-[220px] sm:h-[300px] lg:h-[350px]" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={t("contact.ourLocation")}
                   />
                 </div>
                 <div className="bg-card rounded-xl p-6 shadow-card">
