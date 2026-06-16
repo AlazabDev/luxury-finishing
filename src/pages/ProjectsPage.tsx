@@ -93,15 +93,16 @@ const ProjectsPage = () => {
 
         {/* Controls */}
         <section className="sticky top-[60px] z-40 bg-card/95 backdrop-blur-md border-b border-border">
-          <div className="container-custom py-4">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              {/* Category filters */}
-              <div className="flex flex-wrap gap-2">
+          <div className="container-custom py-3 md:py-4">
+            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 md:gap-4">
+              {/* Category filters — horizontally scrollable on mobile */}
+              <div className="flex gap-2 overflow-x-auto md:flex-wrap -mx-4 px-4 md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {galleryCategories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => handleCategoryChange(cat)}
-                    className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
+                    aria-pressed={activeCategory === cat}
+                    className={`shrink-0 whitespace-nowrap px-4 md:px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
                       activeCategory === cat
                         ? "bg-accent text-accent-foreground shadow-lg shadow-accent/20"
                         : "bg-secondary text-muted-foreground hover:bg-accent/10 hover:text-accent"
@@ -118,17 +119,21 @@ const ProjectsPage = () => {
               </div>
 
               {/* View toggle */}
-              <div className="flex items-center gap-1 bg-secondary rounded-full p-1">
+              <div className="flex items-center gap-1 bg-secondary rounded-full p-1 self-end md:self-auto">
                 <button
                   onClick={() => { setViewMode("projects"); setSelectedProject(null); }}
-                  className={`p-2 rounded-full transition-all ${viewMode === "projects" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
+                  aria-label="عرض المشاريع"
+                  aria-pressed={viewMode === "projects"}
+                  className={`p-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${viewMode === "projects" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
                   title="عرض المشاريع"
                 >
                   <LayoutGrid className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => { setViewMode("gallery"); setSelectedProject(null); }}
-                  className={`p-2 rounded-full transition-all ${viewMode === "gallery" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
+                  aria-label="عرض الصور"
+                  aria-pressed={viewMode === "gallery"}
+                  className={`p-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${viewMode === "gallery" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
                   title="عرض الصور"
                 >
                   <Grid3X3 className="w-4 h-4" />
