@@ -65,7 +65,13 @@ const LazyImage = ({
   return (
     <div
       ref={imgRef}
-      className={cn("relative overflow-hidden bg-muted", placeholderClassName)}
+      className={cn(
+        "relative overflow-hidden bg-muted",
+        // Keep a 4:3 box when the image hasn't loaded yet so broken/loading
+        // images don't collapse to 0px (especially in masonry/columns layouts).
+        !loaded && "aspect-[4/3]",
+        placeholderClassName,
+      )}
     >
       {/* Static placeholder — no pulse */}
       <div
