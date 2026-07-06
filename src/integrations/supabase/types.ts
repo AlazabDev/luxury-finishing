@@ -167,6 +167,255 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_deliveries: {
+        Row: {
+          attempts: number
+          channel: string
+          created_at: string
+          error_message: string | null
+          id: string
+          last_attempt_at: string | null
+          notification_id: string
+          provider: string | null
+          provider_message_id: string | null
+          sent_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          channel: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          last_attempt_at?: string | null
+          notification_id: string
+          provider?: string | null
+          provider_message_id?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          channel?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          last_attempt_at?: string | null
+          notification_id?: string
+          provider?: string | null
+          provider_message_id?: string | null
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_deliveries_notification_id_fkey"
+            columns: ["notification_id"]
+            isOneToOne: false
+            referencedRelation: "notifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_events_log: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: number
+          ip_address: string | null
+          message: string | null
+          notification_id: string | null
+          payload: Json | null
+          source_slug: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: number
+          ip_address?: string | null
+          message?: string | null
+          notification_id?: string | null
+          payload?: Json | null
+          source_slug?: string | null
+          status: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: number
+          ip_address?: string | null
+          message?: string | null
+          notification_id?: string | null
+          payload?: Json | null
+          source_slug?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_events_log_notification_id_fkey"
+            columns: ["notification_id"]
+            isOneToOne: false
+            referencedRelation: "notifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_preferences: {
+        Row: {
+          created_at: string
+          global: Json
+          id: string
+          updated_at: string
+          workflows: Json
+        }
+        Insert: {
+          created_at?: string
+          global?: Json
+          id?: string
+          updated_at?: string
+          workflows?: Json
+        }
+        Update: {
+          created_at?: string
+          global?: Json
+          id?: string
+          updated_at?: string
+          workflows?: Json
+        }
+        Relationships: []
+      }
+      notification_sources: {
+        Row: {
+          api_key_hash: string
+          api_key_prefix: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          hmac_secret: string | null
+          id: string
+          is_active: boolean
+          name: string
+          rate_limit_per_minute: number
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          api_key_hash: string
+          api_key_prefix: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          hmac_secret?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          rate_limit_per_minute?: number
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          api_key_hash?: string
+          api_key_prefix?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          hmac_secret?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          rate_limit_per_minute?: number
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          actions: Json
+          avatar_url: string | null
+          body: string | null
+          category: string
+          channels: string[]
+          created_at: string
+          external_id: string | null
+          id: string
+          idempotency_key: string | null
+          is_archived: boolean
+          is_read: boolean
+          is_starred: boolean
+          link_url: string | null
+          occurred_at: string
+          raw: Json
+          read_at: string | null
+          severity: string
+          source_id: string | null
+          source_slug: string
+          subject: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          actions?: Json
+          avatar_url?: string | null
+          body?: string | null
+          category?: string
+          channels?: string[]
+          created_at?: string
+          external_id?: string | null
+          id?: string
+          idempotency_key?: string | null
+          is_archived?: boolean
+          is_read?: boolean
+          is_starred?: boolean
+          link_url?: string | null
+          occurred_at?: string
+          raw?: Json
+          read_at?: string | null
+          severity?: string
+          source_id?: string | null
+          source_slug: string
+          subject?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          actions?: Json
+          avatar_url?: string | null
+          body?: string | null
+          category?: string
+          channels?: string[]
+          created_at?: string
+          external_id?: string | null
+          id?: string
+          idempotency_key?: string | null
+          is_archived?: boolean
+          is_read?: boolean
+          is_starred?: boolean
+          link_url?: string | null
+          occurred_at?: string
+          raw?: Json
+          read_at?: string | null
+          severity?: string
+          source_id?: string | null
+          source_slug?: string
+          subject?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "notification_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           brand: string | null
