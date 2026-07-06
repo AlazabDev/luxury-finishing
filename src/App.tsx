@@ -23,6 +23,7 @@ import LegalCenterPage from "./pages/LegalCenterPage.tsx";
 import ChannelsPage from "./pages/ChannelsPage.tsx";
 import SitemapPage from "./pages/SitemapPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import DevImagesPage from "./pages/DevImagesPage.tsx";
 import ChatBot from "./components/ChatBot.tsx";
 
 const queryClient = new QueryClient();
@@ -53,6 +54,7 @@ const App = () => (
               <Route path="/legal" element={<LegalCenterPage />} />
               <Route path="/channels" element={<ChannelsPage />} />
               <Route path="/sitemap" element={<SitemapPage />} />
+              <Route path="/dev/images" element={<DevImagesPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <ChatBot />
