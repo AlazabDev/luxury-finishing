@@ -54,6 +54,7 @@ const App = () => (
               <Route path="/legal" element={<LegalCenterPage />} />
               <Route path="/channels" element={<ChannelsPage />} />
               <Route path="/sitemap" element={<SitemapPage />} />
+              <Route path="/dev/images" element={<DevImagesPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <ChatBot />
