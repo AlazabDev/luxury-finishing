@@ -124,10 +124,10 @@ const HeroSection = () => {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.7 }}
               >
-                <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-heading font-bold text-primary-foreground leading-tight mb-3 md:mb-4">
+                <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-primary-foreground leading-[1.15] mb-3 md:mb-4 drop-shadow-[0_4px_20px_rgba(0,0,0,0.35)]">
                   {slide.title}
                 </h1>
-                <p className="text-base md:text-2xl lg:text-3xl font-heading text-accent font-bold mb-4 md:mb-6">
+                <p className="text-lg md:text-2xl lg:text-3xl font-heading font-bold mb-4 md:mb-6 text-gold-gradient">
                   {slide.subtitle}
                 </p>
               </motion.div>
@@ -177,16 +177,20 @@ const HeroSection = () => {
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4">
           <button
             onClick={prev}
-            className="w-10 h-10 rounded-full bg-primary-foreground/10 backdrop-blur-sm flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
+            aria-label="الشريحة السابقة"
+            className="w-10 h-10 rounded-full bg-primary-foreground/10 backdrop-blur-sm flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-all focus-ring"
           >
             <ChevronRight className="w-5 h-5 text-primary-foreground" />
           </button>
-          <div className="flex gap-2">
+          <div className="flex gap-2" role="tablist" aria-label="شرائح العرض">
             {heroSlides.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`h-1.5 rounded-full transition-all duration-500 ${
+                role="tab"
+                aria-selected={i === current}
+                aria-label={`الانتقال إلى الشريحة ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-500 focus-ring ${
                   i === current
                     ? "w-8 bg-accent"
                     : "w-3 bg-primary-foreground/30 hover:bg-primary-foreground/50"
@@ -196,7 +200,8 @@ const HeroSection = () => {
           </div>
           <button
             onClick={next}
-            className="w-10 h-10 rounded-full bg-primary-foreground/10 backdrop-blur-sm flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
+            aria-label="الشريحة التالية"
+            className="w-10 h-10 rounded-full bg-primary-foreground/10 backdrop-blur-sm flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-all focus-ring"
           >
             <ChevronLeft className="w-5 h-5 text-primary-foreground" />
           </button>
