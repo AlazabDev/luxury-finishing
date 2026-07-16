@@ -134,4 +134,23 @@
   .container-custom {
     @apply max-w-7xl mx-auto;
   }
+
+  /* Luxury gold gradient text for hero/section headings */
+  .text-gold-gradient {
+    background: linear-gradient(135deg, hsl(44 100% 62%) 0%, hsl(44 100% 49%) 45%, hsl(38 90% 55%) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Subtle radial vignette used on premium dark sections */
+  .luxury-vignette {
+    background-image: radial-gradient(ellipse at center, transparent 0%, hsl(var(--primary) / 0.35) 100%);
+  }
+
+  /* Focus ring aligned with brand */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
 }

@@ -25,6 +25,8 @@ import SitemapPage from "./pages/SitemapPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import DevImagesPage from "./pages/DevImagesPage.tsx";
 import ChatBot from "./components/ChatBot.tsx";
+import ScrollToTop from "./components/ScrollToTop.tsx";
+import BackToTop from "./components/BackToTop.tsx";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<AboutPage />} />
@@ -58,6 +61,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
             <ChatBot />
+            <BackToTop />
           </BrowserRouter>
         </TooltipProvider>
       </LanguageProvider>

@@ -2,19 +2,36 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#030957" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#030957" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#050a2b" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="canonical" href="https://luxury-finishing.alazab.com/" />
 
-    <title>Luxury Finishing | تشطيبات فاخرة من الأزعب للمقاولات</title>
-    <meta name="description" content="Luxury Finishing — ذراع التشطيبات الفاخرة لشركة الأزعب للمقاولات. تنفيذ راقٍ للوحدات السكنية والتجارية مع التزام بالجودة والتسليم في الموعد." />
+    <!-- Performance: preconnect to third-parties used above the fold -->
+    <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+
+    <!-- Preload the LCP hero background (Cloudinary auto format/quality) -->
+    <link
+      rel="preload"
+      as="image"
+      href="https://res.cloudinary.com/dn4ne1ep1/image/upload/f_auto,q_auto:good,w_1920,c_fill,g_auto/luxury-finishing/hero/hero-main.jpg"
+      fetchpriority="high"
+    />
+
+    <title>تشطيبات فاخرة | Luxury Finishing من الأزعب للمقاولات</title>
+    <meta name="description" content="Luxury Finishing — ذراع التشطيبات الفاخرة لشركة الأزعب للمقاولات. تصميم وتنفيذ راقٍ للفلل والشقق والمكاتب مع ضمان الجودة والتسليم في الموعد." />
+    <meta name="keywords" content="تشطيبات فاخرة, ديكور داخلي, تشطيب شقق, تشطيب فلل, الأزعب للمقاولات, luxury finishing, interior design egypt" />
     <meta name="author" content="Alazab Construction Company" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Luxury Finishing — Alazab" />
-    <meta property="og:title" content="Luxury Finishing | تشطيبات فاخرة من الأزعب للمقاولات" />
+    <meta property="og:title" content="تشطيبات فاخرة | Luxury Finishing من الأزعب للمقاولات" />
     <meta property="og:description" content="ذراع التشطيبات الفاخرة لشركة الأزعب للمقاولات. تنفيذ راقٍ للوحدات السكنية والتجارية." />
     <meta property="og:url" content="https://luxury-finishing.alazab.com/" />
     <meta property="og:locale" content="ar_EG" />
@@ -23,7 +40,7 @@
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@alazab" />
-    <meta name="twitter:title" content="Luxury Finishing | تشطيبات فاخرة من الأزعب للمقاولات" />
+    <meta name="twitter:title" content="تشطيبات فاخرة | Luxury Finishing من الأزعب للمقاولات" />
     <meta name="twitter:description" content="ذراع التشطيبات الفاخرة لشركة الأزعب للمقاولات. تنفيذ راقٍ للوحدات السكنية والتجارية." />
     <meta name="twitter:image" content="https://al-azab.co/logo-alazab.gif" />
 
@@ -42,10 +59,41 @@
         "sameAs": ["https://al-azab.co/"]
       }
     </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Luxury Finishing — Alazab",
+        "image": "https://al-azab.co/logo-alazab.gif",
+        "url": "https://luxury-finishing.alazab.com/",
+        "telephone": "+201004006620",
+        "priceRange": "$$$",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "EG"
+        },
+        "areaServed": "EG",
+        "description": "تصميم وتنفيذ تشطيبات فاخرة للفلل والشقق والمكاتب."
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Luxury Finishing",
+        "url": "https://luxury-finishing.alazab.com/",
+        "inLanguage": ["ar", "en"]
+      }
+    </script>
   </head>
 
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="padding:2rem;text-align:center;font-family:sans-serif;background:#030957;color:#fff;">
+        هذا الموقع يحتاج إلى تفعيل JavaScript لعرض المحتوى.
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
