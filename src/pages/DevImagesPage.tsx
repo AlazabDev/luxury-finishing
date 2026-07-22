@@ -234,9 +234,16 @@ const DevImagesPage = () => {
             <button
               onClick={runProbe}
               disabled={running}
-              className="rounded-md bg-primary px-3 py-1.5 text-sm text-primary-foreground disabled:opacity-50"
+              className="rounded-md border px-3 py-1.5 text-sm hover:bg-muted disabled:opacity-50"
             >
-              {running ? "Probing…" : "Re-run probe"}
+              {running ? "Probing…" : "Re-run sample probe"}
+            </button>
+            <button
+              onClick={runFullProjectAudit}
+              disabled={running}
+              className="rounded-md bg-accent px-3 py-1.5 text-sm font-semibold text-accent-foreground shadow-sm hover:opacity-90 disabled:opacity-50"
+            >
+              {running ? "Auditing…" : "▶ Test all project images"}
             </button>
           </div>
         </header>
