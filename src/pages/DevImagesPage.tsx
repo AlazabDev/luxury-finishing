@@ -93,39 +93,114 @@ const DevImagesPage = () => {
     })),
   );
   const [running, setRunning] = useState(false);
+  const [report, setReport] = useState<string>("");
 
-  const runProbe = async () => {
-    setRunning(true);
-    setResults((prev) => prev.map((r) => ({ ...r, status: "loading" })));
-    const updated = await Promise.all(
-      results.map(async (r) => {
+  const probeList = async (
+    list: { publicId: string; source: string }[],
+  ): Promise<ProbeResult[]> =>
+    Promise.all(
+      list.map(async (s) => {
+        const url = createCloudinaryUrl(s.publicId, { width: 400 });
+        const resolved = resolveCloudinaryPublicId(s.publicId);
         const start = performance.now();
         try {
-          const res = await fetch(r.url, { method: "GET", mode: "cors" });
+          const res = await fetch(url, { method: "GET", mode: "cors" });
           return {
-            ...r,
+            publicId: s.publicId,
+            source: s.source,
+            url,
+            resolved,
             status: (res.ok ? "ok" : "error") as ProbeStatus,
             httpStatus: res.status,
             ms: Math.round(performance.now() - start),
           };
         } catch {
-          // CORS or network — fall back to image element probe
           const ok = await new Promise<boolean>((resolve) => {
             const img = new Image();
             img.onload = () => resolve(true);
             img.onerror = () => resolve(false);
-            img.src = r.url;
+            img.src = url;
           });
           return {
-            ...r,
+            publicId: s.publicId,
+            source: s.source,
+            url,
+            resolved,
             status: (ok ? "ok" : "error") as ProbeStatus,
             ms: Math.round(performance.now() - start),
           };
         }
       }),
     );
+
+  const runProbe = async () => {
+    setRunning(true);
+    setReport("");
+    setResults((prev) => prev.map((r) => ({ ...r, status: "loading" })));
+    const updated = await probeList(samples);
     setResults(updated);
     setRunning(false);
+  };
+
+  const runFullProjectAudit = async () => {
+    setRunning(true);
+    setReport("Running full project image audit…");
+    const list = gatherAllProjectImages();
+    setResults(
+      list.map((s) => ({
+        publicId: s.publicId,
+        source: s.source,
+        url: createCloudinaryUrl(s.publicId, { width: 400 }),
+        resolved: resolveCloudinaryPublicId(s.publicId),
+        status: "loading" as ProbeStatus,
+      })),
+    );
+    const probed = await probeList(list);
+    setResults(probed);
+
+    const failed = probed.filter((r) => r.status === "error");
+    const byReason = new Map<string, ProbeResult[]>();
+    failed.forEach((r) => {
+      const key = classifyError(r.httpStatus);
+      if (!byReason.has(key)) byReason.set(key, []);
+      byReason.get(key)!.push(r);
+    });
+
+    const lines: string[] = [];
+    lines.push(`Luxury Finishing — Project Images Audit`);
+    lines.push(`Generated: ${new Date().toISOString()}`);
+    lines.push(
+      `Cloud: ${cloudinaryConfig.cloudName} · Folder: ${cloudinaryConfig.assetFolder}`,
+    );
+    lines.push(
+      `Total: ${probed.length} · OK: ${probed.length - failed.length} · Failed: ${failed.length}`,
+    );
+    lines.push("");
+    if (failed.length === 0) {
+      lines.push("✅ All project images loaded successfully.");
+    } else {
+      for (const [reason, group] of byReason) {
+        lines.push(`── ${reason} (${group.length}) ──`);
+        group.forEach((r) => {
+          lines.push(`  • [${r.source}] ${r.resolved}`);
+          lines.push(`    ${r.url}`);
+        });
+        lines.push("");
+      }
+    }
+    setReport(lines.join("\n"));
+    setRunning(false);
+  };
+
+  const downloadReport = () => {
+    if (!report) return;
+    const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `image-audit-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   useEffect(() => {
