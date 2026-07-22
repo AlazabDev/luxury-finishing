@@ -53,6 +53,34 @@ const gatherSamples = () => {
   });
 };
 
+const gatherAllProjectImages = () => {
+  const items: { publicId: string; source: string }[] = [];
+  galleryProjects.forEach((p) => {
+    items.push({ publicId: p.coverImageId, source: `Cover · ${p.id}` });
+    p.imageIds.forEach((id, idx) =>
+      items.push({ publicId: id, source: `${p.id} · #${idx + 1}` }),
+    );
+  });
+  const seen = new Set<string>();
+  return items.filter((i) => {
+    const k = `${i.publicId}|${i.source}`;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+};
+
+const classifyError = (httpStatus?: number) => {
+  if (!httpStatus) return "Network / CORS / unreachable";
+  if (httpStatus === 404) return "Not found (404) — missing asset or wrong public_id";
+  if (httpStatus === 401 || httpStatus === 403)
+    return `Permission denied (${httpStatus}) — asset is private or delivery restricted`;
+  if (httpStatus === 420 || httpStatus === 429)
+    return `Rate limited (${httpStatus})`;
+  if (httpStatus >= 500) return `Cloudinary server error (${httpStatus})`;
+  return `HTTP ${httpStatus}`;
+};
+
 const DevImagesPage = () => {
   const samples = useMemo(gatherSamples, []);
   const [results, setResults] = useState<ProbeResult[]>(() =>
@@ -65,39 +93,114 @@ const DevImagesPage = () => {
     })),
   );
   const [running, setRunning] = useState(false);
+  const [report, setReport] = useState<string>("");
 
-  const runProbe = async () => {
-    setRunning(true);
-    setResults((prev) => prev.map((r) => ({ ...r, status: "loading" })));
-    const updated = await Promise.all(
-      results.map(async (r) => {
+  const probeList = async (
+    list: { publicId: string; source: string }[],
+  ): Promise<ProbeResult[]> =>
+    Promise.all(
+      list.map(async (s) => {
+        const url = createCloudinaryUrl(s.publicId, { width: 400 });
+        const resolved = resolveCloudinaryPublicId(s.publicId);
         const start = performance.now();
         try {
-          const res = await fetch(r.url, { method: "GET", mode: "cors" });
+          const res = await fetch(url, { method: "GET", mode: "cors" });
           return {
-            ...r,
+            publicId: s.publicId,
+            source: s.source,
+            url,
+            resolved,
             status: (res.ok ? "ok" : "error") as ProbeStatus,
             httpStatus: res.status,
             ms: Math.round(performance.now() - start),
           };
         } catch {
-          // CORS or network — fall back to image element probe
           const ok = await new Promise<boolean>((resolve) => {
             const img = new Image();
             img.onload = () => resolve(true);
             img.onerror = () => resolve(false);
-            img.src = r.url;
+            img.src = url;
           });
           return {
-            ...r,
+            publicId: s.publicId,
+            source: s.source,
+            url,
+            resolved,
             status: (ok ? "ok" : "error") as ProbeStatus,
             ms: Math.round(performance.now() - start),
           };
         }
       }),
     );
+
+  const runProbe = async () => {
+    setRunning(true);
+    setReport("");
+    setResults((prev) => prev.map((r) => ({ ...r, status: "loading" })));
+    const updated = await probeList(samples);
     setResults(updated);
     setRunning(false);
+  };
+
+  const runFullProjectAudit = async () => {
+    setRunning(true);
+    setReport("Running full project image audit…");
+    const list = gatherAllProjectImages();
+    setResults(
+      list.map((s) => ({
+        publicId: s.publicId,
+        source: s.source,
+        url: createCloudinaryUrl(s.publicId, { width: 400 }),
+        resolved: resolveCloudinaryPublicId(s.publicId),
+        status: "loading" as ProbeStatus,
+      })),
+    );
+    const probed = await probeList(list);
+    setResults(probed);
+
+    const failed = probed.filter((r) => r.status === "error");
+    const byReason = new Map<string, ProbeResult[]>();
+    failed.forEach((r) => {
+      const key = classifyError(r.httpStatus);
+      if (!byReason.has(key)) byReason.set(key, []);
+      byReason.get(key)!.push(r);
+    });
+
+    const lines: string[] = [];
+    lines.push(`Luxury Finishing — Project Images Audit`);
+    lines.push(`Generated: ${new Date().toISOString()}`);
+    lines.push(
+      `Cloud: ${cloudinaryConfig.cloudName} · Folder: ${cloudinaryConfig.assetFolder}`,
+    );
+    lines.push(
+      `Total: ${probed.length} · OK: ${probed.length - failed.length} · Failed: ${failed.length}`,
+    );
+    lines.push("");
+    if (failed.length === 0) {
+      lines.push("✅ All project images loaded successfully.");
+    } else {
+      for (const [reason, group] of byReason) {
+        lines.push(`── ${reason} (${group.length}) ──`);
+        group.forEach((r) => {
+          lines.push(`  • [${r.source}] ${r.resolved}`);
+          lines.push(`    ${r.url}`);
+        });
+        lines.push("");
+      }
+    }
+    setReport(lines.join("\n"));
+    setRunning(false);
+  };
+
+  const downloadReport = () => {
+    if (!report) return;
+    const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `image-audit-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   useEffect(() => {
@@ -131,9 +234,16 @@ const DevImagesPage = () => {
             <button
               onClick={runProbe}
               disabled={running}
-              className="rounded-md bg-primary px-3 py-1.5 text-sm text-primary-foreground disabled:opacity-50"
+              className="rounded-md border px-3 py-1.5 text-sm hover:bg-muted disabled:opacity-50"
             >
-              {running ? "Probing…" : "Re-run probe"}
+              {running ? "Probing…" : "Re-run sample probe"}
+            </button>
+            <button
+              onClick={runFullProjectAudit}
+              disabled={running}
+              className="rounded-md bg-accent px-3 py-1.5 text-sm font-semibold text-accent-foreground shadow-sm hover:opacity-90 disabled:opacity-50"
+            >
+              {running ? "Auditing…" : "▶ Test all project images"}
             </button>
           </div>
         </header>
@@ -247,6 +357,33 @@ const DevImagesPage = () => {
                 Cloudinary account.
               </li>
             </ul>
+          </section>
+        )}
+
+        {report && (
+          <section className="rounded-lg border bg-card p-4">
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Audit report
+              </h3>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => copy(report)}
+                  className="rounded border px-2 py-1 text-xs hover:bg-muted"
+                >
+                  Copy
+                </button>
+                <button
+                  onClick={downloadReport}
+                  className="rounded border px-2 py-1 text-xs hover:bg-muted"
+                >
+                  Download .txt
+                </button>
+              </div>
+            </div>
+            <pre className="max-h-96 overflow-auto whitespace-pre-wrap rounded bg-background/60 p-3 text-xs leading-relaxed">
+{report}
+            </pre>
           </section>
         )}
       </div>
