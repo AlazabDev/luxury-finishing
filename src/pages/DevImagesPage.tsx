@@ -359,6 +359,33 @@ const DevImagesPage = () => {
             </ul>
           </section>
         )}
+
+        {report && (
+          <section className="rounded-lg border bg-card p-4">
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Audit report
+              </h3>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => copy(report)}
+                  className="rounded border px-2 py-1 text-xs hover:bg-muted"
+                >
+                  Copy
+                </button>
+                <button
+                  onClick={downloadReport}
+                  className="rounded border px-2 py-1 text-xs hover:bg-muted"
+                >
+                  Download .txt
+                </button>
+              </div>
+            </div>
+            <pre className="max-h-96 overflow-auto whitespace-pre-wrap rounded bg-background/60 p-3 text-xs leading-relaxed">
+{report}
+            </pre>
+          </section>
+        )}
       </div>
     </div>
   );
