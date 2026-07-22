@@ -53,6 +53,34 @@ const gatherSamples = () => {
   });
 };
 
+const gatherAllProjectImages = () => {
+  const items: { publicId: string; source: string }[] = [];
+  galleryProjects.forEach((p) => {
+    items.push({ publicId: p.coverImageId, source: `Cover · ${p.id}` });
+    p.imageIds.forEach((id, idx) =>
+      items.push({ publicId: id, source: `${p.id} · #${idx + 1}` }),
+    );
+  });
+  const seen = new Set<string>();
+  return items.filter((i) => {
+    const k = `${i.publicId}|${i.source}`;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+};
+
+const classifyError = (httpStatus?: number) => {
+  if (!httpStatus) return "Network / CORS / unreachable";
+  if (httpStatus === 404) return "Not found (404) — missing asset or wrong public_id";
+  if (httpStatus === 401 || httpStatus === 403)
+    return `Permission denied (${httpStatus}) — asset is private or delivery restricted`;
+  if (httpStatus === 420 || httpStatus === 429)
+    return `Rate limited (${httpStatus})`;
+  if (httpStatus >= 500) return `Cloudinary server error (${httpStatus})`;
+  return `HTTP ${httpStatus}`;
+};
+
 const DevImagesPage = () => {
   const samples = useMemo(gatherSamples, []);
   const [results, setResults] = useState<ProbeResult[]>(() =>
