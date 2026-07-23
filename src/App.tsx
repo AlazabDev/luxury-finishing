@@ -24,6 +24,7 @@ import ChannelsPage from "./pages/ChannelsPage.tsx";
 import SitemapPage from "./pages/SitemapPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import DevImagesPage from "./pages/DevImagesPage.tsx";
+import SubscriptionsPage from "./pages/SubscriptionsPage.tsx";
 import ChatBot from "./components/ChatBot.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
 import BackToTop from "./components/BackToTop.tsx";
@@ -58,6 +59,8 @@ const App = () => (
               <Route path="/channels" element={<ChannelsPage />} />
               <Route path="/sitemap" element={<SitemapPage />} />
               <Route path="/dev/images" element={<DevImagesPage />} />
+              <Route path="/subscriptions" element={<SubscriptionsPage />} />
+              <Route path="/uberfix" element={<SubscriptionsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <ChatBot />
