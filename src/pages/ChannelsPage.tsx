@@ -3,7 +3,6 @@ import { BadgeCheck, BellRing, Clock3, ExternalLink, Megaphone } from "lucide-re
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import FloatingElements from "@/components/FloatingElements";
-import FacebookConnectionCard from "@/components/channels/FacebookConnectionCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getSocialChannels, type SocialChannelCard } from "@/lib/legal";
 
@@ -104,8 +103,6 @@ const ChannelsPage = () => {
                 </p>
               </div>
             </div>
-
-            <FacebookConnectionCard />
 
             <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
               {socialChannels.map((channel, index) => (
