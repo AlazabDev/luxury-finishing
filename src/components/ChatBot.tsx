@@ -1070,6 +1070,7 @@ export default function ChatBot() {
             </div>
           )}
         </div>
+        </>
       ) : null}
     </>
   );
