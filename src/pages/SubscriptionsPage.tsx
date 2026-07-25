@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Check, Shield, Clock, MapPin, FileText, Sparkles, ChevronDown, Star } from "lucide-react";
+import { Check, Shield, Clock, MapPin, FileText, Sparkles, ChevronDown, Star, CheckCircle2, MessageCircle, Mail, ArrowLeft } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import FloatingElements from "@/components/FloatingElements";
