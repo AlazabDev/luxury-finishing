@@ -52,7 +52,13 @@ jobs:
         run: pnpm typecheck
 
       - name: Lint
-        run: pnpm lint
+        shell: bash
+        run: |
+          set +e
+          pnpm lint > lint-output.log 2>&1
+          lint_status=$?
+          tail -n 120 lint-output.log
+          exit "$lint_status"
 
       - name: Unit tests
         run: pnpm test
