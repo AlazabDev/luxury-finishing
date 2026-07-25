@@ -2,6 +2,7 @@
 set -Eeuo pipefail
 
 ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+STATE_DIR="${STATE_DIR:-${XDG_STATE_HOME:-${HOME}/.local/state}/luxury-finishing}"
 cd "${ROOT_DIR}"
 
 if [[ "${EUID}" -eq 0 ]]; then
@@ -35,6 +36,11 @@ fi
 
 LOCAL_SHA="$(git rev-parse HEAD)"
 REMOTE_SHA="$(git ls-remote origin refs/heads/main | awk '{print $1}')"
+if [[ -z "${REMOTE_SHA}" ]]; then
+  echo "Could not resolve origin/main." >&2
+  exit 1
+fi
+
 if [[ "${CURRENT_BRANCH}" == "main" && "${LOCAL_SHA}" != "${REMOTE_SHA}" ]]; then
   echo "Local main does not match origin/main." >&2
   echo "Local:  ${LOCAL_SHA}" >&2
@@ -51,5 +57,7 @@ sudo --preserve-env=DOMAIN,APP_PORT,APP_HEALTH_URL \
 PRODUCTION_URL="${PRODUCTION_URL:-https://luxury-finishing.alazab.com}" \
   node "${ROOT_DIR}/scripts/verify-live-production.mjs"
 
-printf '%s\n' "${LOCAL_SHA}" > "${ROOT_DIR}/.last-production-release"
+mkdir -p "${STATE_DIR}"
+printf '%s\n' "${LOCAL_SHA}" > "${STATE_DIR}/last-production-release"
 echo "Production release completed and verified: ${LOCAL_SHA}"
+echo "Release state: ${STATE_DIR}/last-production-release"
