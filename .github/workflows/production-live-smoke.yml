@@ -7,6 +7,9 @@ on:
       - main
     paths:
       - ".github/workflows/production-live-smoke.yml"
+      - "deploy/nginx/**"
+      - "scripts/deploy-production.sh"
+      - "scripts/install-nginx-production.sh"
       - "scripts/verify-live-production.mjs"
   push:
     branches:
@@ -14,6 +17,9 @@ on:
       - production-live-verification-20260725
     paths:
       - ".github/workflows/production-live-smoke.yml"
+      - "deploy/nginx/**"
+      - "scripts/deploy-production.sh"
+      - "scripts/install-nginx-production.sh"
       - "scripts/verify-live-production.mjs"
   schedule:
     - cron: "15 5 * * *"
@@ -26,6 +32,62 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  validate-deployment-config:
+    name: Validate deployment configuration
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate shell scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash -n scripts/deploy-pm2.sh
+          bash -n scripts/deploy-production.sh
+          bash -n scripts/install-nginx-production.sh
+
+      - name: Install Nginx
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes nginx
+
+      - name: Create temporary TLS certificate
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo mkdir -p /etc/letsencrypt/live/luxury-finishing.alazab.com
+          sudo mkdir -p /var/www/letsencrypt
+          sudo openssl req -x509 -nodes -newkey rsa:2048 \
+            -days 1 \
+            -subj "/CN=luxury-finishing.alazab.com" \
+            -keyout /etc/letsencrypt/live/luxury-finishing.alazab.com/privkey.pem \
+            -out /etc/letsencrypt/live/luxury-finishing.alazab.com/fullchain.pem
+
+      - name: Validate Nginx syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo cp deploy/nginx/luxury-finishing.conf /etc/nginx/conf.d/luxury-finishing.conf
+          sudo nginx -t
+          sudo nginx -T 2>&1 | tee nginx-effective-config.log
+          grep -F "server_name luxury-finishing.alazab.com" nginx-effective-config.log
+          grep -F "proxy_pass http://luxury_finishing_app" nginx-effective-config.log
+          grep -F "X-Frame-Options \"DENY\"" nginx-effective-config.log
+
+      - name: Upload Nginx diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nginx-config-diagnostics-${{ github.sha }}
+          path: nginx-effective-config.log
+          if-no-files-found: warn
+          retention-days: 14
+
   verify-live-production:
     name: Verify live production
     runs-on: ubuntu-latest
@@ -72,10 +134,24 @@ jobs:
             | openssl x509 -noout -checkend 1209600
 
       - name: Run live HTTP security smoke
+        id: live-smoke
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
         shell: bash
         run: |
           set -o pipefail
           node ./scripts/verify-live-production.mjs 2>&1 | tee production-live-smoke.log
+
+      - name: Explain pull request baseline failure
+        if: github.event_name == 'pull_request' && steps.live-smoke.outcome == 'failure'
+        shell: bash
+        run: |
+          echo "The pull request contains the production fix, while the currently deployed server is still on the previous configuration."
+          echo "The live smoke becomes mandatory after merge and deployment."
+
+      - name: Enforce live production after merge
+        if: github.event_name != 'pull_request' && steps.live-smoke.outcome != 'success'
+        shell: bash
+        run: exit 1
 
       - name: Upload production diagnostics
         if: always()
