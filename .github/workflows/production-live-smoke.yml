@@ -1,0 +1,85 @@
+name: Production Live Smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - production-live-verification-20260725
+    paths:
+      - ".github/workflows/production-live-smoke.yml"
+      - "scripts/verify-live-production.mjs"
+  schedule:
+    - cron: "15 5 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-live-smoke
+  cancel-in-progress: false
+
+jobs:
+  verify-live-production:
+    name: Verify live production
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PRODUCTION_URL: https://luxury-finishing.alazab.com
+      PRODUCTION_TIMEOUT_MS: "15000"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Resolve production DNS
+        shell: bash
+        run: |
+          set -euo pipefail
+          getent ahosts luxury-finishing.alazab.com | tee production-dns.log
+          test -s production-dns.log
+
+      - name: Verify TLS certificate
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo | openssl s_client \
+            -connect luxury-finishing.alazab.com:443 \
+            -servername luxury-finishing.alazab.com \
+            -verify_return_error 2>&1 \
+            | tee production-tls-handshake.log
+
+          echo | openssl s_client \
+            -connect luxury-finishing.alazab.com:443 \
+            -servername luxury-finishing.alazab.com 2>/dev/null \
+            | openssl x509 -noout -subject -issuer -dates \
+            | tee production-certificate.log
+
+          echo | openssl s_client \
+            -connect luxury-finishing.alazab.com:443 \
+            -servername luxury-finishing.alazab.com 2>/dev/null \
+            | openssl x509 -noout -checkend 1209600
+
+      - name: Run live HTTP security smoke
+        shell: bash
+        run: |
+          set -o pipefail
+          node ./scripts/verify-live-production.mjs 2>&1 | tee production-live-smoke.log
+
+      - name: Upload production diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-live-diagnostics-${{ github.sha }}
+          path: |
+            production-dns.log
+            production-tls-handshake.log
+            production-certificate.log
+            production-live-smoke.log
+          if-no-files-found: warn
+          retention-days: 14
