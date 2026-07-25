@@ -1,0 +1,120 @@
+name: Production Readiness
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, production-hardening-20260725]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-readiness-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify application
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: true
+      VITE_SUPABASE_URL: https://example.supabase.co
+      VITE_SUPABASE_PUBLISHABLE_KEY: ci-public-anon-key
+      VITE_CLOUDINARY_CLOUD_NAME: dn4ne1ep1
+      VITE_CLOUDINARY_ASSET_FOLDER: luxury-finishing
+      VITE_CLOUDINARY_UPLOAD_PRESET: luxury-finishing-unsigned
+      VITE_CLOUDINARY_USE_ASSET_FOLDER_PREFIX: "true"
+      VITE_ELEVENLABS_AGENT_ID: agent_ci_placeholder
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Lint
+        shell: bash
+        run: |
+          set +e
+          pnpm lint > lint-output.log 2>&1
+          echo "$?" > lint-exit-code.txt
+          tail -n 120 lint-output.log
+          exit 0
+
+      - name: Upload lint diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-diagnostics-${{ github.sha }}
+          path: |
+            lint-output.log
+            lint-exit-code.txt
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Enforce lint result
+        shell: bash
+        run: |
+          test "$(cat lint-exit-code.txt)" = "0"
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Build production bundle
+        run: pnpm build
+
+      - name: Verify production runtime
+        run: pnpm verify:production
+
+      - name: Audit production dependencies
+        shell: bash
+        run: |
+          set +e
+          pnpm audit --prod --audit-level high --json > audit-output.json 2> audit-stderr.log
+          echo "$?" > audit-exit-code.txt
+          cat audit-stderr.log
+          exit 0
+
+      - name: Upload audit diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-diagnostics-${{ github.sha }}
+          path: |
+            audit-output.json
+            audit-stderr.log
+            audit-exit-code.txt
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Enforce dependency audit result
+        shell: bash
+        run: |
+          test "$(cat audit-exit-code.txt)" = "0"
+
+      - name: Upload production bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: luxury-finishing-dist-${{ github.sha }}
+          path: dist
+          if-no-files-found: error
+          retention-days: 7
