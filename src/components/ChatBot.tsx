@@ -756,31 +756,61 @@ export default function ChatBot() {
 
       {/* Chat Window */}
       {open ? (
-        <div className="fixed inset-0 z-50 flex flex-col bg-background sm:inset-auto sm:bottom-24 sm:end-6 sm:h-[580px] sm:w-[370px] sm:rounded-3xl sm:border sm:border-border sm:shadow-2xl animate-in slide-in-from-bottom-4 fade-in duration-300 overflow-hidden">
+        <>
+          {/* Mobile backdrop */}
+          <div
+            className="fixed inset-0 z-[55] bg-black/40 backdrop-blur-sm sm:hidden"
+            onClick={() => setOpen(false)}
+            aria-hidden
+          />
+          <div className="fixed inset-x-0 bottom-0 top-0 z-[60] flex flex-col bg-background sm:inset-auto sm:bottom-24 sm:end-6 sm:h-[600px] sm:w-[400px] sm:max-w-[calc(100vw-3rem)] sm:rounded-3xl sm:border sm:border-border sm:shadow-2xl sm:shadow-primary/10 animate-in slide-in-from-bottom-4 fade-in duration-300 overflow-hidden">
           {/* Header */}
-          <div className="bg-accent px-4 py-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <button type="button" onClick={() => setHistoryOpen(true)} className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-foreground/10 text-accent-foreground hover:bg-accent-foreground/20 transition-colors" title={t("chat.history")}>
-                  <History className="h-4 w-4" />
-                </button>
-              </div>
-              <div className="text-center flex-1">
-                <p className="text-sm font-bold text-accent-foreground">
-                  {lang === "ar" ? "عزبوت (AzaBot)" : "AzaBot"}
+          <div className="relative bg-gradient-to-r from-primary via-primary to-[hsl(236_70%_25%)] px-4 py-3">
+            <div className="absolute inset-0 pointer-events-none opacity-30 bg-[radial-gradient(circle_at_top_right,hsl(var(--accent)/0.35),transparent_60%)]" />
+            <div className="relative flex items-center justify-between gap-2">
+              <button
+                type="button"
+                onClick={() => setHistoryOpen(true)}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 transition-colors focus-ring"
+                title={t("chat.history")}
+              >
+                <History className="h-4 w-4" />
+              </button>
+              <div className="text-center flex-1 min-w-0">
+                <p className="text-sm font-bold text-primary-foreground truncate">
+                  {lang === "ar" ? "عزبوت — المساعد الذكي" : "AzaBot — AI Assistant"}
                 </p>
-                <p className="text-[11px] text-accent-foreground/70">
-                  {lang === "ar" ? "المساعد الذكي - متصل الآن" : "AI Assistant - Online"}
+                <p className="mt-0.5 inline-flex items-center gap-1.5 text-[11px] text-primary-foreground/80">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  </span>
+                  {lang === "ar" ? "متصل الآن" : "Online"}
                 </p>
               </div>
-              <div className="flex items-center gap-1">
-                <button type="button" onClick={startNewConversation} className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-foreground/10 text-accent-foreground hover:bg-accent-foreground/20 transition-colors" title={t("chat.newConversation")}>
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={startNewConversation}
+                  className="hidden sm:flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 transition-colors focus-ring"
+                  title={t("chat.newConversation")}
+                >
                   <Plus className="h-4 w-4" />
                 </button>
-                <button type="button" onClick={handleDownloadTranscript} className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-foreground/10 text-accent-foreground hover:bg-accent-foreground/20 transition-colors" title={t("chat.download")}>
+                <button
+                  type="button"
+                  onClick={handleDownloadTranscript}
+                  className="hidden sm:flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 transition-colors focus-ring"
+                  title={t("chat.download")}
+                >
                   <Download className="h-4 w-4" />
                 </button>
-                <button type="button" onClick={() => setOpen(false)} className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-foreground/10 text-accent-foreground hover:bg-accent-foreground/20 transition-colors sm:hidden">
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 transition-colors focus-ring"
+                  title={t("chat.close") ?? "Close"}
+                >
                   <X className="h-4 w-4" />
                 </button>
               </div>
@@ -792,9 +822,9 @@ export default function ChatBot() {
             <button
               onClick={() => setActiveTab("text")}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-semibold transition-colors border-b-2",
+                "flex-1 flex items-center justify-center gap-2 py-3 text-xs font-semibold transition-colors border-b-2 focus-ring",
                 activeTab === "text"
-                  ? "border-accent text-accent"
+                  ? "border-accent text-accent bg-accent/5"
                   : "border-transparent text-muted-foreground hover:text-foreground",
               )}
             >
@@ -804,9 +834,9 @@ export default function ChatBot() {
             <button
               onClick={() => setActiveTab("voice")}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-semibold transition-colors border-b-2",
+                "flex-1 flex items-center justify-center gap-2 py-3 text-xs font-semibold transition-colors border-b-2 focus-ring",
                 activeTab === "voice"
-                  ? "border-accent text-accent"
+                  ? "border-accent text-accent bg-accent/5"
                   : "border-transparent text-muted-foreground hover:text-foreground",
               )}
             >
@@ -814,6 +844,7 @@ export default function ChatBot() {
               {lang === "ar" ? "محادثة صوتية" : "Voice Chat"}
             </button>
           </div>
+
 
           {/* Content */}
           {activeTab === "text" ? (
