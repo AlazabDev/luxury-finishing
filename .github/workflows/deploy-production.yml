@@ -1,0 +1,129 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: luxury-finishing-production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy main to production
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    env:
+      PRODUCTION_HOST: ${{ secrets.PRODUCTION_HOST }}
+      PRODUCTION_USER: ${{ secrets.PRODUCTION_USER }}
+      PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PRODUCTION_SSH_PRIVATE_KEY }}
+      PRODUCTION_SSH_KNOWN_HOSTS: ${{ secrets.PRODUCTION_SSH_KNOWN_HOSTS }}
+      PRODUCTION_SSH_PORT: ${{ secrets.PRODUCTION_SSH_PORT }}
+      PRODUCTION_APP_PATH: ${{ vars.PRODUCTION_APP_PATH }}
+      PRODUCTION_URL: https://luxury-finishing.alazab.com
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate deployment configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=0
+          for name in \
+            PRODUCTION_HOST \
+            PRODUCTION_USER \
+            PRODUCTION_SSH_PRIVATE_KEY \
+            PRODUCTION_SSH_KNOWN_HOSTS \
+            PRODUCTION_APP_PATH; do
+            if [[ -z "${!name:-}" ]]; then
+              echo "Missing GitHub production configuration: ${name}" >&2
+              missing=1
+            fi
+          done
+          exit "${missing}"
+
+      - name: Configure SSH
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "${HOME}/.ssh"
+          chmod 700 "${HOME}/.ssh"
+          printf '%s\n' "${PRODUCTION_SSH_PRIVATE_KEY}" > "${HOME}/.ssh/id_ed25519"
+          printf '%s\n' "${PRODUCTION_SSH_KNOWN_HOSTS}" > "${HOME}/.ssh/known_hosts"
+          chmod 600 "${HOME}/.ssh/id_ed25519" "${HOME}/.ssh/known_hosts"
+
+      - name: Deploy exact main commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          port="${PRODUCTION_SSH_PORT:-22}"
+          remote="${PRODUCTION_USER}@${PRODUCTION_HOST}"
+          repo_url="https://github.com/AlazabDev/luxury-finishing.git"
+
+          printf -v remote_command '%q ' \
+            bash -s -- \
+            "${PRODUCTION_APP_PATH}" \
+            "${GITHUB_SHA}" \
+            "${repo_url}"
+
+          ssh \
+            -i "${HOME}/.ssh/id_ed25519" \
+            -p "${port}" \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            "${remote}" \
+            "${remote_command}" <<'REMOTE_SCRIPT'
+          set -Eeuo pipefail
+          app_path="$1"
+          expected_sha="$2"
+          repo_url="$3"
+
+          if [[ ! -d "${app_path}/.git" ]]; then
+            mkdir -p "$(dirname -- "${app_path}")"
+            git clone "${repo_url}" "${app_path}"
+          fi
+
+          cd "${app_path}"
+          git fetch --prune origin main
+          git checkout main
+          git reset --hard origin/main
+
+          deployed_sha="$(git rev-parse HEAD)"
+          if [[ "${deployed_sha}" != "${expected_sha}" ]]; then
+            echo "Remote origin/main does not match the workflow commit." >&2
+            echo "Expected: ${expected_sha}" >&2
+            echo "Remote:   ${deployed_sha}" >&2
+            exit 1
+          fi
+
+          bash scripts/deploy-production.sh
+          REMOTE_SCRIPT
+
+      - name: Verify production externally
+        shell: bash
+        run: |
+          set -o pipefail
+          node ./scripts/verify-live-production.mjs 2>&1 | tee production-post-deploy.log
+
+      - name: Upload deployment verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-deploy-verification-${{ github.sha }}
+          path: production-post-deploy.log
+          if-no-files-found: warn
+          retention-days: 30
