@@ -1,34 +1,76 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { corsHeaders, jsonHeaders } from "../_shared/cors.ts";
+import { corsHeaders, jsonHeaders as sharedJsonHeaders } from "../_shared/cors.ts";
+import { createRateLimiter, exceedsContentLength } from "../_shared/rate-limit.ts";
 
 const DEFAULT_SEAFILE_URL = "https://seafile.alazab.com";
 const DEFAULT_PARENT_DIR = "/chatbot-attachments";
+const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024;
+const rateLimit = createRateLimiter({ windowMs: 60_000, maxRequests: 5 });
 
-const sanitizePathSegment = (value: string) =>
+const jsonHeaders = {
+  ...sharedJsonHeaders,
+  "Cache-Control": "no-store",
+  "X-Content-Type-Options": "nosniff",
+};
+
+const sanitizePathSegment = (value: string, maxLength = 80) =>
   value
     .replace(/[^a-zA-Z0-9._-]/g, "-")
     .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+    .replace(/^-|-$/g, "")
+    .slice(0, maxLength);
 
 const sanitizeFileName = (value: string) => {
-  const normalized = value.trim();
+  const normalized = value.trim().slice(0, 180);
   const extensionIndex = normalized.lastIndexOf(".");
   const extension = extensionIndex > -1 ? normalized.slice(extensionIndex) : "";
   const baseName = extensionIndex > -1 ? normalized.slice(0, extensionIndex) : normalized;
-  const safeBaseName = sanitizePathSegment(baseName) || "attachment";
-  const safeExtension = extension.replace(/[^a-zA-Z0-9.]/g, "");
+  const safeBaseName = sanitizePathSegment(baseName, 120) || "attachment";
+  const safeExtension = extension.replace(/[^a-zA-Z0-9.]/g, "").slice(0, 12);
   return `${safeBaseName}${safeExtension}`;
 };
 
+const startsWithBytes = (bytes: Uint8Array, signature: number[]) =>
+  signature.every((value, index) => bytes[index] === value);
+
+const validateFileSignature = async (file: File) => {
+  const extension = file.name.toLowerCase().match(/\.([a-z0-9]+)$/)?.[1] || "";
+  const head = new Uint8Array(await file.slice(0, 4_096).arrayBuffer());
+
+  if (extension === "pdf") {
+    return startsWithBytes(head, [0x25, 0x50, 0x44, 0x46, 0x2d]);
+  }
+  if (extension === "jpg" || extension === "jpeg") {
+    return startsWithBytes(head, [0xff, 0xd8, 0xff]);
+  }
+  if (extension === "png") {
+    return startsWithBytes(head, [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  }
+  if (extension === "webp") {
+    return startsWithBytes(head, [0x52, 0x49, 0x46, 0x46]) &&
+      String.fromCharCode(...head.slice(8, 12)) === "WEBP";
+  }
+  if (extension === "txt" || extension === "csv") {
+    return !head.includes(0x00);
+  }
+
+  return false;
+};
+
 const ensureDirectory = async (baseUrl: string, repoId: string, token: string, path: string) => {
-  await fetch(`${baseUrl}/api2/repos/${repoId}/dir/?p=${encodeURIComponent(path)}`, {
+  const response = await fetch(`${baseUrl}/api2/repos/${repoId}/dir/?p=${encodeURIComponent(path)}`, {
     method: "POST",
     headers: {
       Authorization: `Token ${token}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: "operation=mkdir",
+    signal: AbortSignal.timeout(15_000),
   }).catch(() => null);
+
+  if (response && !response.ok && response.status !== 400) {
+    throw new Error(`Failed to create Seafile directory [${response.status}]`);
+  }
 };
 
 const ensureDirectoryTree = async (
@@ -63,6 +105,7 @@ const createShareLink = async (
       path: filePath,
       permissions: { can_download: true },
     }),
+    signal: AbortSignal.timeout(15_000),
   });
 
   if (!response.ok) {
@@ -70,8 +113,19 @@ const createShareLink = async (
   }
 
   const payload = await response.json();
-  return payload.link || `${baseUrl}/lib/${repoId}/file${filePath}`;
+  return typeof payload.link === "string"
+    ? payload.link
+    : `${baseUrl}/lib/${repoId}/file${filePath}`;
 };
+
+const errorResponse = (status: number, error: string, retryAfterSeconds?: number) =>
+  new Response(JSON.stringify({ success: false, error }), {
+    status,
+    headers: {
+      ...jsonHeaders,
+      ...(retryAfterSeconds ? { "Retry-After": String(retryAfterSeconds) } : {}),
+    },
+  });
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -79,10 +133,16 @@ serve(async (req) => {
   }
 
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
-      status: 405,
-      headers: jsonHeaders,
-    });
+    return errorResponse(405, "Method not allowed");
+  }
+
+  if (exceedsContentLength(req, MAX_ATTACHMENT_BYTES + 256 * 1024)) {
+    return errorResponse(413, "file exceeds 10MB limit");
+  }
+
+  const limit = rateLimit(req);
+  if (!limit.allowed) {
+    return errorResponse(429, "Too many attachment uploads", limit.retryAfterSeconds);
   }
 
   try {
@@ -92,86 +152,88 @@ serve(async (req) => {
       Deno.env.get("SEAFILE_URL")?.trim().replace(/\/+$/, "") || DEFAULT_SEAFILE_URL;
 
     if (!seafileToken || !seafileRepoId) {
-      throw new Error("Seafile credentials not configured");
+      console.error("chat-attachments configuration error: Seafile credentials are missing");
+      return errorResponse(503, "Attachment service is temporarily unavailable");
     }
 
     const formData = await req.formData();
     const file = formData.get("file");
-    if (!(file instanceof File)) {
-      return new Response(JSON.stringify({ error: "file is required" }), {
-        status: 400,
-        headers: jsonHeaders,
-      });
+    if (!(file instanceof File) || file.size === 0) {
+      return errorResponse(400, "file is required");
     }
 
-    // Enforce safe MIME allowlist and a hard size cap to prevent abuse
-    const MAX_ATTACHMENT_BYTES = 15 * 1024 * 1024;
     if (file.size > MAX_ATTACHMENT_BYTES) {
-      return new Response(
-        JSON.stringify({ error: "file exceeds 15MB limit" }),
-        { status: 413, headers: jsonHeaders },
-      );
-    }
-    const ALLOWED_MIME = new Set([
-      "image/jpeg", "image/png", "image/webp", "image/gif", "image/heic",
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "application/vnd.ms-excel",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "text/plain", "text/csv",
-      "application/zip", "application/x-zip-compressed",
-      "application/vnd.rar", "application/x-rar-compressed",
-      "application/acad", "image/vnd.dwg", "application/dxf",
-      "application/octet-stream",
-    ]);
-    const ALLOWED_EXT = /\.(jpe?g|png|webp|gif|heic|pdf|docx?|xlsx?|txt|csv|zip|rar|dwg|dxf)$/i;
-    const declaredType = (file.type || "").toLowerCase();
-    const nameOk = ALLOWED_EXT.test(file.name);
-    if (!nameOk || (declaredType && !ALLOWED_MIME.has(declaredType))) {
-      return new Response(
-        JSON.stringify({ error: "file type not allowed" }),
-        { status: 400, headers: jsonHeaders },
-      );
+      return errorResponse(413, "file exceeds 10MB limit");
     }
 
-    const category = sanitizePathSegment(String(formData.get("category") || "general")) || "general";
+    const allowedExtensions = /\.(jpe?g|png|webp|pdf|txt|csv)$/i;
+    const allowedMimeTypes = new Set([
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "application/pdf",
+      "text/plain",
+      "text/csv",
+      "application/csv",
+      "application/vnd.ms-excel",
+    ]);
+    const declaredType = (file.type || "").toLowerCase();
+
+    if (!allowedExtensions.test(file.name) || (declaredType && !allowedMimeTypes.has(declaredType))) {
+      return errorResponse(400, "file type not allowed");
+    }
+
+    if (!(await validateFileSignature(file))) {
+      return errorResponse(400, "file content does not match its extension");
+    }
+
     const conversationId =
       sanitizePathSegment(String(formData.get("conversationId") || "session")) || "session";
-    const year = new Date().getFullYear().toString();
-    const month = String(new Date().getMonth() + 1).padStart(2, "0");
-    const parentDir = `${DEFAULT_PARENT_DIR}/${category}/${year}/${month}/${conversationId}`;
+    const now = new Date();
+    const year = now.getUTCFullYear().toString();
+    const month = String(now.getUTCMonth() + 1).padStart(2, "0");
+    const parentDir = `${DEFAULT_PARENT_DIR}/chatbot/${year}/${month}/${conversationId}`;
     await ensureDirectoryTree(seafileUrl, seafileRepoId, seafileToken, parentDir);
 
     const uploadLinkResponse = await fetch(
       `${seafileUrl}/api2/repos/${seafileRepoId}/upload-link/?p=${encodeURIComponent(parentDir)}`,
       {
         headers: { Authorization: `Token ${seafileToken}` },
+        signal: AbortSignal.timeout(15_000),
       },
     );
 
     if (!uploadLinkResponse.ok) {
-      const errorText = await uploadLinkResponse.text();
-      throw new Error(`Failed to get Seafile upload link: ${errorText}`);
+      throw new Error(`Failed to get Seafile upload link [${uploadLinkResponse.status}]`);
     }
 
     const uploadLink = (await uploadLinkResponse.text()).replace(/"/g, "");
-    const safeFileName = `${Date.now()}-${sanitizeFileName(file.name)}`;
+    const uploadUrl = new URL(uploadLink);
+    const seafileOrigin = new URL(seafileUrl);
+    const trustedUploadHost =
+      uploadUrl.protocol === "https:" &&
+      (uploadUrl.hostname === seafileOrigin.hostname ||
+        uploadUrl.hostname.endsWith(`.${seafileOrigin.hostname}`));
 
+    if (!trustedUploadHost) {
+      throw new Error("Seafile returned an untrusted upload URL");
+    }
+
+    const safeFileName = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}-${sanitizeFileName(file.name)}`;
     const uploadFormData = new FormData();
     uploadFormData.append("file", file, safeFileName);
     uploadFormData.append("parent_dir", parentDir);
-    uploadFormData.append("replace", "1");
+    uploadFormData.append("replace", "0");
 
-    const uploadResponse = await fetch(uploadLink, {
+    const uploadResponse = await fetch(uploadUrl, {
       method: "POST",
       headers: { Authorization: `Token ${seafileToken}` },
       body: uploadFormData,
+      signal: AbortSignal.timeout(60_000),
     });
 
     if (!uploadResponse.ok) {
-      const errorText = await uploadResponse.text();
-      throw new Error(`Failed to upload to Seafile: ${errorText}`);
+      throw new Error(`Failed to upload to Seafile [${uploadResponse.status}]`);
     }
 
     await uploadResponse.text();
@@ -189,27 +251,17 @@ serve(async (req) => {
         success: true,
         data: {
           name: safeFileName,
-          originalName: file.name,
           path: filePath,
           url: shareUrl,
           provider: "seafile",
-          repoId: seafileRepoId,
           size: file.size,
-          type: file.type || "application/octet-stream",
+          type: declaredType || "application/octet-stream",
         },
       }),
       { headers: jsonHeaders },
     );
   } catch (error) {
-    console.error("chat-attachments error:", error);
-    return new Response(
-      JSON.stringify({
-        error: error instanceof Error ? error.message : "Unknown error",
-      }),
-      {
-        status: 500,
-        headers: jsonHeaders,
-      },
-    );
+    console.error("chat-attachments error:", error instanceof Error ? error.message : error);
+    return errorResponse(500, "Internal server error");
   }
 });
