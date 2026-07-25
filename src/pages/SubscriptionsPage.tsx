@@ -519,59 +519,130 @@ const SubscriptionsPage = () => {
               <p className="text-muted-foreground">{c.contactDesc}</p>
               <div className="w-16 h-0.5 bg-accent mx-auto mt-4" />
             </div>
-            <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-6 md:p-8 shadow-card space-y-5">
-              {selectedPlanLabel && (
-                <div className="bg-accent/10 border border-accent/30 rounded-lg px-4 py-3 text-sm">
-                  <span className="font-semibold text-primary">{selectedPlanLabel}</span>
+            {submitted ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-card rounded-2xl p-6 md:p-8 shadow-card"
+              >
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 rounded-full bg-accent/15 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle2 className="w-9 h-9 text-accent" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-primary mb-2">{c.successTitle}</h3>
+                  <p className="text-muted-foreground text-sm">{c.successDesc}</p>
                 </div>
-              )}
-              <div className="grid sm:grid-cols-2 gap-4">
+
+                <div className="bg-secondary/50 rounded-xl p-5 mb-6 border border-border">
+                  <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground mb-3">
+                    {c.summaryTitle}
+                  </div>
+                  <dl className="space-y-2 text-sm">
+                    {submittedPlanLabel && (
+                      <div className="flex justify-between gap-4">
+                        <dt className="text-muted-foreground">{c.labelPlan}</dt>
+                        <dd className="font-semibold text-primary">{submittedPlanLabel}</dd>
+                      </div>
+                    )}
+                    <div className="flex justify-between gap-4">
+                      <dt className="text-muted-foreground">{c.labelName}</dt>
+                      <dd className="font-medium text-foreground">{submitted.name}</dd>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                      <dt className="text-muted-foreground">{c.labelPhone}</dt>
+                      <dd className="font-medium text-foreground" dir="ltr">{submitted.phone}</dd>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                      <dt className="text-muted-foreground">{c.labelShop}</dt>
+                      <dd className="font-medium text-foreground">{submitted.shop}</dd>
+                    </div>
+                    {submitted.message && (
+                      <div className="pt-2 border-t border-border">
+                        <dt className="text-muted-foreground mb-1">{c.labelDetails}</dt>
+                        <dd className="text-foreground whitespace-pre-wrap">{submitted.message}</dd>
+                      </div>
+                    )}
+                  </dl>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-3 mb-4">
+                  <Button asChild variant="gold" size="lg" className="w-full">
+                    <a href={whatsappHref()} target="_blank" rel="noopener noreferrer">
+                      <MessageCircle className="w-4 h-4" />
+                      {c.sendWhatsapp}
+                    </a>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="w-full">
+                    <a href={emailHref()}>
+                      <Mail className="w-4 h-4" />
+                      {c.sendEmail}
+                    </a>
+                  </Button>
+                </div>
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="w-full text-sm text-muted-foreground hover:text-primary transition-colors focus-ring rounded py-2 inline-flex items-center justify-center gap-1"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  {c.newRequest}
+                </button>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-6 md:p-8 shadow-card space-y-5">
+                {selectedPlanLabel && (
+                  <div className="bg-accent/10 border border-accent/30 rounded-lg px-4 py-3 text-sm">
+                    <span className="font-semibold text-primary">{selectedPlanLabel}</span>
+                  </div>
+                )}
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="name">{c.formName}</Label>
+                    <Input
+                      id="name"
+                      required
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      className="mt-1.5"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone">{c.formPhone}</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      required
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      className="mt-1.5"
+                    />
+                  </div>
+                </div>
                 <div>
-                  <Label htmlFor="name">{c.formName}</Label>
+                  <Label htmlFor="shop">{c.formShop}</Label>
                   <Input
-                    id="name"
+                    id="shop"
                     required
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    value={form.shop}
+                    onChange={(e) => setForm({ ...form, shop: e.target.value })}
                     className="mt-1.5"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="phone">{c.formPhone}</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    required
-                    value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  <Label htmlFor="message">{c.formMessage}</Label>
+                  <Textarea
+                    id="message"
+                    rows={4}
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
                     className="mt-1.5"
                   />
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="shop">{c.formShop}</Label>
-                <Input
-                  id="shop"
-                  required
-                  value={form.shop}
-                  onChange={(e) => setForm({ ...form, shop: e.target.value })}
-                  className="mt-1.5"
-                />
-              </div>
-              <div>
-                <Label htmlFor="message">{c.formMessage}</Label>
-                <Textarea
-                  id="message"
-                  rows={4}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className="mt-1.5"
-                />
-              </div>
-              <Button type="submit" variant="gold" size="lg" className="w-full">
-                {c.formSubmit}
-              </Button>
-            </form>
+                <Button type="submit" variant="gold" size="lg" className="w-full">
+                  {c.formSubmit}
+                </Button>
+              </form>
+            )}
           </div>
         </section>
       </main>
