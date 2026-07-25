@@ -231,6 +231,7 @@ const SubscriptionsPage = () => {
   const plans = plansData[L];
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [form, setForm] = useState({ name: "", phone: "", shop: "", message: "", plan: "" });
+  const [submitted, setSubmitted] = useState<null | typeof form>(null);
 
   const scrollToPlans = () => {
     document.getElementById("plans")?.scrollIntoView({ behavior: "smooth" });
@@ -242,14 +243,43 @@ const SubscriptionsPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitted(form);
     toast({ title: c.formSuccess });
-    setForm({ name: "", phone: "", shop: "", message: "", plan: "" });
+    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const selectedPlanLabel = useMemo(() => {
     if (!form.plan) return "";
     return plans.find((p) => p.id === form.plan)?.name ?? "";
   }, [form.plan, plans]);
+
+  const submittedPlanLabel = useMemo(() => {
+    if (!submitted?.plan) return "";
+    return plans.find((p) => p.id === submitted.plan)?.name ?? "";
+  }, [submitted, plans]);
+
+  const buildSummary = () => {
+    if (!submitted) return "";
+    const lines = [
+      `*${c.emailSubject}*`,
+      submittedPlanLabel ? `${c.labelPlan}: ${submittedPlanLabel}` : "",
+      `${c.labelName}: ${submitted.name}`,
+      `${c.labelPhone}: ${submitted.phone}`,
+      `${c.labelShop}: ${submitted.shop}`,
+      submitted.message ? `${c.labelDetails}: ${submitted.message}` : "",
+    ].filter(Boolean);
+    return lines.join("\n");
+  };
+
+  const whatsappHref = () =>
+    `https://wa.me/201004006620?text=${encodeURIComponent(buildSummary())}`;
+  const emailHref = () =>
+    `mailto:brand.identity@alazab.com?subject=${encodeURIComponent(c.emailSubject)}&body=${encodeURIComponent(buildSummary())}`;
+
+  const resetForm = () => {
+    setSubmitted(null);
+    setForm({ name: "", phone: "", shop: "", message: "", plan: "" });
+  };
 
   return (
     <div className="min-h-screen" dir={dir}>
