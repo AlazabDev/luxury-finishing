@@ -1,8 +1,8 @@
 name: Refresh pnpm Lockfile
 
 on:
-  push:
-    branches: [production-hardening-20260725]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -19,11 +19,12 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Check out branch
+      - name: Check out source branch
         uses: actions/checkout@v4
         with:
           ref: production-hardening-20260725
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
