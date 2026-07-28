@@ -770,7 +770,7 @@ export default function ChatBot() {
             onClick={() => setOpen(false)}
             aria-hidden
           />
-          <div className="fixed inset-x-0 bottom-0 top-0 z-[60] flex flex-col bg-background sm:inset-auto sm:bottom-24 sm:end-6 sm:h-[600px] sm:w-[400px] sm:max-w-[calc(100vw-3rem)] sm:rounded-3xl sm:border sm:border-border sm:shadow-2xl sm:shadow-primary/10 animate-in slide-in-from-bottom-4 fade-in duration-300 overflow-hidden">
+          <div className="fixed inset-x-0 bottom-0 top-0 z-[60] flex flex-col bg-background sm:inset-auto sm:bottom-24 sm:end-6 sm:h-[420px] sm:w-[400px] sm:max-w-[calc(100vw-3rem)] sm:rounded-3xl sm:border sm:border-border sm:shadow-2xl sm:shadow-primary/10 animate-in slide-in-from-bottom-4 fade-in duration-300 overflow-hidden">
           {/* Header */}
           <div className="relative bg-gradient-to-r from-primary via-primary to-[hsl(236_70%_25%)] px-4 py-3">
             <div className="absolute inset-0 pointer-events-none opacity-30 bg-[radial-gradient(circle_at_top_right,hsl(var(--accent)/0.35),transparent_60%)]" />
