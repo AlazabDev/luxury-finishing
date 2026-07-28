@@ -1,20 +1,27 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
+  Calculator,
   Download,
   ExternalLink,
   FileText,
   History,
   Loader2,
+  MapPin,
+  MessageCircle,
   MessageSquareText,
   Mic,
   MicOff,
   Paperclip,
+  Phone,
   Plus,
+  Search,
   Send,
   Trash2,
   Volume2,
+  Wrench,
   X,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
@@ -763,7 +770,7 @@ export default function ChatBot() {
             onClick={() => setOpen(false)}
             aria-hidden
           />
-          <div className="fixed inset-x-0 bottom-0 top-0 z-[60] flex flex-col bg-background sm:inset-auto sm:bottom-24 sm:end-6 sm:h-[600px] sm:w-[400px] sm:max-w-[calc(100vw-3rem)] sm:rounded-3xl sm:border sm:border-border sm:shadow-2xl sm:shadow-primary/10 animate-in slide-in-from-bottom-4 fade-in duration-300 overflow-hidden">
+          <div className="fixed inset-x-0 bottom-0 top-0 z-[60] flex flex-col bg-background sm:inset-auto sm:bottom-24 sm:end-6 sm:h-[420px] sm:w-[400px] sm:max-w-[calc(100vw-3rem)] sm:rounded-3xl sm:border sm:border-border sm:shadow-2xl sm:shadow-primary/10 animate-in slide-in-from-bottom-4 fade-in duration-300 overflow-hidden">
           {/* Header */}
           <div className="relative bg-gradient-to-r from-primary via-primary to-[hsl(236_70%_25%)] px-4 py-3">
             <div className="absolute inset-0 pointer-events-none opacity-30 bg-[radial-gradient(circle_at_top_right,hsl(var(--accent)/0.35),transparent_60%)]" />
@@ -845,6 +852,45 @@ export default function ChatBot() {
             </button>
           </div>
 
+          {/* Productivity tools */}
+          <div className="border-b border-border bg-muted/30 px-2 py-1.5">
+            <div className="flex items-center gap-1 overflow-x-auto scrollbar-none" dir={lang === "ar" ? "rtl" : "ltr"}>
+              {[
+                { icon: FileText, label: lang === "ar" ? "عرض سعر" : "Quote", to: "/quote" as const },
+                { icon: Calculator, label: lang === "ar" ? "حاسبة" : "Calculator", to: "/calculator" as const },
+                { icon: Wrench, label: lang === "ar" ? "صيانة" : "Maintenance", action: () => void handleTextSubmission(lang === "ar" ? "أريد طلب صيانة" : "I need maintenance") },
+                { icon: Search, label: lang === "ar" ? "متابعة طلب" : "Track", action: () => void handleTextSubmission(lang === "ar" ? "استعلام عن طلب صيانة" : "Track maintenance request") },
+                { icon: MessageCircle, label: "WhatsApp", href: "https://wa.me/201004006620" },
+                { icon: Phone, label: lang === "ar" ? "اتصال" : "Call", href: "tel:+201004006620" },
+                { icon: MapPin, label: lang === "ar" ? "تواصل" : "Contact", to: "/contact" as const },
+              ].map((tool) => {
+                const Icon = tool.icon;
+                const cls = "flex shrink-0 flex-col items-center justify-center gap-0.5 rounded-lg px-2 py-1 text-[10px] font-medium text-muted-foreground hover:bg-accent/10 hover:text-accent transition-colors min-w-[52px]";
+                if ("to" in tool && tool.to) {
+                  return (
+                    <Link key={tool.label} to={tool.to} onClick={() => setOpen(false)} className={cls}>
+                      <Icon className="h-4 w-4" />
+                      <span>{tool.label}</span>
+                    </Link>
+                  );
+                }
+                if ("href" in tool && tool.href) {
+                  return (
+                    <a key={tool.label} href={tool.href} target={tool.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className={cls}>
+                      <Icon className="h-4 w-4" />
+                      <span>{tool.label}</span>
+                    </a>
+                  );
+                }
+                return (
+                  <button key={tool.label} type="button" onClick={tool.action} className={cls}>
+                    <Icon className="h-4 w-4" />
+                    <span>{tool.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Content */}
           {activeTab === "text" ? (
