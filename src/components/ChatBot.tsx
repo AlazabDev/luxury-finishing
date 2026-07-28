@@ -1,20 +1,27 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
+  Calculator,
   Download,
   ExternalLink,
   FileText,
   History,
   Loader2,
+  MapPin,
+  MessageCircle,
   MessageSquareText,
   Mic,
   MicOff,
   Paperclip,
+  Phone,
   Plus,
+  Search,
   Send,
   Trash2,
   Volume2,
+  Wrench,
   X,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
