@@ -852,6 +852,45 @@ export default function ChatBot() {
             </button>
           </div>
 
+          {/* Productivity tools */}
+          <div className="border-b border-border bg-muted/30 px-2 py-1.5">
+            <div className="flex items-center gap-1 overflow-x-auto scrollbar-none" dir={lang === "ar" ? "rtl" : "ltr"}>
+              {[
+                { icon: FileText, label: lang === "ar" ? "عرض سعر" : "Quote", to: "/quote" as const },
+                { icon: Calculator, label: lang === "ar" ? "حاسبة" : "Calculator", to: "/calculator" as const },
+                { icon: Wrench, label: lang === "ar" ? "صيانة" : "Maintenance", action: () => void handleTextSubmission(lang === "ar" ? "أريد طلب صيانة" : "I need maintenance") },
+                { icon: Search, label: lang === "ar" ? "متابعة طلب" : "Track", action: () => void handleTextSubmission(lang === "ar" ? "استعلام عن طلب صيانة" : "Track maintenance request") },
+                { icon: MessageCircle, label: "WhatsApp", href: "https://wa.me/201004006620" },
+                { icon: Phone, label: lang === "ar" ? "اتصال" : "Call", href: "tel:+201004006620" },
+                { icon: MapPin, label: lang === "ar" ? "تواصل" : "Contact", to: "/contact" as const },
+              ].map((tool) => {
+                const Icon = tool.icon;
+                const cls = "flex shrink-0 flex-col items-center justify-center gap-0.5 rounded-lg px-2 py-1 text-[10px] font-medium text-muted-foreground hover:bg-accent/10 hover:text-accent transition-colors min-w-[52px]";
+                if ("to" in tool && tool.to) {
+                  return (
+                    <Link key={tool.label} to={tool.to} onClick={() => setOpen(false)} className={cls}>
+                      <Icon className="h-4 w-4" />
+                      <span>{tool.label}</span>
+                    </Link>
+                  );
+                }
+                if ("href" in tool && tool.href) {
+                  return (
+                    <a key={tool.label} href={tool.href} target={tool.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className={cls}>
+                      <Icon className="h-4 w-4" />
+                      <span>{tool.label}</span>
+                    </a>
+                  );
+                }
+                return (
+                  <button key={tool.label} type="button" onClick={tool.action} className={cls}>
+                    <Icon className="h-4 w-4" />
+                    <span>{tool.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Content */}
           {activeTab === "text" ? (
