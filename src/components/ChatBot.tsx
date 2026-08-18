@@ -868,7 +868,7 @@ export default function ChatBot() {
           <div className="border-b border-border bg-muted/30 px-2 py-1.5">
             <div className="flex items-center gap-1 overflow-x-auto scrollbar-none" dir={lang === "ar" ? "rtl" : "ltr"}>
               {[
-                { icon: FileText, label: lang === "ar" ? "عرض سعر" : "Quote", to: "/quote" as const },
+                { icon: FileText, label: lang === "ar" ? "عرض سعر" : "Quote", to: quoteHref },
                 { icon: Calculator, label: lang === "ar" ? "حاسبة" : "Calculator", to: "/calculator" as const },
                 { icon: Wrench, label: lang === "ar" ? "صيانة" : "Maintenance", action: () => void handleTextSubmission(lang === "ar" ? "أريد طلب صيانة" : "I need maintenance") },
                 { icon: Search, label: lang === "ar" ? "متابعة طلب" : "Track", action: () => void handleTextSubmission(lang === "ar" ? "استعلام عن طلب صيانة" : "Track maintenance request") },
