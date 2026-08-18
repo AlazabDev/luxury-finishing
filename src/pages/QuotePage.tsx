@@ -503,52 +503,102 @@ const QuotePage = () => {
                     </div>
                   )}
 
-                  {/* Step 4: Review */}
+                  {/* Step 4: Review & Confirm */}
                   {step === 4 && (
                     <div className="space-y-6">
+                      {wasAutoPrefilled && (
+                        <div className="flex items-start gap-2 rounded-lg border border-accent/30 bg-accent/10 p-3 text-sm text-foreground">
+                          <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                          <span>
+                            البيانات المعلّمة بـ "تم التعبئة تلقائياً" جاءت من محادثتك مع المساعد. راجعها قبل الإرسال.
+                          </span>
+                        </div>
+                      )}
+
                       <div className="bg-muted rounded-xl p-5 space-y-3">
-                        <h3 className="text-sm font-bold text-primary mb-3">
-                          معلوماتك الأساسية
-                        </h3>
+                        <div className="flex items-center justify-between mb-3">
+                          <h3 className="text-sm font-bold text-primary">
+                            معلوماتك الأساسية
+                          </h3>
+                          <button
+                            type="button"
+                            onClick={() => setStep(0)}
+                            className="text-xs font-medium text-accent hover:underline"
+                          >
+                            تعديل
+                          </button>
+                        </div>
                         {[
-                          { label: "الاسم", value: form.name },
-                          { label: "الهاتف", value: form.phone },
-                          { label: "البريد", value: form.email },
+                          { label: "الاسم", value: form.name, key: "name" as const },
+                          { label: "الهاتف", value: form.phone, key: "phone" as const },
+                          { label: "البريد", value: form.email, key: "email" as const },
                         ].map((f) => (
-                          <div key={f.label} className="flex justify-between text-sm">
+                          <div key={f.label} className="flex justify-between text-sm items-start gap-4">
                             <span className="text-muted-foreground">{f.label}</span>
-                            <span className="font-medium text-primary">
-                              {f.value || "—"}
-                            </span>
+                            <div className="text-end">
+                              <span className="font-medium text-primary block">
+                                {f.value || "—"}
+                              </span>
+                              {prefilledFields[f.key] && f.value && (
+                                <span className="text-[10px] text-accent font-medium">
+                                  تم التعبئة تلقائياً
+                                </span>
+                              )}
+                            </div>
                           </div>
                         ))}
                       </div>
 
                       <div className="bg-muted rounded-xl p-5 space-y-3">
-                        <h3 className="text-sm font-bold text-primary mb-3">
-                          تفاصيل العقار
-                        </h3>
+                        <div className="flex items-center justify-between mb-3">
+                          <h3 className="text-sm font-bold text-primary">
+                            تفاصيل العقار
+                          </h3>
+                          <button
+                            type="button"
+                            onClick={() => setStep(1)}
+                            className="text-xs font-medium text-accent hover:underline"
+                          >
+                            تعديل
+                          </button>
+                        </div>
                         {[
-                          { label: "النوع", value: form.propertyType },
-                          { label: "المساحة", value: form.area ? `${form.area} م²` : "—" },
-                          { label: "الموقع", value: form.location },
-                          { label: "الطوابق", value: form.floors },
-                          { label: "الميزانية", value: form.budget },
+                          { label: "النوع", value: form.propertyType, key: "propertyType" as const },
+                          { label: "المساحة", value: form.area ? `${form.area} م²` : "", key: "area" as const },
+                          { label: "الموقع", value: form.location, key: "location" as const },
+                          { label: "الطوابق", value: form.floors, key: "floors" as const },
+                          { label: "الميزانية", value: form.budget, key: undefined },
                         ].map((f) => (
-                          <div key={f.label} className="flex justify-between text-sm">
+                          <div key={f.label} className="flex justify-between text-sm items-start gap-4">
                             <span className="text-muted-foreground">{f.label}</span>
-                            <span className="font-medium text-primary">
-                              {f.value || "—"}
-                            </span>
+                            <div className="text-end">
+                              <span className="font-medium text-primary block">
+                                {f.value || "—"}
+                              </span>
+                              {f.key && prefilledFields[f.key] && f.value && (
+                                <span className="text-[10px] text-accent font-medium">
+                                  تم التعبئة تلقائياً
+                                </span>
+                              )}
+                            </div>
                           </div>
                         ))}
                       </div>
 
-                      {form.services.length > 0 && (
-                        <div className="bg-muted rounded-xl p-5">
-                          <h3 className="text-sm font-bold text-primary mb-3">
+                      <div className="bg-muted rounded-xl p-5">
+                        <div className="flex items-center justify-between mb-3">
+                          <h3 className="text-sm font-bold text-primary">
                             الخدمات المطلوبة
                           </h3>
+                          <button
+                            type="button"
+                            onClick={() => setStep(2)}
+                            className="text-xs font-medium text-accent hover:underline"
+                          >
+                            تعديل
+                          </button>
+                        </div>
+                        {form.services.length > 0 ? (
                           <div className="flex flex-wrap gap-2">
                             {form.services.map((s) => (
                               <span
@@ -559,17 +609,43 @@ const QuotePage = () => {
                               </span>
                             ))}
                           </div>
-                        </div>
-                      )}
+                        ) : (
+                          <p className="text-sm text-muted-foreground">لم يتم اختيار خدمات</p>
+                        )}
+                      </div>
 
                       {form.notes && (
                         <div className="bg-muted rounded-xl p-5">
-                          <h3 className="text-sm font-bold text-primary mb-2">
-                            ملاحظات
-                          </h3>
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="text-sm font-bold text-primary">ملاحظات</h3>
+                            <button
+                              type="button"
+                              onClick={() => setStep(3)}
+                              className="text-xs font-medium text-accent hover:underline"
+                            >
+                              تعديل
+                            </button>
+                          </div>
                           <p className="text-sm text-muted-foreground">{form.notes}</p>
+                          {prefilledFields.notes && (
+                            <span className="text-[10px] text-accent font-medium block mt-2">
+                              تم التعبئة تلقائياً
+                            </span>
+                          )}
                         </div>
                       )}
+
+                      <label className="flex items-start gap-3 p-4 rounded-xl border border-border bg-background cursor-pointer hover:bg-muted/50 transition-colors">
+                        <input
+                          type="checkbox"
+                          checked={confirmed}
+                          onChange={(e) => setConfirmed(e.target.checked)}
+                          className="mt-1 w-4 h-4 accent-accent"
+                        />
+                        <span className="text-sm text-foreground">
+                          أؤكد صحة البيانات المذكورة أعلاه وأرغب في إرسال طلب عرض السعر.
+                        </span>
+                      </label>
                     </div>
                   )}
                 </motion.div>
