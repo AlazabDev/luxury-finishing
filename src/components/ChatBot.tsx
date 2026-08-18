@@ -175,6 +175,16 @@ export default function ChatBot() {
   const [activeTab, setActiveTab] = useState<ChatTab>("text");
   const [historyOpen, setHistoryOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(() => [createWelcomeMessage(lang)]);
+  const quoteHref = useMemo(
+    () =>
+      `/quote${buildQuoteQuery(
+        extractQuotePrefill(
+          messages.filter((m) => m.role === "user").map((m) => m.content),
+        ),
+      )}`,
+    [messages],
+  );
+
   const [conversationId, setConversationId] = useState(() =>
     createChatEntityId("conversation"),
   );
