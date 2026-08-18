@@ -280,6 +280,12 @@ const QuotePage = () => {
                   {/* Step 0: Basic Info */}
                   {step === 0 && (
                     <div className="space-y-5">
+                      {prefilled && (
+                        <div className="flex items-start gap-2 rounded-lg border border-accent/30 bg-accent/10 p-3 text-sm text-foreground">
+                          <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                          <span>تم تعبئة بعض البيانات تلقائياً من محادثتك مع المساعد — يمكنك تعديلها.</span>
+                        </div>
+                      )}
                       <div>
                         <label className="block text-sm font-medium mb-1.5">
                           الاسم الكامل <span className="text-destructive">*</span>
