@@ -669,13 +669,13 @@ const QuotePage = () => {
                     variant="gold"
                     size="lg"
                     onClick={submit}
-                    disabled={loading}
-                    className="min-w-[140px]"
+                    disabled={loading || !confirmed}
+                    className="min-w-[160px]"
                   >
                     {loading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      <>إرسال الطلب</>
+                      <>تأكيد وإرسال الطلب</>
                     )}
                   </Button>
                 )}
