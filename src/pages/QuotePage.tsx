@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import FloatingElements from "@/components/FloatingElements";
@@ -58,21 +59,29 @@ interface FormData {
 }
 
 const QuotePage = () => {
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState<FormData>({
-    name: "",
-    phone: "",
-    email: "",
-    propertyType: "",
-    area: "",
-    location: "",
-    floors: "",
-    services: [],
-    budget: "",
-    notes: "",
+  const [form, setForm] = useState<FormData>(() => {
+    const q = (key: string, max = 200) =>
+      (searchParams.get(key) ?? "").toString().trim().slice(0, max);
+    const propertyType = q("propertyType", 40);
+    return {
+      name: q("name", 100),
+      phone: q("phone", 15),
+      email: q("email", 255),
+      propertyType: propertyTypes.includes(propertyType) ? propertyType : "",
+      area: q("area", 20),
+      location: q("location", 200),
+      floors: q("floors", 10),
+      services: [],
+      budget: "",
+      notes: q("notes", 1000),
+    };
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [prefilled] = useState(() => Boolean(searchParams.get("name") || searchParams.get("phone") || searchParams.get("notes")));
   const [submitted, setSubmitted] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -271,6 +280,12 @@ const QuotePage = () => {
                   {/* Step 0: Basic Info */}
                   {step === 0 && (
                     <div className="space-y-5">
+                      {prefilled && (
+                        <div className="flex items-start gap-2 rounded-lg border border-accent/30 bg-accent/10 p-3 text-sm text-foreground">
+                          <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                          <span>تم تعبئة بعض البيانات تلقائياً من محادثتك مع المساعد — يمكنك تعديلها.</span>
+                        </div>
+                      )}
                       <div>
                         <label className="block text-sm font-medium mb-1.5">
                           الاسم الكامل <span className="text-destructive">*</span>
