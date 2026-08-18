@@ -206,7 +206,7 @@ const QuotePage = () => {
               <p className="text-muted-foreground mb-8">
                 سيتواصل معك فريقنا خلال 24 ساعة لتقديم عرض السعر التفصيلي.
               </p>
-              <Button variant="gold" size="lg" onClick={() => { setSubmitted(false); setStep(0); setForm({ name: "", phone: "", email: "", propertyType: "", area: "", location: "", floors: "", services: [], budget: "", notes: "" }); }}>
+              <Button variant="gold" size="lg" onClick={() => { setSubmitted(false); setStep(0); setConfirmed(false); setForm({ name: "", phone: "", email: "", propertyType: "", area: "", location: "", floors: "", services: [], budget: "", notes: "" }); }}>
                 تقديم طلب جديد
               </Button>
             </motion.div>
