@@ -59,21 +59,29 @@ interface FormData {
 }
 
 const QuotePage = () => {
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState<FormData>({
-    name: "",
-    phone: "",
-    email: "",
-    propertyType: "",
-    area: "",
-    location: "",
-    floors: "",
-    services: [],
-    budget: "",
-    notes: "",
+  const [form, setForm] = useState<FormData>(() => {
+    const q = (key: string, max = 200) =>
+      (searchParams.get(key) ?? "").toString().trim().slice(0, max);
+    const propertyType = q("propertyType", 40);
+    return {
+      name: q("name", 100),
+      phone: q("phone", 15),
+      email: q("email", 255),
+      propertyType: propertyTypes.includes(propertyType) ? propertyType : "",
+      area: q("area", 20),
+      location: q("location", 200),
+      floors: q("floors", 10),
+      services: [],
+      budget: "",
+      notes: q("notes", 1000),
+    };
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [prefilled] = useState(() => Boolean(searchParams.get("name") || searchParams.get("phone") || searchParams.get("notes")));
   const [submitted, setSubmitted] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
