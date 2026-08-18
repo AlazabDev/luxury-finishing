@@ -78,9 +78,26 @@ const QuotePage = () => {
       notes: q("notes", 1000),
     };
   });
+  const [prefilledFields] = useState<Record<keyof FormData, boolean>>(() => {
+    const fields: (keyof FormData)[] = [
+      "name",
+      "phone",
+      "email",
+      "propertyType",
+      "area",
+      "location",
+      "floors",
+      "notes",
+    ];
+    return fields.reduce((acc, key) => {
+      acc[key] = Boolean(searchParams.get(key));
+      return acc;
+    }, {} as Record<keyof FormData, boolean>);
+  });
+  const wasAutoPrefilled = Object.values(prefilledFields).some(Boolean);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [prefilled] = useState(() => Boolean(searchParams.get("name") || searchParams.get("phone") || searchParams.get("notes")));
   const [submitted, setSubmitted] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
