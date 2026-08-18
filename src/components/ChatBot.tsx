@@ -35,7 +35,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import {
+  buildQuoteQuery,
   detectChatIntent,
+  extractQuotePrefill,
   getPriorityLabel,
   getServiceLabel,
   isMaintenanceRequestNumber,
