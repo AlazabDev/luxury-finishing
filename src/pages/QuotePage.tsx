@@ -413,7 +413,11 @@ const QuotePage = () => {
                   {/* Step 1: Property Details */}
                   {step === 1 && (
                     <div className="space-y-5">
-                      <div>
+                      <div
+                        ref={(el) => (fieldRefs.current.propertyType = el)}
+                        className={fieldRing("propertyType")}
+                        tabIndex={-1}
+                      >
                         <label className="block text-sm font-medium mb-2">
                           نوع العقار <span className="text-destructive">*</span>
                         </label>
@@ -437,7 +441,11 @@ const QuotePage = () => {
                         )}
                       </div>
                       <div className="grid grid-cols-2 gap-4">
-                        <div>
+                        <div
+                          ref={(el) => (fieldRefs.current.area = el)}
+                          className={fieldRing("area")}
+                          tabIndex={-1}
+                        >
                           <label className="block text-sm font-medium mb-1.5">
                             المساحة (م²) <span className="text-destructive">*</span>
                           </label>
@@ -449,7 +457,11 @@ const QuotePage = () => {
                           />
                           {errors.area && <p className={errorClass}>{errors.area}</p>}
                         </div>
-                        <div>
+                        <div
+                          ref={(el) => (fieldRefs.current.floors = el)}
+                          className={fieldRing("floors")}
+                          tabIndex={-1}
+                        >
                           <label className="block text-sm font-medium mb-1.5">
                             عدد الطوابق
                           </label>
@@ -461,7 +473,11 @@ const QuotePage = () => {
                           />
                         </div>
                       </div>
-                      <div>
+                      <div
+                        ref={(el) => (fieldRefs.current.location = el)}
+                        className={fieldRing("location")}
+                        tabIndex={-1}
+                      >
                         <label className="block text-sm font-medium mb-1.5">
                           الموقع <span className="text-destructive">*</span>
                         </label>
