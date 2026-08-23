@@ -102,6 +102,58 @@ const QuotePage = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
+  const fieldStepMap: Record<keyof FormData, number> = {
+    name: 0,
+    phone: 0,
+    email: 0,
+    propertyType: 1,
+    area: 1,
+    floors: 1,
+    location: 1,
+    services: 2,
+    budget: 3,
+    notes: 3,
+  };
+
+  const fieldRefs = useRef<Record<string, HTMLElement | null>>({});
+  const [focusTarget, setFocusTarget] = useState<keyof FormData | null>(null);
+  const [highlighted, setHighlighted] = useState<keyof FormData | null>(null);
+
+  useEffect(() => {
+    if (!focusTarget) return;
+    if (step !== fieldStepMap[focusTarget]) return;
+    const el = fieldRefs.current[focusTarget];
+    if (!el) return;
+    const timer = setTimeout(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      const focusable = el.querySelector(
+        "input, textarea, button, [tabindex]:not([tabindex='-1'])"
+      ) as HTMLElement | null;
+      if (focusable) {
+        focusable.focus({ preventScroll: true });
+      } else {
+        el.focus();
+      }
+      setHighlighted(focusTarget);
+      setFocusTarget(null);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [focusTarget, step]);
+
+  useEffect(() => {
+    if (!highlighted) return;
+    const timer = setTimeout(() => setHighlighted(null), 1800);
+    return () => clearTimeout(timer);
+  }, [highlighted]);
+
+  const goToField = (field: keyof FormData) => {
+    setStep(fieldStepMap[field]);
+    setFocusTarget(field);
+  };
+
+  const fieldRing = (field: keyof FormData) =>
+    highlighted === field ? " ring-2 ring-accent rounded-xl" : "";
+
   const update = (field: keyof FormData, value: string | string[]) => {
     setForm((p) => ({ ...p, [field]: value }));
     setErrors((p) => {
