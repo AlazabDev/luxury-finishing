@@ -541,7 +541,11 @@ const QuotePage = () => {
                   {/* Step 3: Budget */}
                   {step === 3 && (
                     <div className="space-y-5">
-                      <div>
+                      <div
+                        ref={(el) => (fieldRefs.current.budget = el)}
+                        className={fieldRing("budget")}
+                        tabIndex={-1}
+                      >
                         <label className="block text-sm font-medium mb-2">
                           الميزانية التقريبية
                         </label>
@@ -572,7 +576,11 @@ const QuotePage = () => {
                           ))}
                         </div>
                       </div>
-                      <div>
+                      <div
+                        ref={(el) => (fieldRefs.current.notes = el)}
+                        className={fieldRing("notes")}
+                        tabIndex={-1}
+                      >
                         <label className="block text-sm font-medium mb-1.5">
                           ملاحظات إضافية
                         </label>
