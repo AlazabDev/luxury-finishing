@@ -355,7 +355,11 @@ const QuotePage = () => {
                           <span>تم تعبئة بعض البيانات تلقائياً من محادثتك مع المساعد — يمكنك تعديلها.</span>
                         </div>
                       )}
-                      <div>
+                      <div
+                        ref={(el) => (fieldRefs.current.name = el)}
+                        className={fieldRing("name")}
+                        tabIndex={-1}
+                      >
                         <label className="block text-sm font-medium mb-1.5">
                           الاسم الكامل <span className="text-destructive">*</span>
                         </label>
@@ -367,7 +371,11 @@ const QuotePage = () => {
                         />
                         {errors.name && <p className={errorClass}>{errors.name}</p>}
                       </div>
-                      <div>
+                      <div
+                        ref={(el) => (fieldRefs.current.phone = el)}
+                        className={fieldRing("phone")}
+                        tabIndex={-1}
+                      >
                         <label className="block text-sm font-medium mb-1.5">
                           رقم الهاتف <span className="text-destructive">*</span>
                         </label>
@@ -381,7 +389,11 @@ const QuotePage = () => {
                         />
                         {errors.phone && <p className={errorClass}>{errors.phone}</p>}
                       </div>
-                      <div>
+                      <div
+                        ref={(el) => (fieldRefs.current.email = el)}
+                        className={fieldRing("email")}
+                        tabIndex={-1}
+                      >
                         <label className="block text-sm font-medium mb-1.5">
                           البريد الإلكتروني (اختياري)
                         </label>
