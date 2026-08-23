@@ -496,7 +496,11 @@ const QuotePage = () => {
 
                   {/* Step 2: Services */}
                   {step === 2 && (
-                    <div>
+                    <div
+                      ref={(el) => (fieldRefs.current.services = el)}
+                      className={fieldRing("services")}
+                      tabIndex={-1}
+                    >
                       <p className="text-sm text-muted-foreground mb-4">
                         اختر الخدمات التي تحتاجها (يمكنك اختيار أكثر من خدمة)
                       </p>
