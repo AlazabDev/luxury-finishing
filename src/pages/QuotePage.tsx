@@ -614,7 +614,7 @@ const QuotePage = () => {
                           </h3>
                           <button
                             type="button"
-                            onClick={() => setStep(0)}
+                            onClick={() => goToField("name")}
                             className="text-xs font-medium text-accent hover:underline"
                           >
                             تعديل
@@ -627,15 +627,24 @@ const QuotePage = () => {
                         ].map((f) => (
                           <div key={f.label} className="flex justify-between text-sm items-start gap-4">
                             <span className="text-muted-foreground">{f.label}</span>
-                            <div className="text-end">
-                              <span className="font-medium text-primary block">
-                                {f.value || "—"}
-                              </span>
-                              {prefilledFields[f.key] && f.value && (
-                                <span className="text-[10px] text-accent font-medium">
-                                  تم التعبئة تلقائياً
+                            <div className="text-end flex items-start gap-2">
+                              <div>
+                                <span className="font-medium text-primary block">
+                                  {f.value || "—"}
                                 </span>
-                              )}
+                                {prefilledFields[f.key] && f.value && (
+                                  <span className="text-[10px] text-accent font-medium">
+                                    تم التعبئة تلقائياً
+                                  </span>
+                                )}
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => goToField(f.key)}
+                                className="text-xs font-medium text-accent hover:underline"
+                              >
+                                تعديل
+                              </button>
                             </div>
                           </div>
                         ))}
@@ -648,7 +657,7 @@ const QuotePage = () => {
                           </h3>
                           <button
                             type="button"
-                            onClick={() => setStep(1)}
+                            onClick={() => goToField("propertyType")}
                             className="text-xs font-medium text-accent hover:underline"
                           >
                             تعديل
@@ -659,19 +668,28 @@ const QuotePage = () => {
                           { label: "المساحة", value: form.area ? `${form.area} م²` : "", key: "area" as const },
                           { label: "الموقع", value: form.location, key: "location" as const },
                           { label: "الطوابق", value: form.floors, key: "floors" as const },
-                          { label: "الميزانية", value: form.budget, key: undefined },
+                          { label: "الميزانية", value: form.budget, key: "budget" as const },
                         ].map((f) => (
                           <div key={f.label} className="flex justify-between text-sm items-start gap-4">
                             <span className="text-muted-foreground">{f.label}</span>
-                            <div className="text-end">
-                              <span className="font-medium text-primary block">
-                                {f.value || "—"}
-                              </span>
-                              {f.key && prefilledFields[f.key] && f.value && (
-                                <span className="text-[10px] text-accent font-medium">
-                                  تم التعبئة تلقائياً
+                            <div className="text-end flex items-start gap-2">
+                              <div>
+                                <span className="font-medium text-primary block">
+                                  {f.value || "—"}
                                 </span>
-                              )}
+                                {prefilledFields[f.key] && f.value && (
+                                  <span className="text-[10px] text-accent font-medium">
+                                    تم التعبئة تلقائياً
+                                  </span>
+                                )}
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => goToField(f.key)}
+                                className="text-xs font-medium text-accent hover:underline"
+                              >
+                                تعديل
+                              </button>
                             </div>
                           </div>
                         ))}
@@ -684,7 +702,7 @@ const QuotePage = () => {
                           </h3>
                           <button
                             type="button"
-                            onClick={() => setStep(2)}
+                            onClick={() => goToField("services")}
                             className="text-xs font-medium text-accent hover:underline"
                           >
                             تعديل
@@ -706,26 +724,24 @@ const QuotePage = () => {
                         )}
                       </div>
 
-                      {form.notes && (
-                        <div className="bg-muted rounded-xl p-5">
-                          <div className="flex items-center justify-between mb-2">
-                            <h3 className="text-sm font-bold text-primary">ملاحظات</h3>
-                            <button
-                              type="button"
-                              onClick={() => setStep(3)}
-                              className="text-xs font-medium text-accent hover:underline"
-                            >
-                              تعديل
-                            </button>
-                          </div>
-                          <p className="text-sm text-muted-foreground">{form.notes}</p>
-                          {prefilledFields.notes && (
-                            <span className="text-[10px] text-accent font-medium block mt-2">
-                              تم التعبئة تلقائياً
-                            </span>
-                          )}
+                      <div className="bg-muted rounded-xl p-5">
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="text-sm font-bold text-primary">ملاحظات</h3>
+                          <button
+                            type="button"
+                            onClick={() => goToField("notes")}
+                            className="text-xs font-medium text-accent hover:underline"
+                          >
+                            تعديل
+                          </button>
                         </div>
-                      )}
+                        <p className="text-sm text-muted-foreground">{form.notes || "—"}</p>
+                        {prefilledFields.notes && form.notes && (
+                          <span className="text-[10px] text-accent font-medium block mt-2">
+                            تم التعبئة تلقائياً
+                          </span>
+                        )}
+                      </div>
 
                       <label className="flex items-start gap-3 p-4 rounded-xl border border-border bg-background cursor-pointer hover:bg-muted/50 transition-colors">
                         <input
