@@ -374,7 +374,28 @@ export default function ChatBot() {
         },
         body: JSON.stringify({ messages: payloadMessages }),
       });
-      if (!resp.ok || !resp.body) throw new Error("Stream failed");
+      if (!resp.ok) {
+        if (resp.status === 429) {
+          throw new Error(
+            lang === "ar"
+              ? "لقد أرسلت رسائل كثيرة بسرعة. انتظر دقيقة ثم أعد المحاولة."
+              : "Too many messages. Please wait a minute and try again.",
+          );
+        }
+        if (resp.status === 401 || resp.status === 403) {
+          throw new Error(
+            lang === "ar"
+              ? "تعذر الاتصال بخدمة المساعد حالياً. يرجى التواصل معنا عبر واتساب."
+              : "The assistant service is unavailable right now. Please contact us on WhatsApp.",
+          );
+        }
+        throw new Error(
+          lang === "ar"
+            ? "تعذر الوصول إلى المساعد الذكي. حاول مرة أخرى بعد قليل."
+            : "Could not reach the assistant. Please try again shortly.",
+        );
+      }
+      if (!resp.body) throw new Error("Stream failed");
       const reader = resp.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
