@@ -423,8 +423,9 @@ export default function ChatBot() {
         }
       }
     } catch (error) {
-      console.error(error);
-      upsert(lang === "ar" ? "عذراً، حدث خطأ. يرجى المحاولة مرة أخرى." : "Sorry, an error occurred. Please try again.");
+      console.error("chat error:", error);
+      const fallback = lang === "ar" ? "عذراً، حدث خطأ. يرجى المحاولة مرة أخرى." : "Sorry, an error occurred. Please try again.";
+      upsert(error instanceof Error && error.message && error.message !== "Stream failed" ? error.message : fallback);
     }
     setLoading(false);
   }, [welcomeMessage, lang]);
