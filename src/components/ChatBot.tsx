@@ -1077,7 +1077,7 @@ export default function ChatBot() {
                     {loading || uploadingAttachments ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <Send className={cn("h-4 w-4", lang === "ar" && "rotate-180")} />
+                      <Send className={cn("h-4 w-4", lang === "ar" && "-scale-x-100")} />
                     )}
                   </button>
                 </div>
