@@ -22,8 +22,8 @@ command -v corepack >/dev/null 2>&1 || { echo "Corepack is not installed." >&2; 
 command -v pm2 >/dev/null 2>&1 || { echo "PM2 is not installed." >&2; exit 1; }
 
 NODE_MAJOR="$(node -p 'process.versions.node.split(".")[0]')"
-if [[ "$NODE_MAJOR" != "22" ]]; then
-  echo "Node.js 22 is required; current version is $(node --version)." >&2
+if [[ "$NODE_MAJOR" != "24" ]]; then
+  echo "Node.js 24 is required; current version is $(node --version)." >&2
   exit 1
 fi
 
