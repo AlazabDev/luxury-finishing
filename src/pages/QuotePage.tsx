@@ -58,6 +58,19 @@ interface FormData {
   notes: string;
 }
 
+const fieldStepMap: Record<keyof FormData, number> = {
+  name: 0,
+  phone: 0,
+  email: 0,
+  propertyType: 1,
+  area: 1,
+  floors: 1,
+  location: 1,
+  services: 2,
+  budget: 3,
+  notes: 3,
+};
+
 const QuotePage = () => {
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState(0);
@@ -101,19 +114,6 @@ const QuotePage = () => {
 
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-
-  const fieldStepMap: Record<keyof FormData, number> = {
-    name: 0,
-    phone: 0,
-    email: 0,
-    propertyType: 1,
-    area: 1,
-    floors: 1,
-    location: 1,
-    services: 2,
-    budget: 3,
-    notes: 3,
-  };
 
   const fieldRefs = useRef<Record<string, HTMLElement | null>>({});
   const [focusTarget, setFocusTarget] = useState<keyof FormData | null>(null);
