@@ -1,6 +1,10 @@
 import LegalPageLayout from "@/components/legal/LegalPageLayout";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getLegalLinks, getTermsSections, legalLastUpdated } from "@/lib/legal";
+import { getLegalLinks } from "@/lib/legal";
+import {
+  getProfessionalTermsSections,
+  professionalTermsLastUpdated,
+} from "@/lib/professionalTerms";
 
 const TermsPage = () => {
   const { lang } = useLanguage();
@@ -8,19 +12,19 @@ const TermsPage = () => {
 
   return (
     <LegalPageLayout
-      badge={lang === "ar" ? "الشروط والأحكام" : "Terms And Conditions"}
+      badge={lang === "ar" ? "الشروط والأحكام" : "Terms & Conditions"}
       title={
         lang === "ar"
-          ? "شروط استخدام موقع وخدمات لاكشري فينيشينج"
-          : "Terms Of Using The Luxury Finishing Website And Services"
+          ? "الشروط والأحكام المهنية لخدمات العزب"
+          : "Professional Terms & Conditions for Alazab Services"
       }
       lead={
         lang === "ar"
-          ? "تنظم هذه الصفحة أسس استخدام الموقع والقنوات الرقمية والخدمات المرتبطة به، بما في ذلك الشات بوت، طلبات الصيانة، والاتصالات التشغيلية."
-          : "This page defines the rules for using the website, connected digital channels, and related services, including the chatbot, maintenance requests, and operational communications."
+          ? "إطار مهني واضح ينظم بدء الأعمال والاعتمادات والدفعات والضمان، ويحدد منهج العزب في أنظمة المراقبة والحماية المدارة مع الحفاظ الكامل على خصوصية العميل."
+          : "A clear professional framework covering commencement, approvals, payments, warranty, and Alazab's managed surveillance and security approach while preserving client privacy and control."
       }
-      lastUpdated={legalLastUpdated}
-      sections={getTermsSections(lang)}
+      lastUpdated={professionalTermsLastUpdated}
+      sections={getProfessionalTermsSections(lang)}
       relatedLinks={legalLinks.filter((link) => link.href !== "/terms")}
     />
   );
