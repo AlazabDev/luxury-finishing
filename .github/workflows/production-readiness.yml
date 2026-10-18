@@ -62,7 +62,7 @@ jobs:
 
       - name: Upload lint diagnostics
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lint-diagnostics-${{ github.sha }}
           path: |
@@ -96,7 +96,7 @@ jobs:
 
       - name: Upload audit diagnostics
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: audit-diagnostics-${{ github.sha }}
           path: |
@@ -112,7 +112,7 @@ jobs:
           test "$(cat audit-exit-code.txt)" = "0"
 
       - name: Upload production bundle
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: luxury-finishing-dist-${{ github.sha }}
           path: dist
